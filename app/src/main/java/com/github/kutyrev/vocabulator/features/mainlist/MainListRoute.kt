@@ -19,7 +19,6 @@ import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 @Composable
 fun MainListRoute(viewModel: MainListViewModel = hiltViewModel()) {
     val listState = viewModel.subtitlesList.collectAsStateWithLifecycle(initialValue = listOf())
-    viewModel.initSubitlesListCollecting()
     MainListScreen(listState)
 }
 
