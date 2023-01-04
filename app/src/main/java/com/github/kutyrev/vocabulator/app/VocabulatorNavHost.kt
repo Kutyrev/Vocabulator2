@@ -9,6 +9,8 @@ import androidx.navigation.compose.rememberNavController
 import com.github.kutyrev.vocabulator.features.cards.CardsRoute
 import com.github.kutyrev.vocabulator.features.mainlist.MainListRoute
 
+private const val LIST_ID_PARAM_TEMPLATE = "{listId}"
+
 @Composable
 fun VocabulatorNavHost(
     modifier: Modifier = Modifier,
@@ -21,11 +23,17 @@ fun VocabulatorNavHost(
         modifier = modifier
     ) {
         composable(route = VocabulatorDestinations.MainListDestination.route) {
-            MainListRoute(onListItemClick = { navController.navigate(VocabulatorDestinations.CardsDestinations.route) })
+            MainListRoute(onListItemClick = { listId ->
+                navController.navigate(
+                    VocabulatorDestinations.CardsDestinations.route.replace(
+                        oldValue = LIST_ID_PARAM_TEMPLATE,
+                        newValue = "$listId"
+                    )
+                )
+            })
         }
         composable(route = VocabulatorDestinations.CardsDestinations.route) {
             CardsRoute()
         }
     }
 }
-

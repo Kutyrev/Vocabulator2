@@ -24,13 +24,13 @@ import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun MainListRoute(viewModel: MainListViewModel = hiltViewModel(), onListItemClick: () -> Unit) {
+fun MainListRoute(viewModel: MainListViewModel = hiltViewModel(), onListItemClick: (Int) -> Unit) {
     val listState = viewModel.subtitlesList.collectAsStateWithLifecycle(initialValue = listOf())
     MainListScreen(listState, onListItemClick)
 }
 
 @Composable
-private fun MainListScreen(listState: State<List<SubtitlesUnit>>, onListItemClick: () -> Unit) {
+private fun MainListScreen(listState: State<List<SubtitlesUnit>>, onListItemClick: (Int) -> Unit) {
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier) {
             items(listState.value) { subtitlesUnit ->
@@ -38,7 +38,7 @@ private fun MainListScreen(listState: State<List<SubtitlesUnit>>, onListItemClic
                     modifier = Modifier
                         .padding(dimensionResource(id = R.dimen.padding_std))
                         .fillMaxWidth()
-                        .clickable(onClick = onListItemClick),
+                        .clickable(onClick = { onListItemClick(subtitlesUnit.id) }),
                     elevation = 4.dp
                 ) {
                     Text(
