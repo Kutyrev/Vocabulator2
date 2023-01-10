@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.kutyrev.vocabulator.app.LIST_ID_PARAM_NAME
 import com.github.kutyrev.vocabulator.model.EMPTY_CARD
 import com.github.kutyrev.vocabulator.model.WordCard
 import com.github.kutyrev.vocabulator.repository.StorageRepository
@@ -11,8 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-private const val LIST_ID_PARAM_NAME = "listId"
 
 @HiltViewModel
 class CardsViewModel @Inject constructor(

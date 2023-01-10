@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Vocabulator</string>
+    <string name="edit_button_desc">Edit subtitle</string>
+    <string name="subtitles_name_label">Subtitles name</string>
 </resources>
