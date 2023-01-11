@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val ZERO_CARD_POSITION_OFFSET = 0f
+
 @HiltViewModel
 class CardsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -31,18 +33,21 @@ class CardsViewModel @Inject constructor(
         savedStateHandle.get<String>(LIST_ID_PARAM_NAME)?.let {
             listId.value = it.toInt()
         }
+
         viewModelScope.launch {
-            _cards.value = storageRepository.getCards(listId.value).first()
-            emitNewCard(0f)
+            storageRepository.getCards(listId.value).collect {
+                _cards.value
+            }
+            emitNewCard(ZERO_CARD_POSITION_OFFSET)
         }
     }
 
     fun emitNewCard(offsetX: Float) {
-        if(cards.value.isEmpty()) return
+        if (cards.value.isEmpty()) return
 
-        if(offsetX > 0 && cardIndex > 0)
+        if (offsetX > 0 && cardIndex > 0)
             cardIndex -= 1
-        else if(offsetX < 0 && cardIndex < cards.value.size - 1){
+        else if (offsetX < 0 && cardIndex < cards.value.size - 1) {
             cardIndex += 1
         }
 
