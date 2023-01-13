@@ -1,8 +1,8 @@
-package com.github.kutyrev.vocabulator.repository
+package com.github.kutyrev.vocabulator.repository.datastore
 
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
-    suspend fun getWordsForLoadCount(): Flow<Int>
+    fun getWordsForLoadCount(): Flow<Int>
     suspend fun setWordsForLoadCount(newWordsCount: Int)
 }

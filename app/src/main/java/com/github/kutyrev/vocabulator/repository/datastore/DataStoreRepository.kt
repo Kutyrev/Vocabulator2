@@ -1,4 +1,4 @@
-package com.github.kutyrev.vocabulator.repository
+package com.github.kutyrev.vocabulator.repository.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -13,7 +13,7 @@ private const val PROP_WORDS_FOR_LOAD_COUNT = "words_for_load_count"
 class DataStoreRepository @Inject constructor(private val dataStore: DataStore<Preferences>) :
     SettingsRepository {
 
-    override suspend fun getWordsForLoadCount(): Flow<Int> {
+    override fun getWordsForLoadCount(): Flow<Int> {
         return dataStore.data
             .map { preferences ->
                 // No type safety.

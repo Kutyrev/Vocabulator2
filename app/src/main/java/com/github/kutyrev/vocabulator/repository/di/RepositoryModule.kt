@@ -13,6 +13,8 @@ import com.github.kutyrev.vocabulator.repository.DefaultStorageRepository
 import com.github.kutyrev.vocabulator.repository.DefaultTranslationRepository
 import com.github.kutyrev.vocabulator.repository.StorageRepository
 import com.github.kutyrev.vocabulator.repository.TranslationRepository
+import com.github.kutyrev.vocabulator.repository.datastore.DataStoreRepository
+import com.github.kutyrev.vocabulator.repository.datastore.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +23,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import javax.inject.Singleton
 
 private const val DATA_STORE_SETTINGS_NAME = "settings"
 
@@ -38,6 +41,7 @@ class RepositoryModule {
     }
 
     @Provides
+    @Singleton
     fun providePreferencesDataStore(@ApplicationContext appContext: Context): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler(
@@ -46,5 +50,10 @@ class RepositoryModule {
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
             produceFile = { appContext.preferencesDataStoreFile(DATA_STORE_SETTINGS_NAME) }
         )
+    }
+
+    @Provides
+    fun provideSettingsRepository(dateStore: DataStore<Preferences>) : SettingsRepository {
+        return DataStoreRepository(dateStore)
     }
 }

@@ -10,4 +10,6 @@
     <string name="menuitem_about">About</string>
     <string name="menuitem_tutorial">Tutorial</string>
     <string name="topappbar_options_button_desc">Open Options</string>
+    <string name="button_save">Save</string>
+    <string name="settings_number_of_words_label">Number of words to load</string>
 </resources>

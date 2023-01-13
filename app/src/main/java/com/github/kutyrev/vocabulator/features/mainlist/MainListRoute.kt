@@ -27,17 +27,24 @@ private const val SPACER_DEF_WEIGHT = 1.0f
 fun MainListRoute(
     viewModel: MainListViewModel = hiltViewModel(),
     onListItemClick: (Int) -> Unit,
-    onEditButtonClick: (Int) -> Unit
+    onEditButtonClick: (Int) -> Unit,
+    onSettingsMenuItemClick: () -> Unit
 ) {
     val listState = viewModel.subtitlesList.collectAsStateWithLifecycle(initialValue = listOf())
-    MainStructureScreen(listState, onListItemClick, onEditButtonClick)
+    MainStructureScreen(
+        listState = listState,
+        onListItemClick = onListItemClick,
+        onEditButtonClick = onEditButtonClick,
+        onSettingsMenuItemClick = onSettingsMenuItemClick
+    )
 }
 
 @Composable
 private fun MainStructureScreen(
     listState: State<List<SubtitlesUnit>>,
     onListItemClick: (Int) -> Unit,
-    onEditButtonClick: (Int) -> Unit
+    onEditButtonClick: (Int) -> Unit,
+    onSettingsMenuItemClick: () -> Unit
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
@@ -69,7 +76,7 @@ private fun MainStructureScreen(
                         DropdownMenuItem(onClick = { /*TODO*/ }) {
                             Text(stringResource(R.string.menuitem_tutorial))
                         }
-                        DropdownMenuItem(onClick = { /*TODO*/ }) {
+                        DropdownMenuItem(onClick = { onSettingsMenuItemClick() }) {
                             Text(stringResource(R.string.menuitem_settings))
                         }
                         DropdownMenuItem(onClick = { /*TODO*/ }) {
@@ -132,4 +139,3 @@ private fun MainListScreen(
         }
     }
 }
-

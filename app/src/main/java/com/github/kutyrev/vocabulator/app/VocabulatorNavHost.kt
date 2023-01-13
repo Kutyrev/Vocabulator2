@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.github.kutyrev.vocabulator.features.cards.CardsRoute
 import com.github.kutyrev.vocabulator.features.editsub.EditSubRoute
 import com.github.kutyrev.vocabulator.features.mainlist.MainListRoute
+import com.github.kutyrev.vocabulator.features.settings.SettingsRoute
 
 const val LIST_ID_PARAM_NAME = "listId"
 private const val LIST_ID_PARAM_TEMPLATE = "{listId}"
@@ -39,13 +40,20 @@ fun VocabulatorNavHost(
                         newValue = "$listId"
                     )
                 )
-            })
+            },
+                onSettingsMenuItemClick = {
+                    navController.navigate(VocabulatorDestinations.SettingsDestination.route)
+                }
+            )
         }
         composable(route = VocabulatorDestinations.CardsDestinations.route) {
             CardsRoute()
         }
         composable(route = VocabulatorDestinations.EditSubtitlesDestination.route) {
             EditSubRoute()
+        }
+        composable(route = VocabulatorDestinations.SettingsDestination.route) {
+            SettingsRoute(onSaveSettings = { navController.popBackStack() })
         }
     }
 }
