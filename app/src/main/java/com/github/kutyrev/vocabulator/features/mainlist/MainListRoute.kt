@@ -6,8 +6,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -29,16 +30,76 @@ fun MainListRoute(
     onEditButtonClick: (Int) -> Unit
 ) {
     val listState = viewModel.subtitlesList.collectAsStateWithLifecycle(initialValue = listOf())
-    MainListScreen(listState, onListItemClick, onEditButtonClick)
+    MainStructureScreen(listState, onListItemClick, onEditButtonClick)
+}
+
+@Composable
+private fun MainStructureScreen(
+    listState: State<List<SubtitlesUnit>>,
+    onListItemClick: (Int) -> Unit,
+    onEditButtonClick: (Int) -> Unit
+) {
+    var showMenu by remember { mutableStateOf(false) }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(elevation = dimensionResource(id = R.dimen.elevation_std),
+                title = { Text(stringResource(id = R.string.app_name)) },
+                actions = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_baseline_fact_check_24),
+                            contentDescription = stringResource(id = R.string.button_commons)
+                        )
+                    }
+
+                    IconButton(onClick = {
+                        showMenu = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = stringResource(R.string.topappbar_options_button_desc)
+                        )
+                    }
+
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false }
+                    ) {
+                        DropdownMenuItem(onClick = { /*TODO*/ }) {
+                            Text(stringResource(R.string.menuitem_tutorial))
+                        }
+                        DropdownMenuItem(onClick = { /*TODO*/ }) {
+                            Text(stringResource(R.string.menuitem_settings))
+                        }
+                        DropdownMenuItem(onClick = { /*TODO*/ }) {
+                            Text(stringResource(R.string.menuitem_about))
+                        }
+                    }
+                })
+        }
+    ) { paddingValues ->
+        MainListScreen(
+            listState = listState,
+            onListItemClick = onListItemClick,
+            onEditButtonClick = onEditButtonClick,
+            paddingValues = paddingValues
+        )
+    }
 }
 
 @Composable
 private fun MainListScreen(
     listState: State<List<SubtitlesUnit>>,
     onListItemClick: (Int) -> Unit,
-    onEditButtonClick: (Int) -> Unit
+    onEditButtonClick: (Int) -> Unit,
+    paddingValues: PaddingValues
 ) {
-    Surface(modifier = Modifier.fillMaxSize()) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = paddingValues.calculateTopPadding())
+    ) {
         LazyColumn(modifier = Modifier) {
             items(listState.value) { subtitlesUnit ->
                 Card(
