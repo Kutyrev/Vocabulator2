@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -29,6 +30,8 @@ import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.features.mainlist.model.MainListViewModel
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
+import com.github.kutyrev.vocabulator.repository.file.FileLoadStatus
+import com.github.kutyrev.vocabulator.ui.components.DialogBoxLoading
 import com.github.kutyrev.vocabulator.utils.getFileName
 
 private const val SPACER_DEF_WEIGHT = 1.0f
@@ -42,6 +45,27 @@ fun MainListRoute(
     onSettingsMenuItemClick: () -> Unit
 ) {
     val listState = viewModel.subtitlesList.collectAsStateWithLifecycle(initialValue = listOf())
+
+    val fileLoadStatus by viewModel.fileLoadingStatus
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = fileLoadStatus) {
+
+        if (fileLoadStatus is FileLoadStatus.FileLoaded) TODO()
+        if (fileLoadStatus is FileLoadStatus.LoadingError) {
+            Toast.makeText(
+                context,
+                context.getText((fileLoadStatus as FileLoadStatus.LoadingError).error.messageRes),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    if (viewModel.showLoadingDialog.value) {
+        DialogBoxLoading()
+    }
+
     MainStructureScreen(
         listState = listState,
         onListItemClick = onListItemClick,
@@ -61,7 +85,7 @@ private fun MainStructureScreen(
     onSettingsMenuItemClick: () -> Unit,
     checkFileExtension: (String) -> Boolean,
     setLanguage: (Language?) -> Unit,
-    loadFile: (Uri, String?) -> Unit
+    loadFile: (Uri, String?) -> Unit,
 ) {
     var showMenu by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
@@ -76,7 +100,11 @@ private fun MainStructureScreen(
                 loadFile(docUri, getFileName(context, docUri))
             } else {
                 setLanguage(null)
-                Toast.makeText(context, context.getText(R.string.toast_unsupported_file), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    context.getText(R.string.toast_unsupported_file),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -138,14 +166,31 @@ private fun MainStructureScreen(
             showLanguageDialog = false
             // pickSubtitlesLauncher.launch(arrayOf("*/*"))
         }) {
-            Column {
-                for (language in Language.values()) {
-                    Row {
-                        ClickableText(onClick = {
-                            showLanguageDialog = false
-                            setLanguage(language)
-                            pickSubtitlesLauncher.launch(arrayOf("*/*"))
-                        }, text = AnnotatedString(language.name))
+            Surface(
+                elevation = dimensionResource(id = R.dimen.elevation_std),
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_std))
+            ) {
+                Column {
+                    Text(
+                        modifier = Modifier.padding(dimensionResource(R.dimen.padding_std)),
+                        text = stringResource(R.string.choose_lang_dialog_caption),
+                        style = MaterialTheme.typography.caption
+                    )
+                    for (language in Language.values()) {
+                        Row {
+                            ClickableText(
+                                modifier = Modifier.padding(dimensionResource(R.dimen.padding_std)),
+                                onClick = {
+                                    showLanguageDialog = false
+                                    setLanguage(language)
+                                    pickSubtitlesLauncher.launch(arrayOf("*/*"))
+                                },
+                                text = AnnotatedString(language.name).plus(
+                                    AnnotatedString(
+                                        stringResource(language.fullNameResource))
+                                )
+                            )
+                        }
                     }
                 }
             }

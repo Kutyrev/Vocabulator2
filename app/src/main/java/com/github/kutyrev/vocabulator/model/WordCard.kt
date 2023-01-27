@@ -1,6 +1,6 @@
 package com.github.kutyrev.vocabulator.model
 
-val EMPTY_CARD = WordCard(0,0)
+val EMPTY_CARD = WordCard(-1,-1)
 
 class WordCard(
     val id: Int,

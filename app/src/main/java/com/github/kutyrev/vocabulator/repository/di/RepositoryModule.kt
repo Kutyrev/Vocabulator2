@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.github.kutyrev.vocabulator.datasource.database.VocabulatorDao
+import com.github.kutyrev.vocabulator.datasource.fileparsers.ParserFactory
 import com.github.kutyrev.vocabulator.datasource.translators.TranslationBackSource
 import com.github.kutyrev.vocabulator.repository.DefaultStorageRepository
 import com.github.kutyrev.vocabulator.repository.DefaultTranslationRepository
@@ -15,6 +16,8 @@ import com.github.kutyrev.vocabulator.repository.StorageRepository
 import com.github.kutyrev.vocabulator.repository.TranslationRepository
 import com.github.kutyrev.vocabulator.repository.datastore.DataStoreRepository
 import com.github.kutyrev.vocabulator.repository.datastore.SettingsRepository
+import com.github.kutyrev.vocabulator.repository.file.DefaultFileRepository
+import com.github.kutyrev.vocabulator.repository.file.FileRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,6 +41,11 @@ class RepositoryModule {
     @Provides
     fun providesTranslationRepository(translationBackSource: TranslationBackSource): TranslationRepository {
         return DefaultTranslationRepository(translationBackSource)
+    }
+
+    @Provides
+    fun providesFileRepository(fileParserFactory: ParserFactory, settingsRepository: SettingsRepository): FileRepository {
+        return DefaultFileRepository(fileParserFactory, settingsRepository)
     }
 
     @Provides

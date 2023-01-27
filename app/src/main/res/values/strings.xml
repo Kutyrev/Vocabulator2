@@ -13,5 +13,13 @@
     <string name="button_save">Save</string>
     <string name="settings_number_of_words_label">Number of words to load</string>
     <string name="sub_fab_content_desc">Add new subtitle</string>
-    <string name="toast_unsupported_file">The app supports srt, ssa, ass, txt, fb2 files</string>
+    <string name="toast_unsupported_file">Unsupported file. The app supports srt, ssa, ass, txt, fb2 files</string>
+    <string name="toast_file_format_corrupted">Corrupted file</string>
+    <string name="toast_io_exception">Error reading file</string>
+    <string name="loading_message">Please wait…</string>
+    <string name="choose_lang_dialog_caption">Choose file language</string>
+    <string name="en_lang_fullname"> — English</string>
+    <string name="fr_lang_fullname"> — French</string>
+    <string name="ru_lang_fullname"> — Russian</string>
+    <string name="it_lang_fullname"> — Italian</string>
 </resources>
