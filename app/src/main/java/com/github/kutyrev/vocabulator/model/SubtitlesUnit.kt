@@ -1,5 +1,16 @@
 package com.github.kutyrev.vocabulator.model
 
-data class SubtitlesUnit(val id: Int, val name: String, val origLangId: Int, val transLangId: Int){
-    val wordCards : MutableList<WordCard> = mutableListOf()
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "subtitles")
+data class SubtitlesUnit(
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    var name: String,
+    var origLangId: Int,
+    var transLangId: Int
+) {
+    @Ignore
+    val wordCards: MutableList<WordCard> = mutableListOf()
 }

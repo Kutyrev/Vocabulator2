@@ -2,6 +2,8 @@ package com.github.kutyrev.vocabulator.repository
 
 import com.github.kutyrev.vocabulator.app.di.IoDispatcher
 import com.github.kutyrev.vocabulator.datasource.database.VocabulatorDao
+import com.github.kutyrev.vocabulator.model.CommonWord
+import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.model.WordCard
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,8 +16,7 @@ import javax.inject.Inject
 class DefaultStorageRepository @Inject constructor(
     private val vocabulatorDao: VocabulatorDao,
     @IoDispatcher private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) :
-    StorageRepository {
+) : StorageRepository {
     override suspend fun getSubtitlesList(): Flow<List<SubtitlesUnit>> = withContext(dispatcher) {
         flowOf(listOf(SubtitlesUnit(1, "Test", 1, 2)))
     }
@@ -27,7 +28,8 @@ class DefaultStorageRepository @Inject constructor(
                     1,
                     1,
                     "to binge",
-                    "позволять себе"),
+                    "позволять себе"
+                ),
                 WordCard(
                     2,
                     1,
@@ -37,4 +39,9 @@ class DefaultStorageRepository @Inject constructor(
             )
         )
     }
+
+    override suspend fun getCommonWords(language: Language): List<CommonWord> =
+        withContext(dispatcher) {
+            vocabulatorDao.getCommonWords(language.ordinal)
+        }
 }

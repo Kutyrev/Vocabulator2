@@ -1,15 +1,31 @@
 package com.github.kutyrev.vocabulator.datasource.database.di
 
-import com.github.kutyrev.vocabulator.datasource.database.DbDaoMock
+import android.content.Context
+import androidx.room.Room
+import com.github.kutyrev.vocabulator.datasource.database.DatabaseSource
 import com.github.kutyrev.vocabulator.datasource.database.VocabulatorDao
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-abstract class DatabaseModule {
-    @Binds
-    abstract fun provideVocabulatorDao(dbDaoMock: DbDaoMock): VocabulatorDao
+class DatabaseModule {
+    @Provides
+    fun provideVocabulatorDao(databaseSource: DatabaseSource): VocabulatorDao {
+        return databaseSource.vocabulatorDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext appContext: Context): DatabaseSource {
+        return Room.databaseBuilder(
+            appContext,
+            DatabaseSource::class.java,
+            "vocabulator.db"
+        ).createFromAsset("initial_data.db").build()
+    }
 }

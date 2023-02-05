@@ -44,8 +44,12 @@ class RepositoryModule {
     }
 
     @Provides
-    fun providesFileRepository(fileParserFactory: ParserFactory, settingsRepository: SettingsRepository): FileRepository {
-        return DefaultFileRepository(fileParserFactory, settingsRepository)
+    fun providesFileRepository(
+        fileParserFactory: ParserFactory,
+        settingsRepository: SettingsRepository,
+        vocabulatorDao: VocabulatorDao
+    ): FileRepository {
+        return DefaultFileRepository(fileParserFactory, settingsRepository, vocabulatorDao)
     }
 
     @Provides
@@ -61,7 +65,7 @@ class RepositoryModule {
     }
 
     @Provides
-    fun provideSettingsRepository(dateStore: DataStore<Preferences>) : SettingsRepository {
+    fun provideSettingsRepository(dateStore: DataStore<Preferences>): SettingsRepository {
         return DataStoreRepository(dateStore)
     }
 }

@@ -2,11 +2,9 @@ package com.github.kutyrev.vocabulator.repository.file
 
 import android.net.Uri
 import com.github.kutyrev.vocabulator.app.di.IoDispatcher
+import com.github.kutyrev.vocabulator.datasource.database.VocabulatorDao
 import com.github.kutyrev.vocabulator.datasource.fileparsers.*
-import com.github.kutyrev.vocabulator.model.Language
-import com.github.kutyrev.vocabulator.model.SubtitlesUnit
-import com.github.kutyrev.vocabulator.model.SupportedFileExtension
-import com.github.kutyrev.vocabulator.model.WordCard
+import com.github.kutyrev.vocabulator.model.*
 import com.github.kutyrev.vocabulator.repository.datastore.SettingsRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +16,7 @@ import javax.inject.Inject
 class DefaultFileRepository @Inject constructor(
     private val fileParserFactory: ParserFactory,
     private val settingsRepository: SettingsRepository,
+    private val vocabulatorDao: VocabulatorDao,
     @IoDispatcher private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) :
     FileRepository {
@@ -26,10 +25,10 @@ class DefaultFileRepository @Inject constructor(
         //Log.d("FileLoad", String.valueOf(System.currentTimeMillis()));
 
         withContext(dispatcher) {
-            val commonWordsArray: MutableList<String> = getCommonWords(language)
+            val commonWordsArray: List<CommonWord> = getCommonWords(language)
 
             val commonWords: HashSet<String> = HashSet()
-            commonWords.addAll(commonWordsArray)
+            commonWordsArray.forEach { commonWords.add(it.word) }
 
             val extension = fileName.substring(fileName.length - 3).uppercase()
             val newSubtitleEntry =
@@ -150,7 +149,6 @@ class DefaultFileRepository @Inject constructor(
         */
     }
 
-    private fun getCommonWords(language: Language): MutableList<String> {
-        return mutableListOf<String>("I", "you") //TODO Implementation
-    }
+    private fun getCommonWords(language: Language): List<CommonWord> =
+        vocabulatorDao.getCommonWords(language.ordinal)
 }
