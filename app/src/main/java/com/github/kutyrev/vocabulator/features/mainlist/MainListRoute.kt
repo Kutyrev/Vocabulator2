@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -28,13 +29,14 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.features.mainlist.model.MainListViewModel
+import com.github.kutyrev.vocabulator.model.EMPTY_SUBS_ID
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.repository.file.FileLoadStatus
 import com.github.kutyrev.vocabulator.ui.components.DialogBoxLoading
 import com.github.kutyrev.vocabulator.utils.getFileName
 
-private const val SPACER_DEF_WEIGHT = 1.0f
+private const val DEF_WEIGHT = 1.0f
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -52,7 +54,11 @@ fun MainListRoute(
 
     LaunchedEffect(key1 = fileLoadStatus) {
 
-        if (fileLoadStatus is FileLoadStatus.FileLoaded) TODO()
+        if (fileLoadStatus is FileLoadStatus.FileLoaded) {
+            if (viewModel.newSubsId.value != EMPTY_SUBS_ID) {
+                onEditButtonClick(viewModel.newSubsId.value)
+            }
+        }
         if (fileLoadStatus is FileLoadStatus.LoadingError) {
             Toast.makeText(
                 context,
@@ -187,7 +193,8 @@ private fun MainStructureScreen(
                                 },
                                 text = AnnotatedString(language.name).plus(
                                     AnnotatedString(
-                                        stringResource(language.fullNameResource))
+                                        stringResource(language.fullNameResource)
+                                    )
                                 )
                             )
                         }
@@ -219,15 +226,18 @@ private fun MainListScreen(
                         .clickable(onClick = { onListItemClick(subtitlesUnit.id) }),
                     elevation = dimensionResource(id = R.dimen.elevation_std)
                 ) {
-                    Row {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)),
+                            modifier = Modifier
+                                .padding(dimensionResource(id = R.dimen.padding_std))
+                                .weight(DEF_WEIGHT),
                             text = subtitlesUnit.name,
-                            style = MaterialTheme.typography.body1
+                            style = MaterialTheme.typography.body2
                         )
-                        Spacer(modifier = Modifier.weight(SPACER_DEF_WEIGHT))
                         Button(
-                            modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)),
+                            modifier = Modifier
+                                .padding(dimensionResource(id = R.dimen.padding_std))
+                                .weight(DEF_WEIGHT),
                             onClick = { onEditButtonClick(subtitlesUnit.id) }) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_baseline_edit_24),

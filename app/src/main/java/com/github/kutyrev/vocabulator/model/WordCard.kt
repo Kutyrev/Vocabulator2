@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-val EMPTY_CARD = WordCard(-1, -1)
+val EMPTY_CARD = WordCard( -1)
 
 @Entity(
     tableName = "words_cards",
@@ -21,8 +21,9 @@ val EMPTY_CARD = WordCard(-1, -1)
     indices = [Index("subtitleId")]
 )
 data class WordCard(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    val subtitleId: Int,
+    var subtitleId: Int,
     var originalWord: String = "",
     var translatedWord: String = ""
-)
+) {
+    @PrimaryKey(autoGenerate = true) var id: Int = 0
+}

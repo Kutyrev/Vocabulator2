@@ -31,7 +31,7 @@ fun EditSubScreen(
             label = { Text(stringResource(id = R.string.subtitles_name_label)) }
         )
 
-        Button(modifier = Modifier.weight(WEIGHT_STD), onClick = { /*TODO*/ }) {
+        Button(onClick = { /*TODO*/ }) {
             Text(stringResource(R.string.button_translate))
         }
 
@@ -40,12 +40,12 @@ fun EditSubScreen(
                 Row {
                     TextField(
                         modifier = Modifier.weight(WEIGHT_STD),
-                        textStyle = MaterialTheme.typography.body2,
+                        textStyle = MaterialTheme.typography.caption,
                         value = word.originalWord,
                         onValueChange = { newValue -> onOrigWordChange(newValue, word) })
                     TextField(
                         modifier = Modifier.weight(WEIGHT_STD),
-                        textStyle = MaterialTheme.typography.body2,
+                        textStyle = MaterialTheme.typography.caption,
                         value = word.translatedWord,
                         onValueChange = { newValue -> onTranslationChange(newValue, word) })
                 }

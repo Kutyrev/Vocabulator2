@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.kutyrev.vocabulator.app.LIST_ID_PARAM_NAME
+import com.github.kutyrev.vocabulator.model.EMPTY_SUBS_ID
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.WordCard
 import com.github.kutyrev.vocabulator.repository.StorageRepository
@@ -21,7 +22,7 @@ class EditSubViewModel @Inject constructor(
     private val translationRepository: TranslationRepository
 ) : ViewModel() {
 
-    private var listId: Int = 0
+    private var listId: Int = EMPTY_SUBS_ID
     private var _words: MutableStateFlow<List<WordCard>> = MutableStateFlow(listOf())
     val words: StateFlow<List<WordCard>> = _words
 
@@ -29,9 +30,12 @@ class EditSubViewModel @Inject constructor(
         savedStateHandle.get<String>(LIST_ID_PARAM_NAME)?.let {
             listId = it.toInt()
         }
-        viewModelScope.launch {
-            storageRepository.getCards(listId).collect {
-                _words.value = it
+
+        if (listId != EMPTY_SUBS_ID) {
+            viewModelScope.launch {
+                storageRepository.getCards(listId).collect {
+                    _words.value = it
+                }
             }
         }
     }

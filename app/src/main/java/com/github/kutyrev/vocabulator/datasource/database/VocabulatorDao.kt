@@ -26,7 +26,7 @@ interface VocabulatorDao {
     //Modifying subtitles
 
     @Insert
-    fun saveSubtitlesInfo(subtitlesUnit: SubtitlesUnit)
+    fun insertSubtitlesInfo(subtitlesUnit: SubtitlesUnit) : Long
 
     @Update
     fun updateSubtitlesInfo(subtitlesUnit: SubtitlesUnit)
@@ -48,7 +48,10 @@ interface VocabulatorDao {
     //Modifying words cards
 
     @Insert
-    fun saveWordCard(wordCard: WordCard)
+    fun insertWordCard(wordCard: WordCard)
+
+    @Insert
+    fun insertWordCards(wordCard: List<WordCard>)
 
     @Update
     fun updateWordCard(wordCard: WordCard)

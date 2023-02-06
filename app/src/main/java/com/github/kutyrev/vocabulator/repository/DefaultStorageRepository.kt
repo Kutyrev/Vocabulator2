@@ -9,7 +9,6 @@ import com.github.kutyrev.vocabulator.model.WordCard
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -18,30 +17,23 @@ class DefaultStorageRepository @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : StorageRepository {
     override suspend fun getSubtitlesList(): Flow<List<SubtitlesUnit>> = withContext(dispatcher) {
-        flowOf(listOf(SubtitlesUnit(1, "Test", 1, 2)))
+        vocabulatorDao.getSubtitlesList()
     }
 
     override suspend fun getCards(subtitleId: Int): Flow<List<WordCard>> = withContext(dispatcher) {
-        flowOf(
-            listOf(
-                WordCard(
-                    1,
-                    1,
-                    "to binge",
-                    "позволять себе"
-                ),
-                WordCard(
-                    2,
-                    1,
-                    "to do",
-                    "делать"
-                )
-            )
-        )
+        vocabulatorDao.getSubtitlesWordsCards(subtitleId)
     }
 
     override suspend fun getCommonWords(language: Language): List<CommonWord> =
         withContext(dispatcher) {
             vocabulatorDao.getCommonWords(language.ordinal)
+        }
+
+    override suspend fun insertNewSubtitles(subtitlesUnit: SubtitlesUnit): Int =
+        withContext(dispatcher) {
+            val id = vocabulatorDao.insertSubtitlesInfo(subtitlesUnit).toInt()
+            subtitlesUnit.wordCards.forEach { it.subtitleId = id }
+            vocabulatorDao.insertWordCards(subtitlesUnit.wordCards)
+            return@withContext id
         }
 }

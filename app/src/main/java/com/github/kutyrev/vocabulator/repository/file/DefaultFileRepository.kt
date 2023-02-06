@@ -119,7 +119,7 @@ class DefaultFileRepository @Inject constructor(
                     continue
                 }
 
-                newSubtitleEntry.wordCards.add(WordCard(-1, -1, wordEntry.key, ""))
+                newSubtitleEntry.wordCards.add(WordCard(EMPTY_SUBS_ID, wordEntry.key, ""))
             }
 
             return@withContext FileLoadStatus.FileLoaded(newSubtitleEntry)

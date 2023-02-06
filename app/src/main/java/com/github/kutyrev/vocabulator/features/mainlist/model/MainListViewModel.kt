@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.kutyrev.vocabulator.model.EMPTY_SUBS_ID
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.repository.StorageRepository
@@ -19,8 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainListViewModel @Inject constructor(
-    private val storageRepository: StorageRepository,
-    private val fileRepository: FileRepository
+    private val storageRepository: StorageRepository, private val fileRepository: FileRepository
 ) : ViewModel() {
 
     private val fileExtensionRegExPattern =
@@ -41,6 +41,10 @@ class MainListViewModel @Inject constructor(
     val showLoadingDialog: MutableState<Boolean>
         get() = _showLoadingDialog
 
+    private var _newSubsId: MutableState<Int> = mutableStateOf(EMPTY_SUBS_ID)
+    val newSubsId: MutableState<Int>
+        get() = _newSubsId
+
     fun checkFileExtension(uriString: String): Boolean {
         return fileExtensionRegExPattern.matches(uriString)
     }
@@ -58,6 +62,10 @@ class MainListViewModel @Inject constructor(
                     _fileLoadingStatus.value =
                         fileRepository.parseFile(uri = uri, language = it, fileName = fileName)
                     _showLoadingDialog.value = false
+                    if (_fileLoadingStatus.value is FileLoadStatus.FileLoaded) {
+                        _newSubsId.value =
+                            storageRepository.insertNewSubtitles((_fileLoadingStatus.value as FileLoadStatus.FileLoaded).subtitles)
+                    }
                 }
             }
         }
