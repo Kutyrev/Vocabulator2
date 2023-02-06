@@ -20,6 +20,9 @@ interface VocabulatorDao {
     @Query("SELECT * FROM subtitles")
     fun getSubtitlesList() : Flow<List<SubtitlesUnit>>
 
+    @Query("SELECT * FROM subtitles WHERE id = :id")
+    fun getSubtitleUnit(id: Int) : SubtitlesUnit
+
     @Query("SELECT * FROM words_cards WHERE subtitleId = :subtitleId")
     fun getSubtitlesWordsCards(subtitleId: Int) : Flow<List<WordCard>>
 

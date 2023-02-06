@@ -29,6 +29,11 @@ class DefaultStorageRepository @Inject constructor(
             vocabulatorDao.getCommonWords(language.ordinal)
         }
 
+    override suspend fun getSubtitlesUnit(id: Int): SubtitlesUnit =
+        withContext(dispatcher) {
+            vocabulatorDao.getSubtitleUnit(id)
+        }
+
     override suspend fun insertNewSubtitles(subtitlesUnit: SubtitlesUnit): Int =
         withContext(dispatcher) {
             val id = vocabulatorDao.insertSubtitlesInfo(subtitlesUnit).toInt()

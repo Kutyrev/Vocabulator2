@@ -16,49 +16,55 @@ private const val WEIGHT_STD = 1f
 @Composable
 fun EditSubScreen(
     words: List<WordCard>,
+    subtitlesName: String?,
     onOrigWordChange: (String, WordCard) -> Unit,
     onTranslationChange: (String, WordCard) -> Unit
 ) {
-    var text by remember { mutableStateOf("Hello") }
-
-    Column(verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_std))) {
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = dimensionResource(id = R.dimen.padding_std)),
-            value = text,
-            onValueChange = { text = it },
-            label = { Text(stringResource(id = R.string.subtitles_name_label)) }
-        )
-
-        Button(onClick = { /*TODO*/ }) {
-            Text(stringResource(R.string.button_translate))
-        }
-
-        LazyColumn(modifier = Modifier) {
-            items(words) { word ->
-                Row {
-                    TextField(
-                        modifier = Modifier.weight(WEIGHT_STD),
-                        textStyle = MaterialTheme.typography.caption,
-                        value = word.originalWord,
-                        onValueChange = { newValue -> onOrigWordChange(newValue, word) })
-                    TextField(
-                        modifier = Modifier.weight(WEIGHT_STD),
-                        textStyle = MaterialTheme.typography.caption,
-                        value = word.translatedWord,
-                        onValueChange = { newValue -> onTranslationChange(newValue, word) })
-                }
-            }
-        }
-
-        Row {
+    Scaffold(bottomBar = {
+        Row(modifier = Modifier.fillMaxWidth()) {
             OutlinedButton(modifier = Modifier.weight(WEIGHT_STD), onClick = { /*TODO*/ }) {
                 Text(stringResource(R.string.button_ok))
             }
 
             OutlinedButton(modifier = Modifier.weight(WEIGHT_STD), onClick = { /*TODO*/ }) {
                 Text(stringResource(R.string.button_cancel))
+            }
+        }
+    }) {
+        Column(modifier = Modifier.padding(it),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_std))
+        ) {
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = dimensionResource(id = R.dimen.padding_std)),
+                textStyle = MaterialTheme.typography.body2,
+                value = subtitlesName ?: "",
+                onValueChange = { /*TODO*/ },
+                label = { Text(stringResource(id = R.string.subtitles_name_label)) }
+            )
+
+            Button(onClick = { /*TODO*/ }) {
+                Text(stringResource(R.string.button_translate))
+            }
+
+            LazyColumn() {
+                items(words) { word ->
+                    Row {
+                        Checkbox(checked = false, onCheckedChange = { /*TODO*/ })
+                        TextField(
+                            modifier = Modifier.weight(WEIGHT_STD),
+                            textStyle = MaterialTheme.typography.caption,
+                            value = word.originalWord,
+                            onValueChange = { newValue -> onOrigWordChange(newValue, word) })
+                        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)))
+                        TextField(
+                            modifier = Modifier.weight(WEIGHT_STD),
+                            textStyle = MaterialTheme.typography.caption,
+                            value = word.translatedWord,
+                            onValueChange = { newValue -> onTranslationChange(newValue, word) })
+                    }
+                }
             }
         }
     }

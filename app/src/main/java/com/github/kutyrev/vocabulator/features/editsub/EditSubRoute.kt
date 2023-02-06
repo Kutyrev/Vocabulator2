@@ -13,6 +13,11 @@ fun EditSubRoute(viewModel: EditSubViewModel = hiltViewModel()) {
     val words = viewModel.words.collectAsStateWithLifecycle()
 
     Surface() {
-        EditSubScreen(words.value, viewModel::onOrigWordChange, viewModel::onTranslationChange)
+        EditSubScreen(
+            words = words.value,
+            subtitlesName = viewModel.subtitlesUnit.value?.name,
+            onOrigWordChange = viewModel::onOrigWordChange,
+            onTranslationChange = viewModel::onTranslationChange
+        )
     }
 }

@@ -1,11 +1,14 @@
 package com.github.kutyrev.vocabulator.features.editsub.model
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.kutyrev.vocabulator.app.LIST_ID_PARAM_NAME
 import com.github.kutyrev.vocabulator.model.EMPTY_SUBS_ID
 import com.github.kutyrev.vocabulator.model.Language
+import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.model.WordCard
 import com.github.kutyrev.vocabulator.repository.StorageRepository
 import com.github.kutyrev.vocabulator.repository.TranslationRepository
@@ -26,6 +29,10 @@ class EditSubViewModel @Inject constructor(
     private var _words: MutableStateFlow<List<WordCard>> = MutableStateFlow(listOf())
     val words: StateFlow<List<WordCard>> = _words
 
+    private var _subtitlesUnit: MutableState<SubtitlesUnit?> = mutableStateOf(null)
+    val subtitlesUnit: MutableState<SubtitlesUnit?>
+        get() = _subtitlesUnit
+
     init {
         savedStateHandle.get<String>(LIST_ID_PARAM_NAME)?.let {
             listId = it.toInt()
@@ -36,6 +43,9 @@ class EditSubViewModel @Inject constructor(
                 storageRepository.getCards(listId).collect {
                     _words.value = it
                 }
+            }
+            viewModelScope.launch {
+                _subtitlesUnit.value = storageRepository.getSubtitlesUnit(listId)
             }
         }
     }
