@@ -33,6 +33,18 @@ class EditSubViewModel @Inject constructor(
     val subtitlesUnit: MutableState<SubtitlesUnit?>
         get() = _subtitlesUnit
 
+    private var _subsLanguage: MutableState<Language> = mutableStateOf(Language.EN)
+    val subsLanguage: MutableState<Language>
+        get() = _subsLanguage
+
+    private var _langOfTranslation: MutableState<Language> = mutableStateOf(Language.EN)
+    val langOfTranslation: MutableState<Language>
+        get() = _langOfTranslation
+
+    private var _subtitlesName: MutableState<String> = mutableStateOf("")
+    val subtitlesName: MutableState<String>
+        get() = _subtitlesName
+
     init {
         savedStateHandle.get<String>(LIST_ID_PARAM_NAME)?.let {
             listId = it.toInt()
@@ -46,6 +58,10 @@ class EditSubViewModel @Inject constructor(
             }
             viewModelScope.launch {
                 _subtitlesUnit.value = storageRepository.getSubtitlesUnit(listId)
+                if (_subtitlesUnit.value != null) {
+                    _subsLanguage.value = Language.values()[_subtitlesUnit.value!!.origLangId]
+                    _subtitlesName.value = _subtitlesUnit.value!!.name
+                }
             }
         }
     }
@@ -69,6 +85,35 @@ class EditSubViewModel @Inject constructor(
                 origLanguage,
                 translationLanguage
             )
+        }
+    }
+
+    fun onSubtitleNameChange(newSubtitleName: String) {
+        _subtitlesName.value = newSubtitleName
+    }
+
+    fun onSubtitlesLanguageChange(language: Language) {
+        _subsLanguage.value = language
+
+    }
+
+    fun onTargetLanguageChange(language: Language) {
+        _langOfTranslation.value = language
+
+    }
+
+    fun onOkButtonPressed() {
+        var mainSubtitleInfoChanged = false
+
+        if(_subtitlesUnit.value != null) {
+            if (_subtitlesUnit.value!!.name != _subtitlesName.value) {
+                mainSubtitleInfoChanged = true
+                _subtitlesUnit.value!!.name = _subtitlesName.value
+            }
+            if(_subtitlesUnit.value!!.origLangId != _subsLanguage.value.ordinal) {
+                mainSubtitleInfoChanged = true
+                _subtitlesUnit.value!!.origLangId = _subsLanguage.value.ordinal
+            }
         }
     }
 }

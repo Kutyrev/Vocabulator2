@@ -15,9 +15,15 @@ fun EditSubRoute(viewModel: EditSubViewModel = hiltViewModel()) {
     Surface() {
         EditSubScreen(
             words = words.value,
-            subtitlesName = viewModel.subtitlesUnit.value?.name,
+            subtitlesName = viewModel.subtitlesName.value,
+            origLanguage = viewModel.subsLanguage.value,
+            targetLanguage = viewModel.langOfTranslation.value,
             onOrigWordChange = viewModel::onOrigWordChange,
-            onTranslationChange = viewModel::onTranslationChange
+            onTranslationChange = viewModel::onTranslationChange,
+            onSubtitleNameChange = viewModel::onSubtitleNameChange,
+            onSubtitlesLanguageChange = viewModel::onSubtitlesLanguageChange,
+            onTargetLanguageChange = viewModel::onTargetLanguageChange,
+            onOkButtonPressed = viewModel::onOkButtonPressed
         )
     }
 }

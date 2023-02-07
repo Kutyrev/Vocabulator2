@@ -22,4 +22,6 @@
     <string name="fr_lang_fullname"> — French</string>
     <string name="ru_lang_fullname"> — Russian</string>
     <string name="it_lang_fullname"> — Italian</string>
+    <string name="edit_scr_orig_lang_menu_desc">Select subtitles language</string>
+    <string name="edit_scr_trans_lang_menu_desc">Select translation language</string>
 </resources>
