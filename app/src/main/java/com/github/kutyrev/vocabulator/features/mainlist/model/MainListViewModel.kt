@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.kutyrev.vocabulator.model.EMPTY_SUBS_ID
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
-import com.github.kutyrev.vocabulator.repository.StorageRepository
+import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
 import com.github.kutyrev.vocabulator.repository.file.FileLoadStatus
 import com.github.kutyrev.vocabulator.repository.file.FileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

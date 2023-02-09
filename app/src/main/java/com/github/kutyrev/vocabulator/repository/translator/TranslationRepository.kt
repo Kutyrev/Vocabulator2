@@ -1,4 +1,4 @@
-package com.github.kutyrev.vocabulator.repository
+package com.github.kutyrev.vocabulator.repository.translator
 
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.WordCard

@@ -54,11 +54,17 @@ interface VocabulatorDao {
     fun insertWordCard(wordCard: WordCard)
 
     @Insert
-    fun insertWordCards(wordCard: List<WordCard>)
+    fun insertWordCards(wordCards: List<WordCard>)
 
     @Update
     fun updateWordCard(wordCard: WordCard)
 
+    @Update
+    fun updateWordCards(wordCards: List<WordCard>)
+
     @Delete
     fun deleteWordCard(wordCard: WordCard)
+
+    @Delete
+    fun deleteWordCards(wordCards: List<WordCard>)
 }

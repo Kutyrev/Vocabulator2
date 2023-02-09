@@ -4,17 +4,15 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.kutyrev.vocabulator.features.editsub.model.EditSubViewModel
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun EditSubRoute(viewModel: EditSubViewModel = hiltViewModel()) {
-    val words = viewModel.words.collectAsStateWithLifecycle()
+fun EditSubRoute(viewModel: EditSubViewModel = hiltViewModel(), onCancelButtonPressed: () -> Unit) {
+    //val words = viewModel.words.collectAsStateWithLifecycle()
 
     Surface() {
         EditSubScreen(
-            words = words.value,
+            words = viewModel.words,
             subtitlesName = viewModel.subtitlesName.value,
             origLanguage = viewModel.subsLanguage.value,
             targetLanguage = viewModel.langOfTranslation.value,
@@ -23,7 +21,9 @@ fun EditSubRoute(viewModel: EditSubViewModel = hiltViewModel()) {
             onSubtitleNameChange = viewModel::onSubtitleNameChange,
             onSubtitlesLanguageChange = viewModel::onSubtitlesLanguageChange,
             onTargetLanguageChange = viewModel::onTargetLanguageChange,
-            onOkButtonPressed = viewModel::onOkButtonPressed
+            onWordCheckedStateChange = viewModel::onWordCheckedStateChange,
+            onOkButtonPressed = viewModel::onOkButtonPressed,
+            onCancelButtonPressed = onCancelButtonPressed
         )
     }
 }

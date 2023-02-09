@@ -1,6 +1,7 @@
 package com.github.kutyrev.vocabulator.features.editsub.model
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -10,11 +11,9 @@ import com.github.kutyrev.vocabulator.model.EMPTY_SUBS_ID
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.model.WordCard
-import com.github.kutyrev.vocabulator.repository.StorageRepository
-import com.github.kutyrev.vocabulator.repository.TranslationRepository
+import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
+import com.github.kutyrev.vocabulator.repository.translator.TranslationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,8 +25,8 @@ class EditSubViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var listId: Int = EMPTY_SUBS_ID
-    private var _words: MutableStateFlow<List<WordCard>> = MutableStateFlow(listOf())
-    val words: StateFlow<List<WordCard>> = _words
+    private val _words = mutableStateListOf<EditableWordCard>()
+    val words: List<EditableWordCard> = _words
 
     private var _subtitlesUnit: MutableState<SubtitlesUnit?> = mutableStateOf(null)
     val subtitlesUnit: MutableState<SubtitlesUnit?>
@@ -52,8 +51,15 @@ class EditSubViewModel @Inject constructor(
 
         if (listId != EMPTY_SUBS_ID) {
             viewModelScope.launch {
-                storageRepository.getCards(listId).collect {
-                    _words.value = it
+                storageRepository.getCards(listId).collect { wordsList ->
+                    _words.addAll(wordsList.map {
+                        EditableWordCard(
+                            id = it.id,
+                            subtitleId = it.subtitleId,
+                            originalWord = it.originalWord,
+                            translatedWord = it.translatedWord
+                        )
+                    })
                 }
             }
             viewModelScope.launch {
@@ -67,11 +73,13 @@ class EditSubViewModel @Inject constructor(
     }
 
     fun onOrigWordChange(newValue: String, word: WordCard) {
-        word.originalWord = newValue
+        val wordIndex = _words.indexOf(word)
+        _words[wordIndex] = _words[wordIndex].copy(originalWord = newValue, changed = true)
     }
 
     fun onTranslationChange(newValue: String, word: WordCard) {
-        word.translatedWord = newValue
+        val wordIndex = _words.indexOf(word)
+        _words[wordIndex] = _words[wordIndex].copy(translatedWord = newValue, changed = true)
     }
 
     fun translateWords(
@@ -102,17 +110,51 @@ class EditSubViewModel @Inject constructor(
 
     }
 
+    fun onWordCheckedStateChange(word: EditableWordCard, checked: Boolean) {
+        val wordIndex = _words.indexOf(word)
+        _words[wordIndex] = _words[wordIndex].copy(checked = checked)
+    }
+
     fun onOkButtonPressed() {
         var mainSubtitleInfoChanged = false
 
-        if(_subtitlesUnit.value != null) {
+        if (_subtitlesUnit.value != null) {
             if (_subtitlesUnit.value!!.name != _subtitlesName.value) {
                 mainSubtitleInfoChanged = true
                 _subtitlesUnit.value!!.name = _subtitlesName.value
             }
-            if(_subtitlesUnit.value!!.origLangId != _subsLanguage.value.ordinal) {
+            if (_subtitlesUnit.value!!.origLangId != _subsLanguage.value.ordinal) {
                 mainSubtitleInfoChanged = true
                 _subtitlesUnit.value!!.origLangId = _subsLanguage.value.ordinal
+            }
+            viewModelScope.launch {
+                if (mainSubtitleInfoChanged) {
+                    storageRepository.updateSubtitles(_subtitlesUnit.value!!)
+                }
+            }
+        }
+
+        val changedWords: MutableList<WordCard> = mutableListOf()
+        val wordsToDelete: MutableList<WordCard> = mutableListOf()
+
+        _words.forEach {
+            if(it.changed && it.checked) {
+                changedWords.add(WordCard(it.id, it.subtitleId, it.originalWord, it.translatedWord))
+            }
+            if(!it.checked) {
+                wordsToDelete.add(WordCard(it.id, it.subtitleId, it.originalWord, it.translatedWord))
+            }
+        }
+
+        if(changedWords.size > 0) {
+            viewModelScope.launch {
+                storageRepository.updateWordCards(changedWords)
+            }
+        }
+
+        if(wordsToDelete.size > 0) {
+            viewModelScope.launch {
+                storageRepository.deleteWordCards(wordsToDelete)
             }
         }
     }

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.kutyrev.vocabulator.app.LIST_ID_PARAM_NAME
 import com.github.kutyrev.vocabulator.model.EMPTY_CARD
 import com.github.kutyrev.vocabulator.model.WordCard
-import com.github.kutyrev.vocabulator.repository.StorageRepository
+import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

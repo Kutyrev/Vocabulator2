@@ -10,10 +10,10 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import com.github.kutyrev.vocabulator.datasource.database.VocabulatorDao
 import com.github.kutyrev.vocabulator.datasource.fileparsers.ParserFactory
 import com.github.kutyrev.vocabulator.datasource.translators.TranslationBackSource
-import com.github.kutyrev.vocabulator.repository.DefaultStorageRepository
-import com.github.kutyrev.vocabulator.repository.DefaultTranslationRepository
-import com.github.kutyrev.vocabulator.repository.StorageRepository
-import com.github.kutyrev.vocabulator.repository.TranslationRepository
+import com.github.kutyrev.vocabulator.repository.storage.DefaultStorageRepository
+import com.github.kutyrev.vocabulator.repository.translator.DefaultTranslationRepository
+import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
+import com.github.kutyrev.vocabulator.repository.translator.TranslationRepository
 import com.github.kutyrev.vocabulator.repository.datastore.DataStoreRepository
 import com.github.kutyrev.vocabulator.repository.datastore.SettingsRepository
 import com.github.kutyrev.vocabulator.repository.file.DefaultFileRepository

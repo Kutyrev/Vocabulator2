@@ -1,4 +1,4 @@
-package com.github.kutyrev.vocabulator.repository
+package com.github.kutyrev.vocabulator.repository.storage
 
 import com.github.kutyrev.vocabulator.app.di.IoDispatcher
 import com.github.kutyrev.vocabulator.datasource.database.VocabulatorDao
@@ -41,4 +41,22 @@ class DefaultStorageRepository @Inject constructor(
             vocabulatorDao.insertWordCards(subtitlesUnit.wordCards)
             return@withContext id
         }
+
+    override suspend fun updateSubtitles(subtitlesUnit: SubtitlesUnit) {
+        withContext(dispatcher) {
+            vocabulatorDao.updateSubtitlesInfo(subtitlesUnit)
+        }
+    }
+
+    override suspend fun updateWordCards(wordCards: List<WordCard>) {
+        withContext(dispatcher) {
+            vocabulatorDao.updateWordCards(wordCards)
+        }
+    }
+
+    override suspend fun deleteWordCards(wordCards: List<WordCard>) {
+        withContext(dispatcher) {
+            vocabulatorDao.deleteWordCards(wordCards)
+        }
+    }
 }

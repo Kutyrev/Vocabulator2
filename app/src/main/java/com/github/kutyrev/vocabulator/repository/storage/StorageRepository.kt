@@ -1,4 +1,4 @@
-package com.github.kutyrev.vocabulator.repository
+package com.github.kutyrev.vocabulator.repository.storage
 
 import com.github.kutyrev.vocabulator.model.CommonWord
 import com.github.kutyrev.vocabulator.model.Language
@@ -12,4 +12,7 @@ interface StorageRepository {
     suspend fun getCommonWords(language: Language): List<CommonWord>
     suspend fun getSubtitlesUnit(id: Int): SubtitlesUnit
     suspend fun insertNewSubtitles(subtitlesUnit: SubtitlesUnit): Int
+    suspend fun updateSubtitles(subtitlesUnit: SubtitlesUnit)
+    suspend fun updateWordCards(wordCards: List<WordCard>)
+    suspend fun deleteWordCards(wordCards: List<WordCard>)
 }

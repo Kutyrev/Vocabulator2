@@ -50,7 +50,7 @@ fun VocabulatorNavHost(
             CardsRoute()
         }
         composable(route = VocabulatorDestinations.EditSubtitlesDestination.route) {
-            EditSubRoute()
+            EditSubRoute(onCancelButtonPressed = { navController.popBackStack() })
         }
         composable(route = VocabulatorDestinations.SettingsDestination.route) {
             SettingsRoute(onSaveSettings = { navController.popBackStack() })
