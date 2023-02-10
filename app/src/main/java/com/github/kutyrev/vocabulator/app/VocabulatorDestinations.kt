@@ -4,5 +4,6 @@ enum class VocabulatorDestinations(val route: String) {
     MainListDestination("mainlist"),
     CardsDestinations("cards/{listId}"),
     EditSubtitlesDestination("edit/{listId}"),
-    SettingsDestination("settings")
+    SettingsDestination("settings"),
+    CommonsDestination("commons")
 }

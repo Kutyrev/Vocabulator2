@@ -7,10 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.kutyrev.vocabulator.app.LIST_ID_PARAM_NAME
-import com.github.kutyrev.vocabulator.model.EMPTY_SUBS_ID
-import com.github.kutyrev.vocabulator.model.Language
-import com.github.kutyrev.vocabulator.model.SubtitlesUnit
-import com.github.kutyrev.vocabulator.model.WordCard
+import com.github.kutyrev.vocabulator.model.*
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
 import com.github.kutyrev.vocabulator.repository.translator.TranslationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,6 +40,10 @@ class EditSubViewModel @Inject constructor(
     private var _subtitlesName: MutableState<String> = mutableStateOf("")
     val subtitlesName: MutableState<String>
         get() = _subtitlesName
+
+    private var _uncheckedToDict: MutableState<Boolean> = mutableStateOf(false)
+    val uncheckedToDict: MutableState<Boolean>
+        get() = _uncheckedToDict
 
     init {
         savedStateHandle.get<String>(LIST_ID_PARAM_NAME)?.let {
@@ -115,7 +116,75 @@ class EditSubViewModel @Inject constructor(
         _words[wordIndex] = _words[wordIndex].copy(checked = checked)
     }
 
+    fun onChangeUncheckedToDict(newValue: Boolean) {
+        _uncheckedToDict.value = newValue
+    }
+
     fun onOkButtonPressed() {
+        updateMainInfo()
+
+        updateWords()
+
+        updateCommonWords()
+    }
+
+    private fun updateCommonWords() {
+        val newCommonWords: MutableList<CommonWord> = mutableListOf()
+
+        if (uncheckedToDict.value) {
+            words.forEach {
+                if (!it.checked) {
+                    newCommonWords.add(
+                        CommonWord(
+                            languageId = subsLanguage.value.ordinal,
+                            word = it.originalWord
+                        )
+                    )
+                }
+            }
+
+            if (newCommonWords.size > 0) {
+                viewModelScope.launch {
+                    storageRepository.insertCommonWords(newCommonWords)
+                }
+            }
+        }
+    }
+
+    private fun updateWords() {
+        val changedWords: MutableList<WordCard> = mutableListOf()
+        val wordsToDelete: MutableList<WordCard> = mutableListOf()
+
+        words.forEach {
+            if (it.changed && it.checked) {
+                changedWords.add(WordCard(it.id, it.subtitleId, it.originalWord, it.translatedWord))
+            }
+            if (!it.checked) {
+                wordsToDelete.add(
+                    WordCard(
+                        it.id,
+                        it.subtitleId,
+                        it.originalWord,
+                        it.translatedWord
+                    )
+                )
+            }
+        }
+
+        if (changedWords.size > 0) {
+            viewModelScope.launch {
+                storageRepository.updateWordCards(changedWords)
+            }
+        }
+
+        if (wordsToDelete.size > 0) {
+            viewModelScope.launch {
+                storageRepository.deleteWordCards(wordsToDelete)
+            }
+        }
+    }
+
+    private fun updateMainInfo() {
         var mainSubtitleInfoChanged = false
 
         if (_subtitlesUnit.value != null) {
@@ -127,34 +196,10 @@ class EditSubViewModel @Inject constructor(
                 mainSubtitleInfoChanged = true
                 _subtitlesUnit.value!!.origLangId = _subsLanguage.value.ordinal
             }
-            viewModelScope.launch {
-                if (mainSubtitleInfoChanged) {
+            if (mainSubtitleInfoChanged) {
+                viewModelScope.launch {
                     storageRepository.updateSubtitles(_subtitlesUnit.value!!)
                 }
-            }
-        }
-
-        val changedWords: MutableList<WordCard> = mutableListOf()
-        val wordsToDelete: MutableList<WordCard> = mutableListOf()
-
-        _words.forEach {
-            if(it.changed && it.checked) {
-                changedWords.add(WordCard(it.id, it.subtitleId, it.originalWord, it.translatedWord))
-            }
-            if(!it.checked) {
-                wordsToDelete.add(WordCard(it.id, it.subtitleId, it.originalWord, it.translatedWord))
-            }
-        }
-
-        if(changedWords.size > 0) {
-            viewModelScope.launch {
-                storageRepository.updateWordCards(changedWords)
-            }
-        }
-
-        if(wordsToDelete.size > 0) {
-            viewModelScope.launch {
-                storageRepository.deleteWordCards(wordsToDelete)
             }
         }
     }

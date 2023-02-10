@@ -3,7 +3,6 @@ package com.github.kutyrev.vocabulator.features.editsub
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.github.kutyrev.vocabulator.features.editsub.model.EditSubViewModel
 
 @Composable
@@ -16,6 +15,7 @@ fun EditSubRoute(viewModel: EditSubViewModel = hiltViewModel(), onCancelButtonPr
             subtitlesName = viewModel.subtitlesName.value,
             origLanguage = viewModel.subsLanguage.value,
             targetLanguage = viewModel.langOfTranslation.value,
+            uncheckedToDict = viewModel.uncheckedToDict.value,
             onOrigWordChange = viewModel::onOrigWordChange,
             onTranslationChange = viewModel::onTranslationChange,
             onSubtitleNameChange = viewModel::onSubtitleNameChange,
@@ -23,7 +23,8 @@ fun EditSubRoute(viewModel: EditSubViewModel = hiltViewModel(), onCancelButtonPr
             onTargetLanguageChange = viewModel::onTargetLanguageChange,
             onWordCheckedStateChange = viewModel::onWordCheckedStateChange,
             onOkButtonPressed = viewModel::onOkButtonPressed,
-            onCancelButtonPressed = onCancelButtonPressed
+            onCancelButtonPressed = onCancelButtonPressed,
+            onChangeUncheckedToDict = viewModel::onChangeUncheckedToDict
         )
     }
 }

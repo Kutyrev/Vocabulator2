@@ -4,8 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "common_words")
-data class CommonWord(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+open class CommonWord(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var languageId: Int,
     var word: String
 )

@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 interface VocabulatorDao {
     //Getters
 
-    @Query("SELECT * FROM common_words WHERE languageId = :languageId")
+    @Query("SELECT * FROM common_words WHERE languageId = :languageId ORDER BY word")
     fun getCommonWords(languageId: Int) : List<CommonWord>
 
     @Query("SELECT * FROM subtitles")
@@ -41,6 +41,9 @@ interface VocabulatorDao {
 
     @Insert
     fun saveCommonWord(commonWord: CommonWord)
+
+    @Insert
+    fun insertCommonWords(commonWords: List<CommonWord>)
 
     @Update
     fun updateCommonWord(commonWord: CommonWord)

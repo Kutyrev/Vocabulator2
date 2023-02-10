@@ -44,7 +44,8 @@ fun MainListRoute(
     viewModel: MainListViewModel = hiltViewModel(),
     onListItemClick: (Int) -> Unit,
     onEditButtonClick: (Int) -> Unit,
-    onSettingsMenuItemClick: () -> Unit
+    onSettingsMenuItemClick: () -> Unit,
+    onCommonsButtonClick: () -> Unit
 ) {
     val listState = viewModel.subtitlesList.collectAsStateWithLifecycle(initialValue = listOf())
 
@@ -77,6 +78,7 @@ fun MainListRoute(
         onListItemClick = onListItemClick,
         onEditButtonClick = onEditButtonClick,
         onSettingsMenuItemClick = onSettingsMenuItemClick,
+        onCommonsButtonClick = onCommonsButtonClick,
         checkFileExtension = viewModel::checkFileExtension,
         setLanguage = viewModel::setSubsLanguage,
         loadFile = viewModel::parseFile
@@ -89,6 +91,7 @@ private fun MainStructureScreen(
     onListItemClick: (Int) -> Unit,
     onEditButtonClick: (Int) -> Unit,
     onSettingsMenuItemClick: () -> Unit,
+    onCommonsButtonClick: () -> Unit,
     checkFileExtension: (String) -> Boolean,
     setLanguage: (Language?) -> Unit,
     loadFile: (Uri, String?) -> Unit,
@@ -120,7 +123,7 @@ private fun MainStructureScreen(
             TopAppBar(elevation = dimensionResource(id = R.dimen.elevation_std),
                 title = { Text(stringResource(id = R.string.app_name)) },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = onCommonsButtonClick) {
                         Icon(
                             painter = painterResource(R.drawable.ic_baseline_fact_check_24),
                             contentDescription = stringResource(id = R.string.button_commons)

@@ -15,4 +15,5 @@ interface StorageRepository {
     suspend fun updateSubtitles(subtitlesUnit: SubtitlesUnit)
     suspend fun updateWordCards(wordCards: List<WordCard>)
     suspend fun deleteWordCards(wordCards: List<WordCard>)
+    suspend fun insertCommonWords(commonWords: List<CommonWord>)
 }
