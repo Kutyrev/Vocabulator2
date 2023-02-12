@@ -49,7 +49,7 @@ interface VocabulatorDao {
     fun updateCommonWord(commonWord: CommonWord)
 
     @Delete
-    fun deleteCommonWord(commonWord: CommonWord)
+    fun deleteCommonWords(commonWords: List<CommonWord>)
 
     //Modifying words cards
 

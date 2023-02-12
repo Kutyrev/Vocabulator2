@@ -25,4 +25,5 @@
     <string name="edit_scr_orig_lang_menu_desc">Select subtitles language</string>
     <string name="edit_scr_trans_lang_menu_desc">Select translation language</string>
     <string name="add_unchecked_text">Add unchecked to the known words dictionary</string>
+    <string name="commons_scr_search">Search common word</string>
 </resources>

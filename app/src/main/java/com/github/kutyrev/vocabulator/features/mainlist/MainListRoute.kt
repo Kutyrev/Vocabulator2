@@ -34,6 +34,7 @@ import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.repository.file.FileLoadStatus
 import com.github.kutyrev.vocabulator.ui.components.DialogBoxLoading
+import com.github.kutyrev.vocabulator.ui.theme.VocabulatorTheme
 import com.github.kutyrev.vocabulator.utils.getFileName
 
 private const val DEF_WEIGHT = 1.0f
@@ -73,16 +74,18 @@ fun MainListRoute(
         DialogBoxLoading()
     }
 
-    MainStructureScreen(
-        listState = listState,
-        onListItemClick = onListItemClick,
-        onEditButtonClick = onEditButtonClick,
-        onSettingsMenuItemClick = onSettingsMenuItemClick,
-        onCommonsButtonClick = onCommonsButtonClick,
-        checkFileExtension = viewModel::checkFileExtension,
-        setLanguage = viewModel::setSubsLanguage,
-        loadFile = viewModel::parseFile
-    )
+    VocabulatorTheme {
+        MainStructureScreen(
+            listState = listState,
+            onListItemClick = onListItemClick,
+            onEditButtonClick = onEditButtonClick,
+            onSettingsMenuItemClick = onSettingsMenuItemClick,
+            onCommonsButtonClick = onCommonsButtonClick,
+            checkFileExtension = viewModel::checkFileExtension,
+            setLanguage = viewModel::setSubsLanguage,
+            loadFile = viewModel::parseFile
+        )
+    }
 }
 
 @Composable

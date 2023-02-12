@@ -6,7 +6,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.kutyrev.vocabulator.features.editsub.model.EditSubViewModel
 
 @Composable
-fun EditSubRoute(viewModel: EditSubViewModel = hiltViewModel(), onCancelButtonPressed: () -> Unit) {
+fun EditSubRoute(
+    viewModel: EditSubViewModel = hiltViewModel(),
+    onOkButtonPressedRoute: () -> Unit,
+    onCancelButtonPressed: () -> Unit
+) {
     //val words = viewModel.words.collectAsStateWithLifecycle()
 
     Surface() {
@@ -23,6 +27,7 @@ fun EditSubRoute(viewModel: EditSubViewModel = hiltViewModel(), onCancelButtonPr
             onTargetLanguageChange = viewModel::onTargetLanguageChange,
             onWordCheckedStateChange = viewModel::onWordCheckedStateChange,
             onOkButtonPressed = viewModel::onOkButtonPressed,
+            onOkButtonPressedRoute = onOkButtonPressedRoute,
             onCancelButtonPressed = onCancelButtonPressed,
             onChangeUncheckedToDict = viewModel::onChangeUncheckedToDict
         )

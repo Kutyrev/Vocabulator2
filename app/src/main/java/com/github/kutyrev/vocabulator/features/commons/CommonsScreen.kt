@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
 import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.features.commons.model.EditableCommonWord
 import com.github.kutyrev.vocabulator.model.Language
@@ -33,6 +35,7 @@ fun CommonsScreen(
     onLanguageChange: (Language) -> Unit,
     onWordCheckedStateChange: (EditableCommonWord, Boolean) -> Unit,
     onSearchTextChange: (String) -> Unit,
+    onOkButtonPressed: () -> Unit,
     onOkButtonPressedRoute: () -> Unit,
     onCancelButtonPressed: () -> Unit
 ) {
@@ -52,6 +55,7 @@ fun CommonsScreen(
         )
     }, bottomBar = {
         BottomBar(
+            onOkButtonPressed = onOkButtonPressed,
             onOkButtonPressedRoute = onOkButtonPressedRoute,
             onCancelButtonPressed = onCancelButtonPressed
         )
@@ -64,8 +68,12 @@ fun CommonsScreen(
                             commonWord, checked
                         )
                     })
+
                     Text(
-                        text = commonWord.word, style = MaterialTheme.typography.caption
+                        text = commonWord.word,
+                        style = MaterialTheme.typography.caption,
+                        textDecoration = if (commonWord.checked) TextDecoration.None
+                        else TextDecoration.LineThrough
                     )
                 }
             }
@@ -75,12 +83,16 @@ fun CommonsScreen(
 
 @Composable
 private fun BottomBar(
+    onOkButtonPressed: () -> Unit,
     onOkButtonPressedRoute: () -> Unit,
     onCancelButtonPressed: () -> Unit
 ) {
     Row(modifier = Modifier.fillMaxWidth()) {
         OutlinedButton(modifier = Modifier.weight(WEIGHT_STD),
-            onClick = { onOkButtonPressedRoute() }) {
+            onClick = {
+                onOkButtonPressed()
+                onOkButtonPressedRoute()
+            }) {
             Text(stringResource(R.string.button_ok))
         }
         OutlinedButton(
@@ -128,13 +140,26 @@ private fun TopBar(
             }
         }
 
-        TextField(value = searchText, onValueChange = { newText ->
-            onSearchTextChange(newText)
-            coroutineScope.launch {
-                listState.animateScrollToItem(words.indexOf(words.find {
-                    it.word.startsWith(newText)
-                }))
-            }
-        })
+        TextField(
+            value = searchText,
+            singleLine = true,
+            textStyle = MaterialTheme.typography.caption,
+            leadingIcon = {
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = stringResource(R.string.commons_scr_search)
+                )
+            },
+            onValueChange = { newText ->
+                onSearchTextChange(newText)
+                coroutineScope.launch {
+                    val foundedWord = words.find {
+                        it.word.startsWith(newText)
+                    }
+                    if (foundedWord != null) {
+                        listState.animateScrollToItem(words.indexOf(foundedWord))
+                    }
+                }
+            })
     }
 }

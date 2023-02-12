@@ -122,9 +122,7 @@ class EditSubViewModel @Inject constructor(
 
     fun onOkButtonPressed() {
         updateMainInfo()
-
         updateWords()
-
         updateCommonWords()
     }
 
@@ -143,7 +141,7 @@ class EditSubViewModel @Inject constructor(
                 }
             }
 
-            if (newCommonWords.size > 0) {
+            if (newCommonWords.isNotEmpty()) {
                 viewModelScope.launch {
                     storageRepository.insertCommonWords(newCommonWords)
                 }
@@ -171,13 +169,13 @@ class EditSubViewModel @Inject constructor(
             }
         }
 
-        if (changedWords.size > 0) {
+        if (changedWords.isNotEmpty()) {
             viewModelScope.launch {
                 storageRepository.updateWordCards(changedWords)
             }
         }
 
-        if (wordsToDelete.size > 0) {
+        if (wordsToDelete.isNotEmpty()) {
             viewModelScope.launch {
                 storageRepository.deleteWordCards(wordsToDelete)
             }

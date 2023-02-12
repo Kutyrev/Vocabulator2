@@ -35,6 +35,7 @@ fun EditSubScreen(
     onTargetLanguageChange: (Language) -> Unit,
     onWordCheckedStateChange: (EditableWordCard, Boolean) -> Unit,
     onOkButtonPressed: () -> Unit,
+    onOkButtonPressedRoute: () -> Unit,
     onCancelButtonPressed: () -> Unit,
     onChangeUncheckedToDict: (Boolean) -> Unit
 ) {
@@ -56,6 +57,7 @@ fun EditSubScreen(
         },
         bottomBar = { BottomBar(
             onOkButtonPressed = onOkButtonPressed,
+            onOkButtonPressedRoute = onOkButtonPressedRoute,
             onCancelButtonPressed = onCancelButtonPressed
         ) }
     ) { paddingValues ->
@@ -85,12 +87,16 @@ fun EditSubScreen(
 @Composable
 private fun BottomBar(
     onOkButtonPressed: () -> Unit,
+    onOkButtonPressedRoute: () -> Unit,
     onCancelButtonPressed: () -> Unit
 ) {
     Row(modifier = Modifier.fillMaxWidth()) {
         OutlinedButton(
             modifier = Modifier.weight(WEIGHT_STD),
-            onClick = onOkButtonPressed
+            onClick = {
+                onOkButtonPressed()
+                onOkButtonPressedRoute()
+            }
         ) {
             Text(stringResource(R.string.button_ok))
         }

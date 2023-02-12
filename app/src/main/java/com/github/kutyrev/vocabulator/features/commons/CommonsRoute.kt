@@ -19,6 +19,7 @@ fun CommonsRoute(
             onLanguageChange = viewModel::onLanguageChange,
             onWordCheckedStateChange = viewModel::onWordCheckedStateChange,
             onSearchTextChange = viewModel::onSearchTextChange,
+            onOkButtonPressed = viewModel::onOkButtonPressed,
             onOkButtonPressedRoute = onOkButtonPressedRoute,
             onCancelButtonPressed = onCancelButtonPressed
         )

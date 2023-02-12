@@ -8,12 +8,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface StorageRepository {
     suspend fun getSubtitlesList(): Flow<List<SubtitlesUnit>>
-    suspend fun getCards(subtitleId: Int): Flow<List<WordCard>>
-    suspend fun getCommonWords(language: Language): List<CommonWord>
     suspend fun getSubtitlesUnit(id: Int): SubtitlesUnit
     suspend fun insertNewSubtitles(subtitlesUnit: SubtitlesUnit): Int
     suspend fun updateSubtitles(subtitlesUnit: SubtitlesUnit)
+
+    suspend fun getCards(subtitleId: Int): Flow<List<WordCard>>
     suspend fun updateWordCards(wordCards: List<WordCard>)
     suspend fun deleteWordCards(wordCards: List<WordCard>)
+
+    suspend fun getCommonWords(language: Language): List<CommonWord>
     suspend fun insertCommonWords(commonWords: List<CommonWord>)
+    suspend fun deleteCommonWords(commonWords: List<CommonWord>)
 }

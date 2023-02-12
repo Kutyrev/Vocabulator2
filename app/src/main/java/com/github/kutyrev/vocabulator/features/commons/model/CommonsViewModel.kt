@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.kutyrev.vocabulator.model.CommonWord
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,5 +44,20 @@ class CommonsViewModel @Inject constructor(private val storageRepository: Storag
     fun onWordCheckedStateChange(word: EditableCommonWord, checked: Boolean) {
         val wordIndex = words.indexOf(word)
         words[wordIndex] = words[wordIndex].copy(checked = checked)
+    }
+
+    fun onOkButtonPressed() {
+        val commonWordsToDelete = mutableListOf<CommonWord>()
+        for (word in words) {
+            if (!word.checked) {
+                commonWordsToDelete.add(CommonWord(word.id, word.languageId, word.word))
+            }
+        }
+
+        if(commonWordsToDelete.isNotEmpty()) {
+            viewModelScope.launch {
+                storageRepository.deleteCommonWords(commonWordsToDelete)
+            }
+        }
     }
 }

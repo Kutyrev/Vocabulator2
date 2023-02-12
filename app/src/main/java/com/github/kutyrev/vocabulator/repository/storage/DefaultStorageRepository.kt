@@ -65,4 +65,10 @@ class DefaultStorageRepository @Inject constructor(
             vocabulatorDao.insertCommonWords(commonWords)
         }
     }
+
+    override suspend fun deleteCommonWords(commonWords: List<CommonWord>) {
+        withContext(dispatcher) {
+            vocabulatorDao.deleteCommonWords(commonWords)
+        }
+    }
 }
