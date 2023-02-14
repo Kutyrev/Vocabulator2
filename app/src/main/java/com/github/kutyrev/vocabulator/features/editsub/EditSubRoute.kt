@@ -26,6 +26,7 @@ fun EditSubRoute(
             onSubtitlesLanguageChange = viewModel::onSubtitlesLanguageChange,
             onTargetLanguageChange = viewModel::onTargetLanguageChange,
             onWordCheckedStateChange = viewModel::onWordCheckedStateChange,
+            onTranslateButtonClicked = viewModel::translateWords,
             onOkButtonPressed = viewModel::onOkButtonPressed,
             onOkButtonPressedRoute = onOkButtonPressedRoute,
             onCancelButtonPressed = onCancelButtonPressed,

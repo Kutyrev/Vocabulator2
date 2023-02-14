@@ -7,6 +7,7 @@ interface TranslationRepository {
     suspend fun getTranslation(
         words: List<WordCard>,
         origLanguage: Language,
-        translationLanguage: Language
+        translationLanguage: Language,
+        translationCallback: TranslationCallback
     )
 }

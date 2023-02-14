@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.kutyrev.vocabulator.app.LIST_ID_PARAM_NAME
 import com.github.kutyrev.vocabulator.model.*
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
+import com.github.kutyrev.vocabulator.repository.translator.TranslationCallback
 import com.github.kutyrev.vocabulator.repository.translator.TranslationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,7 +20,7 @@ class EditSubViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val storageRepository: StorageRepository,
     private val translationRepository: TranslationRepository
-) : ViewModel() {
+) : ViewModel(), TranslationCallback {
 
     private var listId: Int = EMPTY_SUBS_ID
     private val _words = mutableStateListOf<EditableWordCard>()
@@ -83,16 +84,13 @@ class EditSubViewModel @Inject constructor(
         _words[wordIndex] = _words[wordIndex].copy(translatedWord = newValue, changed = true)
     }
 
-    fun translateWords(
-        words: List<WordCard>,
-        origLanguage: Language,
-        translationLanguage: Language
-    ) {
+    fun translateWords() {
         viewModelScope.launch {
             translationRepository.getTranslation(
                 words,
-                origLanguage,
-                translationLanguage
+                subsLanguage.value,
+                langOfTranslation.value,
+                this@EditSubViewModel
             )
         }
     }
@@ -103,12 +101,10 @@ class EditSubViewModel @Inject constructor(
 
     fun onSubtitlesLanguageChange(language: Language) {
         _subsLanguage.value = language
-
     }
 
     fun onTargetLanguageChange(language: Language) {
         _langOfTranslation.value = language
-
     }
 
     fun onWordCheckedStateChange(word: EditableWordCard, checked: Boolean) {
@@ -124,6 +120,12 @@ class EditSubViewModel @Inject constructor(
         updateMainInfo()
         updateWords()
         updateCommonWords()
+    }
+
+    override fun receiveTranslation(translatedWords: List<WordCard>) {
+        for (i in _words.indices) {
+            _words[i] = _words[i].copy()
+        }
     }
 
     private fun updateCommonWords() {

@@ -9,7 +9,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.github.kutyrev.vocabulator.datasource.database.VocabulatorDao
 import com.github.kutyrev.vocabulator.datasource.fileparsers.ParserFactory
-import com.github.kutyrev.vocabulator.datasource.translators.TranslationBackSource
+import com.github.kutyrev.vocabulator.datasource.firebase.CloudBase
 import com.github.kutyrev.vocabulator.repository.storage.DefaultStorageRepository
 import com.github.kutyrev.vocabulator.repository.translator.DefaultTranslationRepository
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
@@ -39,7 +39,7 @@ class RepositoryModule {
     }
 
     @Provides
-    fun providesTranslationRepository(translationBackSource: TranslationBackSource): TranslationRepository {
+    fun providesTranslationRepository(translationBackSource: CloudBase): TranslationRepository {
         return DefaultTranslationRepository(translationBackSource)
     }
 

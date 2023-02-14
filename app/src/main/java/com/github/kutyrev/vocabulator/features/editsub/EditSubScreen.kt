@@ -34,6 +34,7 @@ fun EditSubScreen(
     onSubtitlesLanguageChange: (Language) -> Unit,
     onTargetLanguageChange: (Language) -> Unit,
     onWordCheckedStateChange: (EditableWordCard, Boolean) -> Unit,
+    onTranslateButtonClicked: () -> Unit,
     onOkButtonPressed: () -> Unit,
     onOkButtonPressedRoute: () -> Unit,
     onCancelButtonPressed: () -> Unit,
@@ -52,14 +53,17 @@ fun EditSubScreen(
                 targetLanguage = targetLanguage,
                 onTargetLanguageChange = onTargetLanguageChange,
                 uncheckedToDict = uncheckedToDict,
-                onChangeUncheckedToDict = onChangeUncheckedToDict
+                onChangeUncheckedToDict = onChangeUncheckedToDict,
+                onTranslateButtonClicked = onTranslateButtonClicked
             )
         },
-        bottomBar = { BottomBar(
-            onOkButtonPressed = onOkButtonPressed,
-            onOkButtonPressedRoute = onOkButtonPressedRoute,
-            onCancelButtonPressed = onCancelButtonPressed
-        ) }
+        bottomBar = {
+            BottomBar(
+                onOkButtonPressed = onOkButtonPressed,
+                onOkButtonPressedRoute = onOkButtonPressedRoute,
+                onCancelButtonPressed = onCancelButtonPressed
+            )
+        }
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
             items(words) { word ->
@@ -120,7 +124,8 @@ private fun TopBar(
     targetLanguage: Language,
     onTargetLanguageChange: (Language) -> Unit,
     uncheckedToDict: Boolean,
-    onChangeUncheckedToDict: (Boolean) -> Unit
+    onChangeUncheckedToDict: (Boolean) -> Unit,
+    onTranslateButtonClicked: () -> Unit,
 ) {
     var origLanguageMenuExpanded by rememberSaveable {
         mutableStateOf(false)
@@ -198,7 +203,7 @@ private fun TopBar(
 
         }
 
-        OutlinedButton(modifier = Modifier.fillMaxWidth(), onClick = { /*TODO*/ }) {
+        OutlinedButton(modifier = Modifier.fillMaxWidth(), onClick = onTranslateButtonClicked) {
             Text(stringResource(R.string.button_translate))
         }
 
