@@ -48,6 +48,12 @@ class DefaultStorageRepository @Inject constructor(
         }
     }
 
+    override suspend fun deleteSubtitles(subtitlesUnit: SubtitlesUnit) {
+        withContext(dispatcher) {
+            vocabulatorDao.deleteSubtitles(subtitlesUnit)
+        }
+    }
+
     override suspend fun updateWordCards(wordCards: List<WordCard>) {
         withContext(dispatcher) {
             vocabulatorDao.updateWordCards(wordCards)

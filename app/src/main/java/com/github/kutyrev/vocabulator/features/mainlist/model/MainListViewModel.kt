@@ -70,4 +70,10 @@ class MainListViewModel @Inject constructor(
             }
         }
     }
+
+    fun onSubtitleSwiped(subtitlesUnit: SubtitlesUnit) {
+        viewModelScope.launch {
+            storageRepository.deleteSubtitles(subtitlesUnit)
+        }
+    }
 }

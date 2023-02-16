@@ -11,6 +11,7 @@ interface StorageRepository {
     suspend fun getSubtitlesUnit(id: Int): SubtitlesUnit
     suspend fun insertNewSubtitles(subtitlesUnit: SubtitlesUnit): Int
     suspend fun updateSubtitles(subtitlesUnit: SubtitlesUnit)
+    suspend fun deleteSubtitles(subtitlesUnit: SubtitlesUnit)
 
     suspend fun getCards(subtitleId: Int): Flow<List<WordCard>>
     suspend fun updateWordCards(wordCards: List<WordCard>)
