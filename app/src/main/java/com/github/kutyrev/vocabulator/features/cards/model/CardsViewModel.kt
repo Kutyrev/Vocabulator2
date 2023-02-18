@@ -12,8 +12,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.random.Random
 
 private const val ZERO_CARD_POSITION_OFFSET = 0f
+private const val NEXT_CARD_OFFSET = 1f
+private const val PREVIOUS_CARD_OFFSET = -1f
 
 @HiltViewModel
 class CardsViewModel @Inject constructor(
@@ -28,6 +31,10 @@ class CardsViewModel @Inject constructor(
     private var _card = MutableStateFlow(EMPTY_CARD)
     val card: StateFlow<WordCard>
         get() = _card
+    var isForeignLangFirst = mutableStateOf(true)
+        private set
+    var isRandomCards = mutableStateOf(false)
+        private set
 
     init {
         savedStateHandle.get<String>(LIST_ID_PARAM_NAME)?.let {
@@ -36,21 +43,46 @@ class CardsViewModel @Inject constructor(
 
         viewModelScope.launch {
             storageRepository.getCards(listId.value).collect {
-                _cards.value
+                _cards.value = it
+                emitNewCard(ZERO_CARD_POSITION_OFFSET)
             }
-            emitNewCard(ZERO_CARD_POSITION_OFFSET)
         }
     }
 
     fun emitNewCard(offsetX: Float) {
         if (cards.value.isEmpty()) return
 
-        if (offsetX > 0 && cardIndex > 0)
-            cardIndex -= 1
-        else if (offsetX < 0 && cardIndex < cards.value.size - 1) {
-            cardIndex += 1
+        val maxInd = cards.value.size * 2 - 2
+
+        if (!isRandomCards.value) {
+
+            if (offsetX > 0 && cardIndex > 0)
+                cardIndex -= 1
+            else if (offsetX < 0 && cardIndex < maxInd) {
+                cardIndex += 1
+            }
+        } else {
+            cardIndex = Random.nextInt(0, maxInd)
         }
 
-        _card.value = cards.value[cardIndex]
+        if (cardIndex < cards.value.size) {
+            _card.value = cards.value[cardIndex]
+            isForeignLangFirst.value = true
+        } else {
+            _card.value = cards.value[cardIndex - cards.value.size]
+            isForeignLangFirst.value = false
+        }
+    }
+
+    fun onChangeIsRandomCardsState(newState: Boolean) {
+        isRandomCards.value = newState
+    }
+
+    fun onNextCardButtonPressed() {
+        emitNewCard(NEXT_CARD_OFFSET)
+    }
+
+    fun onPreviousCardButtonPressed() {
+        emitNewCard(PREVIOUS_CARD_OFFSET)
     }
 }

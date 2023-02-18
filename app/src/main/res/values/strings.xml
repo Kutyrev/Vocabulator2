@@ -27,4 +27,7 @@
     <string name="add_unchecked_text">Add unchecked to the known words dictionary</string>
     <string name="commons_scr_search">Search common word</string>
     <string name="main_list_delete_subs">Delete subtitles</string>
+    <string name="cards_scr_random_cards_text">Random cards</string>
+    <string name="cards_scr_prev_card_button"><![CDATA[<<]]></string>
+    <string name="cards_scr_next_card_button"><![CDATA[>>]]></string>
 </resources>

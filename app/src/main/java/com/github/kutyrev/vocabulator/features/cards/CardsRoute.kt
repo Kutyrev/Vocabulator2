@@ -19,6 +19,14 @@ fun CardsRoute(viewModel: CardsViewModel = hiltViewModel()) {
         modifier = Modifier
             .fillMaxSize()
     ) {
-        CardsScreen(card = card.value, emitNewValue = viewModel::emitNewCard)
+        CardsScreen(
+            card = card.value,
+            isRandomCards = viewModel.isRandomCards.value,
+            isForeignLangFirst = viewModel.isForeignLangFirst.value,
+            emitNewValue = viewModel::emitNewCard,
+            onChangeIsRandomCardsState = viewModel::onChangeIsRandomCardsState,
+            onNextCardButtonPressed = viewModel::onNextCardButtonPressed,
+            onPreviousCardButtonPressed = viewModel::onPreviousCardButtonPressed
+        )
     }
 }
