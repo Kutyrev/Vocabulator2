@@ -13,12 +13,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.dp
 import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.model.WordCard
 import kotlin.math.roundToInt
 
 private const val WEIGHT_STD = 1f
+private const val INIT_OFFSET = 0f
 
 @Composable
 fun CardsScreen(
@@ -36,7 +36,7 @@ fun CardsScreen(
         mutableStateOf(false)
     }
 
-    var offsetX by remember { mutableStateOf(0f) }
+    var offsetX by remember { mutableStateOf(INIT_OFFSET) }
 
     Scaffold(modifier = Modifier, topBar = {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -78,9 +78,9 @@ fun CardsScreen(
             .pointerInput(Unit) {
                 detectHorizontalDragGestures(onDragEnd = {
                     emitNewValue(offsetX)
-                    offsetX = 0f
+                    offsetX = INIT_OFFSET
                     showTranslation = false
-                }, onDragCancel = { offsetX = 0f }, onHorizontalDrag = { change, dragAmount ->
+                }, onDragCancel = { offsetX = INIT_OFFSET }, onHorizontalDrag = { change, dragAmount ->
                     offsetX += dragAmount
                 })
             }) {
@@ -91,7 +91,7 @@ fun CardsScreen(
                 if (isForeignLangFirst || showTranslation) {
                     card.originalWord.let { originalWord -> Text(originalWord) }
                 }
-                Spacer(modifier = Modifier.padding(8.dp))
+                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)))
                 if ((isForeignLangFirst && showTranslation) || !isForeignLangFirst) {
                     card.translatedWord.let { translatedWord -> Text(translatedWord) }
                 }
