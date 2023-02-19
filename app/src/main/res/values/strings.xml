@@ -30,4 +30,6 @@
     <string name="cards_scr_random_cards_text">Random cards</string>
     <string name="cards_scr_prev_card_button"><![CDATA[<<]]></string>
     <string name="cards_scr_next_card_button"><![CDATA[>>]]></string>
+    <string name="cards_scr_delete_word_button">Delete word</string>
+    <string name="cards_scr_message_delete">Card deleted</string>
 </resources>

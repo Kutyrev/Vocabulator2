@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.app.LIST_ID_PARAM_NAME
 import com.github.kutyrev.vocabulator.model.EMPTY_CARD
 import com.github.kutyrev.vocabulator.model.WordCard
@@ -35,6 +36,8 @@ class CardsViewModel @Inject constructor(
         private set
     var isRandomCards = mutableStateOf(false)
         private set
+    private val _messages = MutableStateFlow<CardsMessages?>(null)
+    val messages = _messages.asStateFlow()
 
     init {
         savedStateHandle.get<String>(LIST_ID_PARAM_NAME)?.let {
@@ -85,4 +88,16 @@ class CardsViewModel @Inject constructor(
     fun onPreviousCardButtonPressed() {
         emitNewCard(PREVIOUS_CARD_OFFSET)
     }
+
+    fun deleteWordCard() {
+        viewModelScope.launch {
+            storageRepository.deleteWordCards(listOf(card.value))
+            emitNewCard(NEXT_CARD_OFFSET)
+            _messages.emit(CardsMessages.DELETED)
+        }
+    }
+}
+
+enum class CardsMessages(val messageId: Int) {
+    DELETED(R.string.cards_scr_message_delete)
 }
