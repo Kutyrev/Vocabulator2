@@ -27,14 +27,12 @@ class CommonsViewModel @Inject constructor(private val storageRepository: Storag
         private set
 
     init {
-        viewModelScope.launch {
-            storageRepository.getCommonWords(language.value)
-                .forEach { words.add(EditableCommonWord(it.id, it.languageId, it.word)) }
-        }
+        updateWords()
     }
 
     fun onLanguageChange(newLanguage: Language) {
         _language.value = newLanguage
+        updateWords()
     }
 
     fun onSearchTextChange(newText: String) {
@@ -58,6 +56,14 @@ class CommonsViewModel @Inject constructor(private val storageRepository: Storag
             viewModelScope.launch {
                 storageRepository.deleteCommonWords(commonWordsToDelete)
             }
+        }
+    }
+
+    private fun updateWords() {
+        words.clear()
+        viewModelScope.launch {
+            storageRepository.getCommonWords(language.value)
+                .forEach { words.add(EditableCommonWord(it.id, it.languageId, it.word)) }
         }
     }
 }
