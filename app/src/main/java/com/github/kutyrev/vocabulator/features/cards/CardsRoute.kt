@@ -39,7 +39,8 @@ fun CardsRoute(viewModel: CardsViewModel = hiltViewModel()) {
             onChangeIsRandomCardsState = viewModel::onChangeIsRandomCardsState,
             onNextCardButtonPressed = viewModel::onNextCardButtonPressed,
             onPreviousCardButtonPressed = viewModel::onPreviousCardButtonPressed,
-            deleteWordCard = viewModel::deleteWordCard
+            deleteWordCard = viewModel::deleteWordCard,
+            addWordInCommons = viewModel::addWordInCommons
         )
     }
 }

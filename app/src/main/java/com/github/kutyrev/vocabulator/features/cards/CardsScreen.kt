@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import com.github.kutyrev.vocabulator.R
@@ -30,7 +31,8 @@ fun CardsScreen(
     onChangeIsRandomCardsState: (Boolean) -> Unit,
     onNextCardButtonPressed: () -> Unit,
     onPreviousCardButtonPressed: () -> Unit,
-    deleteWordCard: () -> Unit
+    deleteWordCard: () -> Unit,
+    addWordInCommons: () -> Unit
 ) {
     var showTranslation by remember {
         mutableStateOf(false)
@@ -39,34 +41,9 @@ fun CardsScreen(
     var offsetX by remember { mutableStateOf(INIT_OFFSET) }
 
     Scaffold(modifier = Modifier, topBar = {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(checked = isRandomCards, onCheckedChange = onChangeIsRandomCardsState)
-            Text(
-                text = stringResource(R.string.cards_scr_random_cards_text),
-                style = MaterialTheme.typography.caption
-            )
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)))
-            IconButton(onClick = deleteWordCard) {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = stringResource(R.string.cards_scr_delete_word_button)
-                )
-            }
-        }
+        CardsTopAppBar(addWordInCommons, isRandomCards, onChangeIsRandomCardsState, deleteWordCard)
     }, bottomBar = {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            OutlinedButton(
-                modifier = Modifier.weight(WEIGHT_STD), onClick = onNextCardButtonPressed
-            ) {
-                Text(stringResource(R.string.cards_scr_prev_card_button))
-            }
-
-            OutlinedButton(
-                modifier = Modifier.weight(WEIGHT_STD), onClick = onPreviousCardButtonPressed
-            ) {
-                Text(stringResource(R.string.cards_scr_next_card_button))
-            }
-        }
+        CardsBottomBar(onNextCardButtonPressed, onPreviousCardButtonPressed)
     }) {
         Card(modifier = Modifier
             .padding(it)
@@ -96,6 +73,55 @@ fun CardsScreen(
                     card.translatedWord.let { translatedWord -> Text(translatedWord) }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun CardsBottomBar(
+    onNextCardButtonPressed: () -> Unit,
+    onPreviousCardButtonPressed: () -> Unit
+) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        OutlinedButton(
+            modifier = Modifier.weight(WEIGHT_STD), onClick = onNextCardButtonPressed
+        ) {
+            Text(stringResource(R.string.cards_scr_prev_card_button))
+        }
+
+        OutlinedButton(
+            modifier = Modifier.weight(WEIGHT_STD), onClick = onPreviousCardButtonPressed
+        ) {
+            Text(stringResource(R.string.cards_scr_next_card_button))
+        }
+    }
+}
+
+@Composable
+private fun CardsTopAppBar(
+    addWordInCommons: () -> Unit,
+    isRandomCards: Boolean,
+    onChangeIsRandomCardsState: (Boolean) -> Unit,
+    deleteWordCard: () -> Unit
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        IconButton(onClick = addWordInCommons) {
+            Icon(
+                painter = painterResource(R.drawable.ic_baseline_fact_check_24),
+                contentDescription = stringResource(R.string.cards_scr_add_in_commons_button)
+            )
+        }
+        Checkbox(checked = isRandomCards, onCheckedChange = onChangeIsRandomCardsState)
+        Text(
+            text = stringResource(R.string.cards_scr_random_cards_text),
+            style = MaterialTheme.typography.caption
+        )
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)))
+        IconButton(onClick = deleteWordCard) {
+            Icon(
+                Icons.Default.Delete,
+                contentDescription = stringResource(R.string.cards_scr_delete_word_button)
+            )
         }
     }
 }

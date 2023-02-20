@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.app.LIST_ID_PARAM_NAME
+import com.github.kutyrev.vocabulator.model.CommonWord
 import com.github.kutyrev.vocabulator.model.EMPTY_CARD
 import com.github.kutyrev.vocabulator.model.WordCard
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
@@ -96,8 +97,19 @@ class CardsViewModel @Inject constructor(
             _messages.emit(CardsMessages.DELETED)
         }
     }
+
+    fun addWordInCommons() {
+        viewModelScope.launch {
+            val subtitlesUnit = storageRepository.getSubtitlesUnit(card.value.subtitleId)
+            storageRepository.insertCommonWords(listOf(CommonWord(languageId = subtitlesUnit.origLangId, word = card.value.originalWord)))
+            _messages.emit(CardsMessages.ADDEDINCOMMONS)
+            storageRepository.deleteWordCards(listOf(card.value))
+            emitNewCard(NEXT_CARD_OFFSET)
+        }
+    }
 }
 
 enum class CardsMessages(val messageId: Int) {
-    DELETED(R.string.cards_scr_message_delete)
+    DELETED(R.string.cards_scr_message_delete),
+    ADDEDINCOMMONS(R.string.cards_scr_message_added_in_commons)
 }
