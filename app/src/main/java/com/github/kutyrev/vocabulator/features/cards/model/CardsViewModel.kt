@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
 
+const val EMPTY_LIST_ID = -1
 private const val ZERO_CARD_POSITION_OFFSET = 0f
 private const val NEXT_CARD_OFFSET = 1f
 private const val PREVIOUS_CARD_OFFSET = -1f
@@ -46,9 +47,16 @@ class CardsViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            storageRepository.getCards(listId.value).collect {
-                _cards.value = it
-                emitNewCard(ZERO_CARD_POSITION_OFFSET)
+            if(listId.value == EMPTY_LIST_ID) {
+                storageRepository.getAllCards().collect {
+                    _cards.value = it
+                    emitNewCard(ZERO_CARD_POSITION_OFFSET)
+                }
+            } else {
+                storageRepository.getCards(listId.value).collect {
+                    _cards.value = it
+                    emitNewCard(ZERO_CARD_POSITION_OFFSET)
+                }
             }
         }
     }

@@ -27,8 +27,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
 import com.github.kutyrev.vocabulator.R
+import com.github.kutyrev.vocabulator.features.cards.model.EMPTY_LIST_ID
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.utils.getFileName
@@ -174,6 +176,18 @@ private fun MainListScreen(
             .padding(top = paddingValues.calculateTopPadding())
     ) {
         LazyColumn(modifier = Modifier) {
+            item {
+                Card(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(id = R.dimen.padding_std))
+                    .clickable { onListItemClick(EMPTY_LIST_ID) }) {
+                    Text(
+                        text = stringResource(R.string.main_scr_all_cards_item),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
             items(listState.value) { subtitlesUnit ->
 
                 val dismissState = rememberDismissState(confirmStateChange = {

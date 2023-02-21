@@ -24,6 +24,10 @@ class DefaultStorageRepository @Inject constructor(
         vocabulatorDao.getSubtitlesWordsCards(subtitleId)
     }
 
+    override suspend fun getAllCards(): Flow<List<WordCard>> = withContext(dispatcher) {
+        vocabulatorDao.getAllWordsCards()
+    }
+
     override suspend fun getCommonWords(language: Language): List<CommonWord> =
         withContext(dispatcher) {
             vocabulatorDao.getCommonWords(language.ordinal)

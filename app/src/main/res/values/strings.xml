@@ -34,4 +34,5 @@
     <string name="cards_scr_message_delete">Card deleted</string>
     <string name="cards_scr_message_added_in_commons">Added in commons</string>
     <string name="cards_scr_add_in_commons_button">Add in common words</string>
+    <string name="main_scr_all_cards_item">All cards</string>
 </resources>
