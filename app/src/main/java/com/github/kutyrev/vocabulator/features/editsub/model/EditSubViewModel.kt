@@ -124,7 +124,7 @@ class EditSubViewModel @Inject constructor(
 
     override fun receiveTranslation(translatedWords: List<WordCard>) {
         for (i in _words.indices) {
-            _words[i] = _words[i].copy()
+            _words[i] = _words[i].copy(changed = true)
         }
     }
 
