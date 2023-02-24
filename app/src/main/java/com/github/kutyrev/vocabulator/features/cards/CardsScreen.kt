@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,21 +28,26 @@ fun CardsScreen(
     card: WordCard,
     isRandomCards: Boolean,
     isForeignLangFirst: Boolean,
+    showTranslation: Boolean,
     emitNewValue: (Float) -> Unit,
     onChangeIsRandomCardsState: (Boolean) -> Unit,
     onNextCardButtonPressed: () -> Unit,
     onPreviousCardButtonPressed: () -> Unit,
     deleteWordCard: () -> Unit,
-    addWordInCommons: () -> Unit
+    addWordInCommons: () -> Unit,
+    editTranslation: (Boolean) -> Unit,
+    onCardClick: () -> Unit
 ) {
-    var showTranslation by remember {
-        mutableStateOf(false)
-    }
-
     var offsetX by remember { mutableStateOf(INIT_OFFSET) }
 
     Scaffold(modifier = Modifier, topBar = {
-        CardsTopAppBar(addWordInCommons, isRandomCards, onChangeIsRandomCardsState, deleteWordCard)
+        CardsTopAppBar(
+            addWordInCommons,
+            isRandomCards,
+            onChangeIsRandomCardsState,
+            deleteWordCard,
+            editTranslation
+        )
     }, bottomBar = {
         CardsBottomBar(onNextCardButtonPressed, onPreviousCardButtonPressed)
     }) {
@@ -49,21 +55,24 @@ fun CardsScreen(
             .padding(it)
             .fillMaxSize()
             .clickable {
-                showTranslation = !showTranslation
+                onCardClick()
             }
             .offset { IntOffset((offsetX).roundToInt(), 0) }
             .pointerInput(Unit) {
-                detectHorizontalDragGestures(onDragEnd = {
-                    emitNewValue(offsetX)
-                    offsetX = INIT_OFFSET
-                    showTranslation = false
-                }, onDragCancel = { offsetX = INIT_OFFSET }, onHorizontalDrag = { change, dragAmount ->
-                    offsetX += dragAmount
-                })
+                detectHorizontalDragGestures(
+                    onDragEnd = {
+                        emitNewValue(offsetX)
+                        offsetX = INIT_OFFSET
+                    },
+                    onDragCancel = { offsetX = INIT_OFFSET },
+                    onHorizontalDrag = { change, dragAmount ->
+                        offsetX += dragAmount
+                    })
             }) {
             Column(
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 if (isForeignLangFirst || showTranslation) {
                     card.originalWord.let { originalWord -> Text(originalWord) }
@@ -102,20 +111,31 @@ private fun CardsTopAppBar(
     addWordInCommons: () -> Unit,
     isRandomCards: Boolean,
     onChangeIsRandomCardsState: (Boolean) -> Unit,
-    deleteWordCard: () -> Unit
+    deleteWordCard: () -> Unit,
+    editTranslation: (Boolean) -> Unit
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         IconButton(onClick = addWordInCommons) {
             Icon(
                 painter = painterResource(R.drawable.ic_baseline_fact_check_24),
                 contentDescription = stringResource(R.string.cards_scr_add_in_commons_button)
             )
         }
+        Spacer(modifier = Modifier.weight(WEIGHT_STD))
         Checkbox(checked = isRandomCards, onCheckedChange = onChangeIsRandomCardsState)
         Text(
             text = stringResource(R.string.cards_scr_random_cards_text),
             style = MaterialTheme.typography.caption
         )
+        Spacer(modifier = Modifier.weight(WEIGHT_STD))
+        IconButton(onClick = { editTranslation(true) }) {
+            Icon(
+                Icons.Default.Edit,
+                contentDescription = stringResource(R.string.cards_scr_edit_button)
+            )
+        }
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)))
         IconButton(onClick = deleteWordCard) {
             Icon(

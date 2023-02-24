@@ -10,4 +10,5 @@
     <dimen name="dialog_spacer_height">32dp</dimen>
     <dimen name="border_size_std">12dp</dimen>
     <dimen name="progress_ind_stroke">1dp</dimen>
+    <dimen name="edit_dialog_border_stroke">4dp</dimen>
 </resources>

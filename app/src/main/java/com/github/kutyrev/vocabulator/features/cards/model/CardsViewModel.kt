@@ -38,6 +38,11 @@ class CardsViewModel @Inject constructor(
         private set
     var isRandomCards = mutableStateOf(false)
         private set
+    var isEdit = mutableStateOf(false)
+        private set
+    var showTranslation = mutableStateOf(false)
+        private set
+
     private val _messages = MutableStateFlow<CardsMessages?>(null)
     val messages = _messages.asStateFlow()
 
@@ -63,6 +68,8 @@ class CardsViewModel @Inject constructor(
 
     fun emitNewCard(offsetX: Float) {
         if (cards.value.isEmpty()) return
+
+        showTranslation.value = false
 
         val maxInd = cards.value.size * 2 - 2
 
@@ -115,9 +122,27 @@ class CardsViewModel @Inject constructor(
             emitNewCard(NEXT_CARD_OFFSET)
         }
     }
+
+    fun onIsEditStateChange(show: Boolean) {
+        isEdit.value = show
+    }
+
+    fun onChangeTranslation(newTranslation: String) {
+        isEdit.value = false
+        _card.value.translatedWord = newTranslation
+        viewModelScope.launch {
+            storageRepository.updateWordCards(listOf(card.value))
+            _messages.emit(CardsMessages.TRANSLATIONEDITED)
+        }
+    }
+
+    fun onCardClick(){
+        showTranslation.value = !showTranslation.value
+    }
 }
 
 enum class CardsMessages(val messageId: Int) {
     DELETED(R.string.cards_scr_message_delete),
-    ADDEDINCOMMONS(R.string.cards_scr_message_added_in_commons)
+    ADDEDINCOMMONS(R.string.cards_scr_message_added_in_commons),
+    TRANSLATIONEDITED(R.string.cards_scr_message_trans_edited)
 }
