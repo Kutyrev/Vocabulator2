@@ -11,6 +11,8 @@ import com.github.kutyrev.vocabulator.model.*
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
 import com.github.kutyrev.vocabulator.repository.translator.TranslationCallback
 import com.github.kutyrev.vocabulator.repository.translator.TranslationRepository
+import com.github.kutyrev.vocabulator.ui.components.CheckableWord
+import com.github.kutyrev.vocabulator.ui.components.TRANSLATION_DELIMITER
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -45,6 +47,13 @@ class EditSubViewModel @Inject constructor(
     private var _uncheckedToDict: MutableState<Boolean> = mutableStateOf(false)
     val uncheckedToDict: MutableState<Boolean>
         get() = _uncheckedToDict
+
+    var isEdit = mutableStateOf(false)
+        private set
+
+    val checkableWords = mutableStateListOf<CheckableWord>()
+
+    private var editableWord: WordCard? = null
 
     init {
         savedStateHandle.get<String>(LIST_ID_PARAM_NAME)?.let {
@@ -126,6 +135,25 @@ class EditSubViewModel @Inject constructor(
         for (i in _words.indices) {
             _words[i] = _words[i].copy(changed = true)
         }
+    }
+
+    fun onTranslationClick(word: WordCard) {
+        checkableWords.clear()
+        editableWord = word
+        word.translatedWord.split(TRANSLATION_DELIMITER).forEach {
+            checkableWords.add(CheckableWord(checked = true, word = it))
+        }
+        isEdit.value = true
+    }
+
+    fun onIsEditStateChange(show: Boolean) {
+        isEdit.value = show
+    }
+
+    fun onChangeTranslation(newTranslation: String) {
+        isEdit.value = false
+        val wordIndex = _words.indexOf(editableWord)
+        _words[wordIndex] = _words[wordIndex].copy(translatedWord = newTranslation, changed = true)
     }
 
     private fun updateCommonWords() {

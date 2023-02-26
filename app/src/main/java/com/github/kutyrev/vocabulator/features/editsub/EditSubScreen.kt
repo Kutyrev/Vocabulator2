@@ -1,5 +1,6 @@
 package com.github.kutyrev.vocabulator.features.editsub
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -7,6 +8,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -38,7 +40,8 @@ fun EditSubScreen(
     onOkButtonPressed: () -> Unit,
     onOkButtonPressedRoute: () -> Unit,
     onCancelButtonPressed: () -> Unit,
-    onChangeUncheckedToDict: (Boolean) -> Unit
+    onChangeUncheckedToDict: (Boolean) -> Unit,
+    onTranslationClick: (WordCard) -> Unit
 ) {
     val languages = remember { Language.values() }
 
@@ -78,9 +81,17 @@ fun EditSubScreen(
                         onValueChange = { newValue -> onOrigWordChange(newValue, word) })
                     Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)))
                     TextField(
-                        modifier = Modifier.weight(WEIGHT_STD),
+                        modifier = Modifier
+                            .weight(WEIGHT_STD),
                         textStyle = MaterialTheme.typography.caption,
                         value = word.translatedWord,
+                        trailingIcon = {
+                            Icon(
+                                Icons.Default.MoreVert,
+                                contentDescription = stringResource(R.string.edit_scr_edit_icon_desc),
+                                modifier = Modifier.clickable { onTranslationClick(word) }
+                            )
+                        },
                         onValueChange = { newValue -> onTranslationChange(newValue, word) })
                 }
             }

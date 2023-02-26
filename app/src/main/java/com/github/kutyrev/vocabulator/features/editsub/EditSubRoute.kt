@@ -4,6 +4,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.kutyrev.vocabulator.features.editsub.model.EditSubViewModel
+import com.github.kutyrev.vocabulator.ui.components.DialogChangeTranslation
 
 @Composable
 fun EditSubRoute(
@@ -12,6 +13,14 @@ fun EditSubRoute(
     onCancelButtonPressed: () -> Unit
 ) {
     //val words = viewModel.words.collectAsStateWithLifecycle()
+
+    if (viewModel.isEdit.value) {
+        DialogChangeTranslation(
+            checkableWords = viewModel.checkableWords,
+            onChooseTranslation = viewModel::onChangeTranslation,
+            onCancel = { viewModel.onIsEditStateChange(false) }
+        )
+    }
 
     Surface() {
         EditSubScreen(
@@ -30,7 +39,8 @@ fun EditSubRoute(
             onOkButtonPressed = viewModel::onOkButtonPressed,
             onOkButtonPressedRoute = onOkButtonPressedRoute,
             onCancelButtonPressed = onCancelButtonPressed,
-            onChangeUncheckedToDict = viewModel::onChangeUncheckedToDict
+            onChangeUncheckedToDict = viewModel::onChangeUncheckedToDict,
+            onTranslationClick = viewModel::onTranslationClick
         )
     }
 }

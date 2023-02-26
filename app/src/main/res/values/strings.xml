@@ -37,4 +37,5 @@
     <string name="cards_scr_add_in_commons_button">Add in common words</string>
     <string name="main_scr_all_cards_item">All cards</string>
     <string name="cards_scr_edit_button">Edit translation</string>
+    <string name="edit_scr_edit_icon_desc">Edit word dialog</string>
 </resources>
