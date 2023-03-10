@@ -1,11 +1,17 @@
 package com.github.kutyrev.vocabulator.features.editsub
 
+import android.widget.Toast
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.kutyrev.vocabulator.features.editsub.model.EditSubViewModel
 import com.github.kutyrev.vocabulator.ui.components.DialogChangeTranslation
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun EditSubRoute(
     viewModel: EditSubViewModel = hiltViewModel(),
@@ -13,6 +19,16 @@ fun EditSubRoute(
     onCancelButtonPressed: () -> Unit
 ) {
     //val words = viewModel.words.collectAsStateWithLifecycle()
+    val messages = viewModel.messages.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = messages.value) {
+        if (messages.value != null) {
+            Toast.makeText(context, context.getText(messages.value!!.messageId), Toast.LENGTH_LONG)
+                .show()
+        }
+    }
 
     if (viewModel.isEdit.value) {
         DialogChangeTranslation(

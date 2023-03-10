@@ -6,14 +6,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.app.LIST_ID_PARAM_NAME
 import com.github.kutyrev.vocabulator.model.*
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
 import com.github.kutyrev.vocabulator.repository.translator.TranslationCallback
 import com.github.kutyrev.vocabulator.repository.translator.TranslationRepository
+import com.github.kutyrev.vocabulator.repository.translator.TranslationResultStatus
 import com.github.kutyrev.vocabulator.ui.components.CheckableWord
 import com.github.kutyrev.vocabulator.ui.components.TRANSLATION_DELIMITER
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -54,6 +58,9 @@ class EditSubViewModel @Inject constructor(
     val checkableWords = mutableStateListOf<CheckableWord>()
 
     private var editableWord: WordCard? = null
+
+    private val _messages = MutableStateFlow<EditCardsMessages?>(null)
+    val messages = _messages.asStateFlow()
 
     init {
         savedStateHandle.get<String>(LIST_ID_PARAM_NAME)?.let {
@@ -131,9 +138,20 @@ class EditSubViewModel @Inject constructor(
         updateCommonWords()
     }
 
-    override fun receiveTranslation(translatedWords: List<WordCard>) {
+    override fun receiveTranslation(
+        translatedWords: List<WordCard>,
+        translationResult: TranslationResultStatus
+    ) {
         for (i in _words.indices) {
             _words[i] = _words[i].copy(changed = true)
+        }
+
+        viewModelScope.launch {
+            when (translationResult) {
+                TranslationResultStatus.Success -> _messages.emit(EditCardsMessages.SUCCESS)
+                TranslationResultStatus.YandexGenericError -> _messages.emit(EditCardsMessages.YANDEX_GENERIC_ERROR)
+                TranslationResultStatus.YandexNetworkError -> _messages.emit(EditCardsMessages.NETWORK_ERROR)
+            }
         }
     }
 
@@ -230,5 +248,11 @@ class EditSubViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    enum class EditCardsMessages(val messageId: Int) {
+        SUCCESS(R.string.edit_message_success),
+        NETWORK_ERROR(R.string.edit_message_network_error),
+        YANDEX_GENERIC_ERROR(R.string.edit_message_yandex_generic_error)
     }
 }

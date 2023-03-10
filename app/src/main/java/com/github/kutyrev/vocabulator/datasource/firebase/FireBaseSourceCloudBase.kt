@@ -2,7 +2,6 @@ package com.github.kutyrev.vocabulator.datasource.firebase
 
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.WordCard
-import com.github.kutyrev.vocabulator.repository.translator.TranslationCallback
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FieldPath
@@ -11,13 +10,14 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
 
+private const val FIREBASE_QUERY_LIMIT = 10
+
 class FireBaseSourceCloudBase : CloudBase {
 
     override suspend fun getTranslation(
         wordsToTranslate: List<WordCard>,
         origLanguage: Language,
-        transLanguage: Language,
-        translationCallback: TranslationCallback?
+        transLanguage: Language
     ) {
         if (origLanguage == Language.EN) {
 
@@ -25,11 +25,11 @@ class FireBaseSourceCloudBase : CloudBase {
 
             val subLists: MutableList<List<WordCard>> = mutableListOf()
 
-            for (i in wordsToTranslate.indices step 10) {
+            for (i in wordsToTranslate.indices step FIREBASE_QUERY_LIMIT) {
                 subLists.add(
                     wordsToTranslate.subList(
                         i,
-                        if (i + 10 > wordsToTranslate.size - 1) wordsToTranslate.size - 1 else i + 10
+                        if (i + FIREBASE_QUERY_LIMIT > wordsToTranslate.size - 1) wordsToTranslate.size - 1 else i + FIREBASE_QUERY_LIMIT
                     )
                 )
             }
@@ -62,8 +62,6 @@ class FireBaseSourceCloudBase : CloudBase {
                         }
                     }
                 }
-
-               translationCallback?.receiveTranslation(wordsToTranslate)
             }
         }
     }
