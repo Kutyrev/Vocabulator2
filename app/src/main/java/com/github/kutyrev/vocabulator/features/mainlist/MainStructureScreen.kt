@@ -34,6 +34,7 @@ import com.github.kutyrev.vocabulator.features.cards.model.EMPTY_LIST_ID
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.utils.getFileName
+import kotlinx.coroutines.launch
 
 private const val DEF_WEIGHT = 1.0f
 
@@ -69,7 +70,27 @@ fun MainStructureScreen(
         }
     }
 
-    Scaffold(topBar = {
+    val coroutineScope = rememberCoroutineScope()
+    val scaffoldState = rememberScaffoldState()
+
+    var unswipeSubtitleUnit: SubtitlesUnit? by remember { mutableStateOf(null) }
+    val onDeleteShowSnackbar: (SubtitlesUnit) -> Unit = { subtitlesUnit ->
+        coroutineScope.launch {
+            val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
+                message = context.getString(
+                    R.string.snackbar_delete_sub_unit_text,
+                    subtitlesUnit.name
+                ),
+                actionLabel = context.getString(R.string.snackbar_undo_button)
+            )
+            when (snackbarResult) {
+                SnackbarResult.Dismissed -> onSubtitleSwiped(subtitlesUnit)
+                SnackbarResult.ActionPerformed -> unswipeSubtitleUnit = subtitlesUnit
+            }
+        }
+    }
+
+    Scaffold(scaffoldState = scaffoldState, topBar = {
         MainListTopAppBar(onCommonsButtonClick, showMenu, onSettingsMenuItemClick)
     }, floatingActionButton = {
         FloatingActionButton(onClick = { showLanguageDialog = true }) {
@@ -78,9 +99,10 @@ fun MainStructureScreen(
     }) { paddingValues ->
         MainListScreen(
             listState = listState,
+            unswipeSubtitleUnit = unswipeSubtitleUnit,
             onListItemClick = onListItemClick,
             onEditButtonClick = onEditButtonClick,
-            onSubtitleSwiped = onSubtitleSwiped,
+            onSubtitleSwiping = onDeleteShowSnackbar,
             paddingValues = paddingValues
         )
     }
@@ -165,9 +187,10 @@ private fun MainListTopAppBar(
 @Composable
 private fun MainListScreen(
     listState: State<List<SubtitlesUnit>>,
+    unswipeSubtitleUnit: SubtitlesUnit?,
     onListItemClick: (Int) -> Unit,
     onEditButtonClick: (Int) -> Unit,
-    onSubtitleSwiped: (subtitleUnit: SubtitlesUnit) -> Unit,
+    onSubtitleSwiping: (subtitleUnit: SubtitlesUnit) -> Unit,
     paddingValues: PaddingValues
 ) {
     Surface(
@@ -189,11 +212,17 @@ private fun MainListScreen(
             }
 
             items(listState.value) { subtitlesUnit ->
-
                 val dismissState = rememberDismissState(confirmStateChange = {
-                    if (it == DismissValue.DismissedToStart) onSubtitleSwiped(subtitlesUnit)
+                    if (it == DismissValue.DismissedToStart) onSubtitleSwiping(subtitlesUnit)
                     true
                 })
+
+                if (unswipeSubtitleUnit == subtitlesUnit) {
+                    LaunchedEffect(Unit) {
+                        dismissState.reset()
+                    }
+                   // unswipeSubtitleUnit = null
+                }
 
                 val color by animateColorAsState(
                     when (dismissState.targetValue) {
@@ -203,60 +232,63 @@ private fun MainListScreen(
                     }
                 )
 
-                SwipeToDismiss(state = dismissState,
-                    directions = setOf(DismissDirection.EndToStart),
-                    background = {
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .background(color)
-                                .padding(
-                                    horizontal = dimensionResource(
-                                        id = R.dimen.padding_std
+                if (!dismissState.isDismissed(DismissDirection.EndToStart)) {
+
+                    SwipeToDismiss(state = dismissState,
+                        directions = setOf(DismissDirection.EndToStart),
+                        background = {
+                            Box(
+                                Modifier
+                                    .fillMaxSize()
+                                    .background(color)
+                                    .padding(
+                                        horizontal = dimensionResource(
+                                            id = R.dimen.padding_std
+                                        ),
+                                        vertical = dimensionResource(
+                                            id = R.dimen.padding_std
+                                        )
                                     ),
-                                    vertical = dimensionResource(
-                                        id = R.dimen.padding_std
+                                contentAlignment = Alignment.CenterEnd
+                            ) {
+                                Icon(
+                                    Icons.Default.Delete,
+                                    contentDescription = stringResource(R.string.main_list_delete_subs),
+                                )
+                            }
+                        },
+                        dismissContent = {
+                            Card(
+                                modifier = Modifier
+                                    .padding(dimensionResource(id = R.dimen.padding_std))
+                                    .fillMaxWidth()
+                                    .clickable(onClick = { onListItemClick(subtitlesUnit.id) }),
+                                elevation = dimensionResource(id = R.dimen.elevation_std)
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(dimensionResource(id = R.dimen.padding_std))
+                                            .weight(DEF_WEIGHT),
+                                        text = subtitlesUnit.name,
+                                        style = MaterialTheme.typography.body2
                                     )
-                                ),
-                            contentAlignment = Alignment.CenterEnd
-                        ) {
-                            Icon(
-                                Icons.Default.Delete,
-                                contentDescription = stringResource(R.string.main_list_delete_subs),
-                            )
-                        }
-                    },
-                    dismissContent = {
-                        Card(
-                            modifier = Modifier
-                                .padding(dimensionResource(id = R.dimen.padding_std))
-                                .fillMaxWidth()
-                                .clickable(onClick = { onListItemClick(subtitlesUnit.id) }),
-                            elevation = dimensionResource(id = R.dimen.elevation_std)
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    modifier = Modifier
+                                    Button(modifier = Modifier
                                         .padding(dimensionResource(id = R.dimen.padding_std))
                                         .weight(DEF_WEIGHT),
-                                    text = subtitlesUnit.name,
-                                    style = MaterialTheme.typography.body2
-                                )
-                                Button(modifier = Modifier
-                                    .padding(dimensionResource(id = R.dimen.padding_std))
-                                    .weight(DEF_WEIGHT),
-                                    onClick = { onEditButtonClick(subtitlesUnit.id) }) {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_baseline_edit_24),
-                                        contentDescription = stringResource(
-                                            id = R.string.edit_button_desc
+                                        onClick = { onEditButtonClick(subtitlesUnit.id) }) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.ic_baseline_edit_24),
+                                            contentDescription = stringResource(
+                                                id = R.string.edit_button_desc
+                                            )
                                         )
-                                    )
+                                    }
                                 }
                             }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
     }

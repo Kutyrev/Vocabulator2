@@ -14,7 +14,9 @@ const val COUNT_OF_WORDS_INITIAL_VALUE = 100
 @HiltViewModel
 class SettingsViewModel @Inject constructor(private val settingsRepository: SettingsRepository) : ViewModel() {
 
-    private var _numberOfWordsForLoad: MutableStateFlow<Int> = MutableStateFlow(COUNT_OF_WORDS_INITIAL_VALUE)
+    private var _numberOfWordsForLoad: MutableStateFlow<Int> = MutableStateFlow(
+        COUNT_OF_WORDS_INITIAL_VALUE
+    )
     val numberOfWordsForLoad: StateFlow<Int> = _numberOfWordsForLoad
 
     fun saveCountOfWordsForLoad() {

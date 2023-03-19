@@ -41,4 +41,6 @@
     <string name="edit_message_success">Translations received</string>
     <string name="edit_message_network_error">Network error. Please check your connection.</string>
     <string name="edit_message_yandex_generic_error">An error occurred with Yandex translate connection. Try later.</string>
+    <string name="snackbar_undo_button">Undo</string>
+    <string name="snackbar_delete_sub_unit_text">%1$s deleted</string>
 </resources>
