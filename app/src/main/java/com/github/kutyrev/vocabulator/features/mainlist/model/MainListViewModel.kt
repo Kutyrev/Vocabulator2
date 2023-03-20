@@ -45,6 +45,9 @@ class MainListViewModel @Inject constructor(
     val newSubsId: MutableState<Int>
         get() = _newSubsId
 
+    var unswipedSubtitlesUnit: MutableState<SubtitlesUnit?> = mutableStateOf(null)
+        private set
+
     fun checkFileExtension(uriString: String): Boolean {
         return fileExtensionRegExPattern.matches(uriString)
     }
@@ -75,5 +78,9 @@ class MainListViewModel @Inject constructor(
         viewModelScope.launch {
             storageRepository.deleteSubtitles(subtitlesUnit)
         }
+    }
+
+    fun setUnswipedSubtitleUnit(newValue: SubtitlesUnit?) {
+        unswipedSubtitlesUnit.value = newValue
     }
 }

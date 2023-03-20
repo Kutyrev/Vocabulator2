@@ -52,6 +52,7 @@ fun MainListRoute(
     VocabulatorTheme {
         MainStructureScreen(
             listState = listState,
+            unswipedSubtitleUnit = viewModel.unswipedSubtitlesUnit.value,
             onListItemClick = onListItemClick,
             onEditButtonClick = onEditButtonClick,
             onSettingsMenuItemClick = onSettingsMenuItemClick,
@@ -59,7 +60,8 @@ fun MainListRoute(
             checkFileExtension = viewModel::checkFileExtension,
             setLanguage = viewModel::setSubsLanguage,
             loadFile = viewModel::parseFile,
-            onSubtitleSwiped = viewModel::onSubtitleSwiped
+            onSubtitleSwiped = viewModel::onSubtitleSwiped,
+            setUnswipedSubtitleUnit = viewModel::setUnswipedSubtitleUnit
         )
     }
 }

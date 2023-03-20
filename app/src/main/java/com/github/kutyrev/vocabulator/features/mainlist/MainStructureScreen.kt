@@ -41,6 +41,7 @@ private const val DEF_WEIGHT = 1.0f
 @Composable
 fun MainStructureScreen(
     listState: State<List<SubtitlesUnit>>,
+    unswipedSubtitleUnit: SubtitlesUnit?,
     onListItemClick: (Int) -> Unit,
     onEditButtonClick: (Int) -> Unit,
     onSettingsMenuItemClick: () -> Unit,
@@ -48,7 +49,8 @@ fun MainStructureScreen(
     checkFileExtension: (String) -> Boolean,
     setLanguage: (Language?) -> Unit,
     loadFile: (Uri, String?) -> Unit,
-    onSubtitleSwiped: (subtitleUnit: SubtitlesUnit) -> Unit
+    onSubtitleSwiped: (subtitleUnit: SubtitlesUnit) -> Unit,
+    setUnswipedSubtitleUnit: (subtitleUnit: SubtitlesUnit?) -> Unit
 ) {
     val showMenu by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
@@ -73,7 +75,6 @@ fun MainStructureScreen(
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
 
-    var unswipeSubtitleUnit: SubtitlesUnit? by remember { mutableStateOf(null) }
     val onDeleteShowSnackbar: (SubtitlesUnit) -> Unit = { subtitlesUnit ->
         coroutineScope.launch {
             val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
@@ -85,7 +86,7 @@ fun MainStructureScreen(
             )
             when (snackbarResult) {
                 SnackbarResult.Dismissed -> onSubtitleSwiped(subtitlesUnit)
-                SnackbarResult.ActionPerformed -> unswipeSubtitleUnit = subtitlesUnit
+                SnackbarResult.ActionPerformed -> setUnswipedSubtitleUnit(subtitlesUnit)
             }
         }
     }
@@ -99,10 +100,11 @@ fun MainStructureScreen(
     }) { paddingValues ->
         MainListScreen(
             listState = listState,
-            unswipeSubtitleUnit = unswipeSubtitleUnit,
+            unswipeSubtitleUnit = unswipedSubtitleUnit,
             onListItemClick = onListItemClick,
             onEditButtonClick = onEditButtonClick,
             onSubtitleSwiping = onDeleteShowSnackbar,
+            setUnswipedSubtitleUnit = setUnswipedSubtitleUnit,
             paddingValues = paddingValues
         )
     }
@@ -191,6 +193,7 @@ private fun MainListScreen(
     onListItemClick: (Int) -> Unit,
     onEditButtonClick: (Int) -> Unit,
     onSubtitleSwiping: (subtitleUnit: SubtitlesUnit) -> Unit,
+    setUnswipedSubtitleUnit: (subtitleUnit: SubtitlesUnit?) -> Unit,
     paddingValues: PaddingValues
 ) {
     Surface(
@@ -220,8 +223,8 @@ private fun MainListScreen(
                 if (unswipeSubtitleUnit == subtitlesUnit) {
                     LaunchedEffect(Unit) {
                         dismissState.reset()
+                        setUnswipedSubtitleUnit(null)
                     }
-                   // unswipeSubtitleUnit = null
                 }
 
                 val color by animateColorAsState(
