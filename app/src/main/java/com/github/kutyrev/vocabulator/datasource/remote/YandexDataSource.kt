@@ -31,11 +31,14 @@ class YandexDataSource @Inject constructor(
         when {
             yandexTranslateResult != null && yandexTranslateResult.isSuccessful -> {
                 val resultTranslations = yandexTranslateResult.body()
+                val newTranslatedWordsCards: MutableList<WordCard> = mutableListOf()
                 resultTranslations?.translations?.forEachIndexed { index, yandexTranslation ->
-                    words.find { it.originalWord == wordsWithoutTranslation[index] }?.translatedWord =
-                        yandexTranslation.text
+                    words.find { it.originalWord == wordsWithoutTranslation[index] }?.let {
+                        it.translatedWord = yandexTranslation.text
+                        newTranslatedWordsCards.add(it)
+                    }
                 }
-                return YandexTranslationResult.Success(words)
+                return YandexTranslationResult.Success(newTranslatedWordsCards)
             }
             yandexTranslateResult != null && !yandexTranslateResult.isSuccessful -> {
                 return YandexTranslationResult.GenericError(yandexTranslateResult.code())

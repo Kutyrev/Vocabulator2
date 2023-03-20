@@ -9,4 +9,9 @@ interface CloudBase {
         origLanguage: Language,
         transLanguage: Language
     )
+    suspend fun saveNewWords(
+        wordsToSave: List<WordCard>,
+        origLanguage: Language,
+        transLanguage: Language
+    )
 }

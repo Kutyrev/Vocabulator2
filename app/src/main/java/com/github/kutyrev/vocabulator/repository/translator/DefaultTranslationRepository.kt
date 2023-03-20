@@ -33,19 +33,25 @@ class DefaultTranslationRepository @Inject constructor(
                 translationLanguage
             )
 
-            val translationResult = when(yandexTranslationResult){
+            val translationResult = when (yandexTranslationResult) {
                 is YandexTranslationResult.GenericError -> TranslationResultStatus.YandexGenericError
                 is YandexTranslationResult.NetworkError -> TranslationResultStatus.YandexNetworkError
-                is YandexTranslationResult.Success -> TranslationResultStatus.Success
+                is YandexTranslationResult.Success -> {
+                    fireBaseSource.saveNewWords(
+                        yandexTranslationResult.newTranslatedCards,
+                        origLanguage,
+                        translationLanguage
+                    )
+                    TranslationResultStatus.Success
+                }
             }
-
             translationCallback.receiveTranslation(words, translationResult)
         }
     }
 }
 
 sealed class TranslationResultStatus {
-    object Success: TranslationResultStatus()
-    object YandexNetworkError: TranslationResultStatus()
-    object YandexGenericError: TranslationResultStatus()
+    object Success : TranslationResultStatus()
+    object YandexNetworkError : TranslationResultStatus()
+    object YandexGenericError : TranslationResultStatus()
 }
