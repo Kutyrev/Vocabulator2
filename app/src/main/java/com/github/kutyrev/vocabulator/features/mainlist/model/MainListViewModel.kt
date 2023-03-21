@@ -62,12 +62,13 @@ class MainListViewModel @Inject constructor(
         viewModelScope.launch {
             subsLanguage?.let {
                 if (fileName != null) {
-                    _fileLoadingStatus.value =
+                    val localFileLoadingStatus =
                         fileRepository.parseFile(uri = uri, language = it, fileName = fileName)
                     _showLoadingDialog.value = false
-                    if (_fileLoadingStatus.value is FileLoadStatus.FileLoaded) {
+                    if (localFileLoadingStatus is FileLoadStatus.FileLoaded) {
                         _newSubsId.value =
-                            storageRepository.insertNewSubtitles((_fileLoadingStatus.value as FileLoadStatus.FileLoaded).subtitles)
+                            storageRepository.insertNewSubtitles(localFileLoadingStatus.subtitles)
+                        _fileLoadingStatus.value = localFileLoadingStatus
                     }
                 }
             }
@@ -82,5 +83,10 @@ class MainListViewModel @Inject constructor(
 
     fun setUnswipedSubtitleUnit(newValue: SubtitlesUnit?) {
         unswipedSubtitlesUnit.value = newValue
+    }
+
+    fun resetLoadingStatus() {
+        _fileLoadingStatus.value = FileLoadStatus.None
+        _newSubsId.value = EMPTY_SUBS_ID
     }
 }

@@ -30,10 +30,10 @@ fun MainListRoute(
     val context = LocalContext.current
 
     LaunchedEffect(key1 = fileLoadStatus) {
-
         if (fileLoadStatus is FileLoadStatus.FileLoaded) {
             if (viewModel.newSubsId.value != EMPTY_SUBS_ID) {
                 onEditButtonClick(viewModel.newSubsId.value)
+                viewModel.resetLoadingStatus()
             }
         }
         if (fileLoadStatus is FileLoadStatus.LoadingError) {
