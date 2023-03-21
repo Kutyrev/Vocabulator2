@@ -14,8 +14,9 @@ class YandexDataSource @Inject constructor(
         origLanguage: Language,
         translationLanguage: Language
     ): YandexTranslationResult {
-        val wordsWithoutTranslation =
-            words.filter { it.translatedWord.isEmpty() }.map { it.originalWord }
+        val wordsWithoutTranslation: MutableList<String> = mutableListOf()
+
+        words.forEach { if (it.translatedWord.isBlank()) wordsWithoutTranslation.add(it.originalWord) }
 
         val yandexTranslateResult = kotlin.runCatching {
             yandexApi.getTranslation(
