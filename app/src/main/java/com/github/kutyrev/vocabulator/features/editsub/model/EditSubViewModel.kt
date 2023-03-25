@@ -102,7 +102,7 @@ class EditSubViewModel @Inject constructor(
 
     fun translateWords() {
         viewModelScope.launch {
-            translationRepository.getTranslation(
+            translationRepository.getForebaseTranslation(
                 words,
                 subsLanguage.value,
                 langOfTranslation.value,
@@ -151,6 +151,13 @@ class EditSubViewModel @Inject constructor(
                 TranslationResultStatus.Success -> _messages.emit(EditCardsMessages.SUCCESS)
                 TranslationResultStatus.YandexGenericError -> _messages.emit(EditCardsMessages.YANDEX_GENERIC_ERROR)
                 TranslationResultStatus.YandexNetworkError -> _messages.emit(EditCardsMessages.NETWORK_ERROR)
+                TranslationResultStatus.FirebaseError -> _messages.emit(EditCardsMessages.FIREBASE_ERROR)
+                TranslationResultStatus.FirebaseSuccess -> translationRepository.getYandexTranslation(
+                    words,
+                    subsLanguage.value,
+                    langOfTranslation.value,
+                    this@EditSubViewModel
+                )
             }
         }
     }
@@ -253,6 +260,7 @@ class EditSubViewModel @Inject constructor(
     enum class EditCardsMessages(val messageId: Int) {
         SUCCESS(R.string.edit_message_success),
         NETWORK_ERROR(R.string.edit_message_network_error),
-        YANDEX_GENERIC_ERROR(R.string.edit_message_yandex_generic_error)
+        YANDEX_GENERIC_ERROR(R.string.edit_message_yandex_generic_error),
+        FIREBASE_ERROR(R.string.edit_message_firebase_error)
     }
 }

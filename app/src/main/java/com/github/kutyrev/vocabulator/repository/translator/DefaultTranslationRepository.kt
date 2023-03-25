@@ -16,7 +16,8 @@ class DefaultTranslationRepository @Inject constructor(
     private val yandexDataSource: YandexSource,
     @IoDispatcher private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : TranslationRepository {
-    override suspend fun getTranslation(
+
+    override suspend fun getForebaseTranslation(
         words: List<WordCard>,
         origLanguage: Language,
         translationLanguage: Language,
@@ -26,8 +27,19 @@ class DefaultTranslationRepository @Inject constructor(
             fireBaseSource.getTranslation(
                 words,
                 origLanguage,
-                translationLanguage
+                translationLanguage,
+                translationCallback
             )
+        }
+    }
+
+    override suspend fun getYandexTranslation(
+        words: List<WordCard>,
+        origLanguage: Language,
+        translationLanguage: Language,
+        translationCallback: TranslationCallback
+    ) {
+        withContext(dispatcher) {
             val yandexTranslationResult = yandexDataSource.translateWords(
                 words, origLanguage,
                 translationLanguage
@@ -51,7 +63,9 @@ class DefaultTranslationRepository @Inject constructor(
 }
 
 sealed class TranslationResultStatus {
+    object FirebaseSuccess: TranslationResultStatus()
     object Success : TranslationResultStatus()
     object YandexNetworkError : TranslationResultStatus()
     object YandexGenericError : TranslationResultStatus()
+    object FirebaseError : TranslationResultStatus()
 }

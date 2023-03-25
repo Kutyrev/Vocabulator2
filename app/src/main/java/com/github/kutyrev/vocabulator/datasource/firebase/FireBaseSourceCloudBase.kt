@@ -4,6 +4,8 @@ import android.util.Log
 import com.github.kutyrev.vocabulator.BuildConfig
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.WordCard
+import com.github.kutyrev.vocabulator.repository.translator.TranslationCallback
+import com.github.kutyrev.vocabulator.repository.translator.TranslationResultStatus
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FieldPath
@@ -24,7 +26,8 @@ class FireBaseSourceCloudBase : CloudBase {
     override suspend fun getTranslation(
         wordsToTranslate: List<WordCard>,
         origLanguage: Language,
-        transLanguage: Language
+        transLanguage: Language,
+        translationCallback: TranslationCallback
     ) {
         if (origLanguage == Language.EN) {
 
@@ -54,20 +57,42 @@ class FireBaseSourceCloudBase : CloudBase {
             }
 
             Tasks.whenAllComplete(tasks).addOnCompleteListener {
+                var allTaskSuccessfull = true
+                var exceptionDesc = ""
+
                 it.result.forEach { task ->
-                    if (task.isSuccessful) {
-                        val documents = (task as Task<QuerySnapshot>).result.documents
-                        for (curDocument in documents) {
-                            val curID = curDocument.id
-                            for (k in wordsToTranslate.indices) {
-                                val curWord = wordsToTranslate[k]
-                                if (curWord.originalWord == curID) {
-                                    curWord.translatedWord =
-                                        (curDocument[transLanguage.name.lowercase(locale = Locale.getDefault())] as String?).toString()
+                    if (!task.isSuccessful) {
+                        allTaskSuccessfull = false
+                        exceptionDesc = task.exception.toString()
+                    }
+                }
+
+                if (!allTaskSuccessfull) {
+                    translationCallback.receiveTranslation(
+                        wordsToTranslate,
+                        TranslationResultStatus.FirebaseError
+                    )
+                } else {
+                    it.result.forEach { task ->
+                        if (task.isSuccessful) {
+                            val documents = (task as Task<QuerySnapshot>).result.documents
+                            for (curDocument in documents) {
+                                val curID = curDocument.id
+                                for (k in wordsToTranslate.indices) {
+                                    val curWord = wordsToTranslate[k]
+                                    if (curWord.originalWord == curID) {
+                                        curWord.translatedWord =
+                                            (curDocument[transLanguage.name.lowercase(locale = Locale.getDefault())] as String?).toString()
+                                    }
                                 }
                             }
                         }
                     }
+
+                    translationCallback.receiveTranslation(
+                        wordsToTranslate,
+                        TranslationResultStatus.FirebaseSuccess
+                    )
                 }
             }
         }
