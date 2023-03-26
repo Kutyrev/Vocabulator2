@@ -26,6 +26,6 @@ class DatabaseModule {
             appContext,
             DatabaseSource::class.java,
             "vocabulator.db"
-        ).createFromAsset("initial_data.db").build()
+        ).createFromAsset("initial_commons.db").build()
     }
 }

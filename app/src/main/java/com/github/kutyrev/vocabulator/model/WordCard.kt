@@ -1,9 +1,6 @@
 package com.github.kutyrev.vocabulator.model
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 val EMPTY_CARD = WordCard(-1)
 
@@ -23,7 +20,8 @@ val EMPTY_CARD = WordCard(-1)
 open class WordCard(
     var subtitleId: Int,
     var originalWord: String = "",
-    var translatedWord: String = ""
+    var translatedWord: String = "",
+    var quantity: Int = 0
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
@@ -32,8 +30,9 @@ open class WordCard(
         id: Int,
         subtitleId: Int,
         originalWord: String = "",
-        translatedWord: String = ""
-    ) : this(subtitleId, originalWord, translatedWord) {
+        translatedWord: String = "",
+        quantity: Int = 0
+    ) : this(subtitleId, originalWord, translatedWord, quantity) {
         this.id = id
     }
 }

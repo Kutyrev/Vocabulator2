@@ -103,8 +103,9 @@ class DefaultFileRepository @Inject constructor(
 
             //  Cначала упорядочивает пары частоте (по убыванию),
             //  а затем по слову (в алфавитном порядке).
-            val sortedWords = freqMap.toList().sortedBy { (_, value) -> value }.reversed()
-                .sortedBy { (key, _) -> key }.toMap()
+            val sortedWords =
+                freqMap.toList().sortedBy { (key, _) -> key }.sortedBy { (_, value) -> value }
+                    .reversed().toMap()
 
             var limit = settingsRepository.getWordsForLoadCount().first()
 
@@ -119,7 +120,14 @@ class DefaultFileRepository @Inject constructor(
                     continue
                 }
 
-                newSubtitleEntry.wordCards.add(WordCard(EMPTY_SUBS_ID, wordEntry.key, ""))
+                newSubtitleEntry.wordCards.add(
+                    WordCard(
+                        EMPTY_SUBS_ID,
+                        wordEntry.key,
+                        "",
+                        wordEntry.value
+                    )
+                )
             }
 
             return@withContext FileLoadStatus.FileLoaded(newSubtitleEntry)

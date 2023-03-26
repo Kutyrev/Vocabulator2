@@ -74,12 +74,18 @@ fun EditSubScreen(
                     Checkbox(
                         checked = word.checked,
                         onCheckedChange = { checked -> onWordCheckedStateChange(word, checked) })
+                    Text(
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        text = word.quantity.toString(),
+                        style = MaterialTheme.typography.caption
+                    )
+                    Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_short)))
                     TextField(
                         modifier = Modifier.weight(WEIGHT_STD),
                         textStyle = MaterialTheme.typography.caption,
                         value = word.originalWord,
                         onValueChange = { newValue -> onOrigWordChange(newValue, word) })
-                    Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)))
+                    Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_short)))
                     TextField(
                         modifier = Modifier
                             .weight(WEIGHT_STD),
