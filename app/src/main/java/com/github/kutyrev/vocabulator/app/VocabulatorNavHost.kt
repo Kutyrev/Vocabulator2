@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.github.kutyrev.vocabulator.features.about.AboutRoute
 import com.github.kutyrev.vocabulator.features.cards.CardsRoute
 import com.github.kutyrev.vocabulator.features.commons.CommonsRoute
 import com.github.kutyrev.vocabulator.features.editsub.EditSubRoute
@@ -45,7 +46,8 @@ fun VocabulatorNavHost(
                 onSettingsMenuItemClick = {
                     navController.navigate(VocabulatorDestinations.SettingsDestination.route)
                 },
-                onCommonsButtonClick = { navController.navigate(VocabulatorDestinations.CommonsDestination.route) }
+                onCommonsButtonClick = { navController.navigate(VocabulatorDestinations.CommonsDestination.route) },
+                onAboutButtonClick = { navController.navigate(VocabulatorDestinations.AboutDestination.route) }
             )
         }
         composable(route = VocabulatorDestinations.CardsDestinations.route) {
@@ -63,6 +65,9 @@ fun VocabulatorNavHost(
             CommonsRoute(
                 onOkButtonPressedRoute = { navController.popBackStack() },
                 onCancelButtonPressed = { navController.popBackStack() })
+        }
+        composable(route = VocabulatorDestinations.AboutDestination.route) {
+            AboutRoute()
         }
     }
 }

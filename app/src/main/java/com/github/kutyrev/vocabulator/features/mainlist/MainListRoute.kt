@@ -21,7 +21,8 @@ fun MainListRoute(
     onListItemClick: (Int) -> Unit,
     onEditButtonClick: (Int) -> Unit,
     onSettingsMenuItemClick: () -> Unit,
-    onCommonsButtonClick: () -> Unit
+    onCommonsButtonClick: () -> Unit,
+    onAboutButtonClick: () -> Unit
 ) {
     val listState = viewModel.subtitlesList.collectAsStateWithLifecycle(initialValue = listOf())
 
@@ -57,6 +58,7 @@ fun MainListRoute(
             onEditButtonClick = onEditButtonClick,
             onSettingsMenuItemClick = onSettingsMenuItemClick,
             onCommonsButtonClick = onCommonsButtonClick,
+            onAboutButtonClick = onAboutButtonClick,
             checkFileExtension = viewModel::checkFileExtension,
             setLanguage = viewModel::setSubsLanguage,
             loadFile = viewModel::parseFile,

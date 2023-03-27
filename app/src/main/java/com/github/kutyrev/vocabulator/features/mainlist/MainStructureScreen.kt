@@ -46,13 +46,13 @@ fun MainStructureScreen(
     onEditButtonClick: (Int) -> Unit,
     onSettingsMenuItemClick: () -> Unit,
     onCommonsButtonClick: () -> Unit,
+    onAboutButtonClick: () -> Unit,
     checkFileExtension: (String) -> Boolean,
     setLanguage: (Language?) -> Unit,
     loadFile: (Uri, String?) -> Unit,
     onSubtitleSwiped: (subtitleUnit: SubtitlesUnit) -> Unit,
     setUnswipedSubtitleUnit: (subtitleUnit: SubtitlesUnit?) -> Unit
 ) {
-    val showMenu by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
@@ -92,7 +92,7 @@ fun MainStructureScreen(
     }
 
     Scaffold(scaffoldState = scaffoldState, topBar = {
-        MainListTopAppBar(onCommonsButtonClick, showMenu, onSettingsMenuItemClick)
+        MainListTopAppBar(onCommonsButtonClick, onSettingsMenuItemClick, onAboutButtonClick)
     }, floatingActionButton = {
         FloatingActionButton(onClick = { showLanguageDialog = true }) {
             Icon(Icons.Filled.Add, stringResource(R.string.sub_fab_content_desc))
@@ -149,9 +149,12 @@ fun MainStructureScreen(
 
 @Composable
 private fun MainListTopAppBar(
-    onCommonsButtonClick: () -> Unit, showMenu: Boolean, onSettingsMenuItemClick: () -> Unit
+    onCommonsButtonClick: () -> Unit,
+    onSettingsMenuItemClick: () -> Unit,
+    onAboutButtonClick: () -> Unit
 ) {
-    var showMenu1 = showMenu
+    var showMenu by remember { mutableStateOf(false) }
+
     TopAppBar(elevation = dimensionResource(id = R.dimen.elevation_std),
         title = { Text(stringResource(id = R.string.app_name)) },
         actions = {
@@ -163,7 +166,7 @@ private fun MainListTopAppBar(
             }
 
             IconButton(onClick = {
-                showMenu1 = true
+                showMenu = true
             }) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
@@ -171,14 +174,14 @@ private fun MainListTopAppBar(
                 )
             }
 
-            DropdownMenu(expanded = showMenu1, onDismissRequest = { showMenu1 = false }) {
+            DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
                 DropdownMenuItem(onClick = { /*TODO*/ }) {
                     Text(stringResource(R.string.menuitem_tutorial))
                 }
-                DropdownMenuItem(onClick = { onSettingsMenuItemClick() }) {
+                DropdownMenuItem(onClick =  onSettingsMenuItemClick) {
                     Text(stringResource(R.string.menuitem_settings))
                 }
-                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                DropdownMenuItem(onClick =  onAboutButtonClick ) {
                     Text(stringResource(R.string.menuitem_about))
                 }
             }

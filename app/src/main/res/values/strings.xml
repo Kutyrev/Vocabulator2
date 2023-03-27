@@ -44,4 +44,7 @@
     <string name="edit_message_firebase_error">An error occurred with translation DB connection. Try later.</string>
     <string name="snackbar_undo_button">Undo</string>
     <string name="snackbar_delete_sub_unit_text">%1$s deleted</string>
+    <string name="logo_desc">logo</string>
+    <string name="version_description">Version %1$s.\n\nKutyrev Dmitry — architecture, development.
+    \nDragni Natalya — idea, reconciliation of dictionaries.\nDragni Anastasia — reconciliation of italian dictionary.\n\nThe app uses Google Firestore technology.</string>
 </resources>
