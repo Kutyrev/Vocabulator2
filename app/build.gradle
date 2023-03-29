@@ -5,6 +5,8 @@ plugins {
     id 'kotlin-kapt'
     id "io.gitlab.arturbosch.detekt" version "1.22.0"
     id 'com.google.gms.google-services' //For Firebase
+    // Add the Crashlytics Gradle plugin
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -81,6 +83,7 @@ dependencies {
     //Firebase
     implementation platform('com.google.firebase:firebase-bom:31.2.0')
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
