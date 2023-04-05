@@ -9,6 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.kutyrev.vocabulator.features.editsub.model.EditSubViewModel
+import com.github.kutyrev.vocabulator.ui.components.DialogBoxLoading
 import com.github.kutyrev.vocabulator.ui.components.DialogChangeTranslation
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -22,6 +23,10 @@ fun EditSubRoute(
     val messages = viewModel.messages.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
+
+    if (viewModel.showLoadingDialog.value) {
+        DialogBoxLoading()
+    }
 
     LaunchedEffect(key1 = messages.value) {
         if (messages.value != null) {
@@ -45,6 +50,7 @@ fun EditSubRoute(
             origLanguage = viewModel.subsLanguage.value,
             targetLanguage = viewModel.langOfTranslation.value,
             uncheckedToDict = viewModel.uncheckedToDict.value,
+            isFirstLoad = viewModel.isFirstLoad,
             onOrigWordChange = viewModel::onOrigWordChange,
             onTranslationChange = viewModel::onTranslationChange,
             onSubtitleNameChange = viewModel::onSubtitleNameChange,
@@ -56,7 +62,8 @@ fun EditSubRoute(
             onOkButtonPressedRoute = onOkButtonPressedRoute,
             onCancelButtonPressed = onCancelButtonPressed,
             onChangeUncheckedToDict = viewModel::onChangeUncheckedToDict,
-            onTranslationClick = viewModel::onTranslationClick
+            onTranslationClick = viewModel::onTranslationClick,
+            updateCommonsAndReloadFile = viewModel::updateCommonsAndReloadFile
         )
     }
 }

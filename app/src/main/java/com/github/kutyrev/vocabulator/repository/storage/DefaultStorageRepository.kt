@@ -58,6 +58,12 @@ class DefaultStorageRepository @Inject constructor(
         }
     }
 
+    override suspend fun insertWordCards(wordCards: List<WordCard>) {
+        withContext(dispatcher) {
+            vocabulatorDao.insertWordCards(wordCards)
+        }
+    }
+
     override suspend fun updateWordCards(wordCards: List<WordCard>) {
         withContext(dispatcher) {
             vocabulatorDao.updateWordCards(wordCards)

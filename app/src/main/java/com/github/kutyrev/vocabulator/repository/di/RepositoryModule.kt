@@ -45,6 +45,7 @@ class RepositoryModule {
     }
 
     @Provides
+    @Singleton
     fun providesFileRepository(
         fileParserFactory: ParserFactory,
         settingsRepository: SettingsRepository,

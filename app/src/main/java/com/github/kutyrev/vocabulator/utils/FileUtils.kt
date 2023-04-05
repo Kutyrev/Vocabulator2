@@ -20,6 +20,5 @@ fun getFileName(context: Context, uri: Uri): String? {
             }
         }
     }
-
     return uri.path?.substring(uri.path!!.lastIndexOf('/') + 1)
 }

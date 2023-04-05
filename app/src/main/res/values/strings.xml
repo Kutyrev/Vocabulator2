@@ -47,4 +47,5 @@
     <string name="logo_desc">logo</string>
     <string name="version_description">Version %1$s.\n\nKutyrev Dmitry — architecture, development.
     \nDragni Natalya — idea, reconciliation of dictionaries.\nDragni Anastasia — reconciliation of italian dictionary.\n\nThe app uses Google Firestore technology.</string>
+    <string name="reload_file_desc">Update common words and reload file</string>
 </resources>

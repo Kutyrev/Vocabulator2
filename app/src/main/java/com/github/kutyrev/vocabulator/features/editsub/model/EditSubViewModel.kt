@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.app.LIST_ID_PARAM_NAME
 import com.github.kutyrev.vocabulator.model.*
+import com.github.kutyrev.vocabulator.repository.file.FileRepository
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
 import com.github.kutyrev.vocabulator.repository.translator.TranslationCallback
 import com.github.kutyrev.vocabulator.repository.translator.TranslationRepository
@@ -25,7 +26,8 @@ import javax.inject.Inject
 class EditSubViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val storageRepository: StorageRepository,
-    private val translationRepository: TranslationRepository
+    private val translationRepository: TranslationRepository,
+    private val fileRepository: FileRepository
 ) : ViewModel(), TranslationCallback {
 
     private var listId: Int = EMPTY_SUBS_ID
@@ -62,25 +64,20 @@ class EditSubViewModel @Inject constructor(
     private val _messages = MutableStateFlow<EditCardsMessages?>(null)
     val messages = _messages.asStateFlow()
 
+    val isFirstLoad = fileRepository.sortedWords.isNotEmpty()
+
+    private var _showLoadingDialog: MutableState<Boolean> = mutableStateOf(false)
+    val showLoadingDialog: MutableState<Boolean>
+        get() = _showLoadingDialog
+
     init {
         savedStateHandle.get<String>(LIST_ID_PARAM_NAME)?.let {
             listId = it.toInt()
         }
 
         if (listId != EMPTY_SUBS_ID) {
-            viewModelScope.launch {
-                storageRepository.getCards(listId).collect { wordsList ->
-                    _words.addAll(wordsList.map {
-                        EditableWordCard(
-                            id = it.id,
-                            subtitleId = it.subtitleId,
-                            originalWord = it.originalWord,
-                            translatedWord = it.translatedWord,
-                            quantity = it.quantity
-                        )
-                    })
-                }
-            }
+            loadWords()
+
             viewModelScope.launch {
                 _subtitlesUnit.value = storageRepository.getSubtitlesUnit(listId)
                 if (_subtitlesUnit.value != null) {
@@ -180,6 +177,42 @@ class EditSubViewModel @Inject constructor(
         isEdit.value = false
         val wordIndex = _words.indexOf(editableWord)
         _words[wordIndex] = _words[wordIndex].copy(translatedWord = newTranslation, changed = true)
+    }
+
+    fun updateCommonsAndReloadFile() {
+        updateCommonWords()
+
+        _showLoadingDialog.value = true
+
+        viewModelScope.launch {
+            subtitlesUnit.value?.let {
+                val newWords =
+                    fileRepository.reparseSubtitles(it)
+                storageRepository.deleteWordCards(it.wordCards)
+                _words.clear()
+                storageRepository.insertWordCards(newWords)
+
+                _showLoadingDialog.value = false
+            }
+        }
+    }
+
+    private fun loadWords() {
+        viewModelScope.launch {
+            storageRepository.getCards(listId).collect { wordsList ->
+                subtitlesUnit.value?.wordCards?.clear()
+                subtitlesUnit.value?.wordCards?.addAll(wordsList)
+                _words.addAll(wordsList.map {
+                    EditableWordCard(
+                        id = it.id,
+                        subtitleId = it.subtitleId,
+                        originalWord = it.originalWord,
+                        translatedWord = it.translatedWord,
+                        quantity = it.quantity
+                    )
+                })
+            }
+        }
     }
 
     private fun updateCommonWords() {

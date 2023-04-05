@@ -21,6 +21,8 @@ class DefaultFileRepository @Inject constructor(
 ) :
     FileRepository {
 
+    override var sortedWords: Map<String, Int> = mapOf()
+
     override suspend fun parseFile(uri: Uri, language: Language, fileName: String): FileLoadStatus =
         //Log.d("FileLoad", String.valueOf(System.currentTimeMillis()));
 
@@ -103,11 +105,11 @@ class DefaultFileRepository @Inject constructor(
 
             //  Cначала упорядочивает пары частоте (по убыванию),
             //  а затем по слову (в алфавитном порядке).
-            val sortedWords =
+            sortedWords =
                 freqMap.toList().sortedBy { (key, _) -> key }.sortedBy { (_, value) -> value }
                     .reversed().toMap()
 
-            var limit = settingsRepository.getWordsForLoadCount().first()
+            var limit = settingsRepository.getWordsForLoadCount().first() //TODO check
 
             for (wordEntry in sortedWords) {
                 if (limit-- == 0) break
@@ -131,6 +133,42 @@ class DefaultFileRepository @Inject constructor(
             }
 
             return@withContext FileLoadStatus.FileLoaded(newSubtitleEntry)
+        }
+
+    override suspend fun reparseSubtitles(subtitlesUnit: SubtitlesUnit): List<WordCard> =
+        withContext(dispatcher) {
+            val commonWordsArray: List<CommonWord> =
+                getCommonWords(Language.values()[subtitlesUnit.origLangId])
+
+            val wordCards: MutableList<WordCard> = mutableListOf()
+
+            val commonWords: HashSet<String> = HashSet()
+
+            commonWordsArray.forEach { commonWords.add(it.word) }
+            var limit = settingsRepository.getWordsForLoadCount().first()
+
+            for (wordEntry in sortedWords) {
+                if (limit-- == 0) break
+
+                if (commonWords.contains(wordEntry.key)
+                    || (wordEntry.key.length == 1)
+                    || (android.text.TextUtils.isDigitsOnly(wordEntry.key))
+                ) {
+                    limit++
+                    continue
+                }
+
+                wordCards.add(
+                    WordCard(
+                        subtitlesUnit.id,
+                        wordEntry.key,
+                        "",
+                        wordEntry.value
+                    )
+                )
+            }
+
+            return@withContext wordCards
         }
 
     private fun isEndOfPhrase(word: String): Boolean {

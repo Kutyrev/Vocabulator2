@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="padding_std">8dp</dimen>
+    <dimen name="padding_std_doubled">16dp</dimen>
     <dimen name="padding_short">4dp</dimen>
     <dimen name="elevation_std">4dp</dimen>
     <dimen name="corner_radius_std">16dp</dimen>

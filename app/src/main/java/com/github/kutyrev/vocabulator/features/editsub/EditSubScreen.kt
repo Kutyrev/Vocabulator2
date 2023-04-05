@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -30,6 +31,7 @@ fun EditSubScreen(
     origLanguage: Language,
     targetLanguage: Language,
     uncheckedToDict: Boolean,
+    isFirstLoad: Boolean,
     onOrigWordChange: (String, WordCard) -> Unit,
     onTranslationChange: (String, WordCard) -> Unit,
     onSubtitleNameChange: (String) -> Unit,
@@ -41,7 +43,8 @@ fun EditSubScreen(
     onOkButtonPressedRoute: () -> Unit,
     onCancelButtonPressed: () -> Unit,
     onChangeUncheckedToDict: (Boolean) -> Unit,
-    onTranslationClick: (WordCard) -> Unit
+    onTranslationClick: (WordCard) -> Unit,
+    updateCommonsAndReloadFile: () -> Unit
 ) {
     val languages = remember { Language.values() }
 
@@ -49,6 +52,7 @@ fun EditSubScreen(
         topBar = {
             TopBar(
                 subtitlesName = subtitlesName,
+                isFirstLoad = isFirstLoad,
                 onSubtitleNameChange = onSubtitleNameChange,
                 origLanguage = origLanguage,
                 languages = languages,
@@ -57,7 +61,8 @@ fun EditSubScreen(
                 onTargetLanguageChange = onTargetLanguageChange,
                 uncheckedToDict = uncheckedToDict,
                 onChangeUncheckedToDict = onChangeUncheckedToDict,
-                onTranslateButtonClicked = onTranslateButtonClicked
+                onTranslateButtonClicked = onTranslateButtonClicked,
+                updateCommonsAndReloadFile = updateCommonsAndReloadFile
             )
         },
         bottomBar = {
@@ -134,6 +139,7 @@ private fun BottomBar(
 @Composable
 private fun TopBar(
     subtitlesName: String?,
+    isFirstLoad: Boolean,
     onSubtitleNameChange: (String) -> Unit,
     origLanguage: Language,
     languages: Array<Language>,
@@ -143,6 +149,7 @@ private fun TopBar(
     uncheckedToDict: Boolean,
     onChangeUncheckedToDict: (Boolean) -> Unit,
     onTranslateButtonClicked: () -> Unit,
+    updateCommonsAndReloadFile: () -> Unit
 ) {
     var origLanguageMenuExpanded by rememberSaveable {
         mutableStateOf(false)
@@ -228,11 +235,20 @@ private fun TopBar(
             Checkbox(
                 checked = uncheckedToDict,
                 onCheckedChange = { onChangeUncheckedToDict(it) })
-
             Text(
                 text = stringResource(R.string.add_unchecked_text),
                 style = MaterialTheme.typography.caption
             )
+            if (isFirstLoad) {
+                OutlinedButton(
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std_doubled)),
+                    onClick =  updateCommonsAndReloadFile) {
+                    Icon(
+                        Icons.Default.Refresh,
+                        contentDescription = stringResource(R.string.reload_file_desc)
+                    )
+                }
+            }
         }
     }
 }
