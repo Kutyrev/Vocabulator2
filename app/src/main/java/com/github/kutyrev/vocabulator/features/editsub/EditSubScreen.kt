@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
@@ -44,7 +45,8 @@ fun EditSubScreen(
     onCancelButtonPressed: () -> Unit,
     onChangeUncheckedToDict: (Boolean) -> Unit,
     onTranslationClick: (WordCard) -> Unit,
-    updateCommonsAndReloadFile: () -> Unit
+    updateCommonsAndReloadFile: () -> Unit,
+    setAddNewWordCardDialogVisibility: (Boolean) -> Unit
 ) {
     val languages = remember { Language.values() }
 
@@ -71,6 +73,13 @@ fun EditSubScreen(
                 onOkButtonPressedRoute = onOkButtonPressedRoute,
                 onCancelButtonPressed = onCancelButtonPressed
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                modifier = Modifier.size(dimensionResource(id = R.dimen.fab_small_size)),
+                onClick = { setAddNewWordCardDialogVisibility(true) }) {
+                Icon(Icons.Filled.Add, stringResource(R.string.sub_fab_content_desc))
+            }
         }
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
@@ -242,7 +251,8 @@ private fun TopBar(
             if (isFirstLoad) {
                 OutlinedButton(
                     modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std_doubled)),
-                    onClick =  updateCommonsAndReloadFile) {
+                    onClick = updateCommonsAndReloadFile
+                ) {
                     Icon(
                         Icons.Default.Refresh,
                         contentDescription = stringResource(R.string.reload_file_desc)

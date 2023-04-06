@@ -70,6 +70,10 @@ class EditSubViewModel @Inject constructor(
     val showLoadingDialog: MutableState<Boolean>
         get() = _showLoadingDialog
 
+    private var _showAddNewWordCardDialog: MutableState<Boolean> = mutableStateOf(false)
+    val showAddNewWordCardDialog: MutableState<Boolean>
+        get() = _showAddNewWordCardDialog
+
     init {
         savedStateHandle.get<String>(LIST_ID_PARAM_NAME)?.let {
             listId = it.toInt()
@@ -197,6 +201,28 @@ class EditSubViewModel @Inject constructor(
         }
     }
 
+    fun addNewWordCard(origWord: String, translatedWord: String) {
+        subtitlesUnit.value?.let {
+            viewModelScope.launch {
+                storageRepository.insertWordCards(
+                    mutableListOf(
+                        WordCard(
+                            subtitleId = it.id,
+                            originalWord = origWord,
+                            translatedWord = translatedWord
+                        )
+                    )
+                )
+                setAddNewWordCardDialogVisibility(false)
+                _messages.emit(EditCardsMessages.NEW_WORD_ADDED)
+            }
+        }
+    }
+
+    fun setAddNewWordCardDialogVisibility(isVisible: Boolean) {
+        _showAddNewWordCardDialog.value = isVisible
+    }
+
     private fun loadWords() {
         viewModelScope.launch {
             storageRepository.getCards(listId).collect { wordsList ->
@@ -304,6 +330,7 @@ class EditSubViewModel @Inject constructor(
         SUCCESS(R.string.edit_message_success),
         NETWORK_ERROR(R.string.edit_message_network_error),
         YANDEX_GENERIC_ERROR(R.string.edit_message_yandex_generic_error),
-        FIREBASE_ERROR(R.string.edit_message_firebase_error)
+        FIREBASE_ERROR(R.string.edit_message_firebase_error),
+        NEW_WORD_ADDED(R.string.edit_message_word_added)
     }
 }

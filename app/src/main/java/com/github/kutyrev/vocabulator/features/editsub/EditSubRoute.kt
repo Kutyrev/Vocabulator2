@@ -11,6 +11,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.kutyrev.vocabulator.features.editsub.model.EditSubViewModel
 import com.github.kutyrev.vocabulator.ui.components.DialogBoxLoading
 import com.github.kutyrev.vocabulator.ui.components.DialogChangeTranslation
+import com.github.kutyrev.vocabulator.ui.components.DialogNewWordCard
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -26,6 +27,12 @@ fun EditSubRoute(
 
     if (viewModel.showLoadingDialog.value) {
         DialogBoxLoading()
+    }
+
+    if (viewModel.showAddNewWordCardDialog.value) {
+        DialogNewWordCard(
+            createWordCard = viewModel::addNewWordCard,
+            onCancel = { viewModel.setAddNewWordCardDialogVisibility(false) })
     }
 
     LaunchedEffect(key1 = messages.value) {
@@ -63,7 +70,8 @@ fun EditSubRoute(
             onCancelButtonPressed = onCancelButtonPressed,
             onChangeUncheckedToDict = viewModel::onChangeUncheckedToDict,
             onTranslationClick = viewModel::onTranslationClick,
-            updateCommonsAndReloadFile = viewModel::updateCommonsAndReloadFile
+            updateCommonsAndReloadFile = viewModel::updateCommonsAndReloadFile,
+            setAddNewWordCardDialogVisibility = viewModel::setAddNewWordCardDialogVisibility
         )
     }
 }

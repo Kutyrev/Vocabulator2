@@ -42,10 +42,13 @@
     <string name="edit_message_network_error">Network error. Please check your connection.</string>
     <string name="edit_message_yandex_generic_error">An error occurred with Yandex translate connection. Try later.</string>
     <string name="edit_message_firebase_error">An error occurred with translation DB connection. Try later.</string>
+    <string name="edit_message_word_added">New card added</string>
     <string name="snackbar_undo_button">Undo</string>
     <string name="snackbar_delete_sub_unit_text">%1$s deleted</string>
     <string name="logo_desc">logo</string>
     <string name="version_description">Version %1$s.\n\nKutyrev Dmitry — architecture, development.
     \nDragni Natalya — idea, reconciliation of dictionaries.\nDragni Anastasia — reconciliation of italian dictionary.\n\nThe app uses Google Firestore technology.</string>
     <string name="reload_file_desc">Update common words and reload file</string>
+    <string name="add_word_dialog_orig">Original word</string>
+    <string name="add_word_dialog_trans">Translated word</string>
 </resources>
