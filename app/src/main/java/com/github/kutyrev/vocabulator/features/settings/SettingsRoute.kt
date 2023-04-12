@@ -17,15 +17,20 @@ import com.github.kutyrev.vocabulator.features.settings.model.SettingsViewModel
 fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel(), onSaveSettings: () -> Unit) {
     LaunchedEffect(key1 = Unit) {
         viewModel.startCollectingNumberOfWordsForLoad()
+        viewModel.startCollectingLoadPhrases()
     }
     val numberOfWords by
         viewModel.numberOfWordsForLoad.collectAsStateWithLifecycle(initialValue = COUNT_OF_WORDS_INITIAL_VALUE)
+    val isLoadPhrases by
+        viewModel.loadPhrasesExamples.collectAsStateWithLifecycle()
 
     Surface(modifier = Modifier.fillMaxSize()) {
         SettingsScreen(countOfWords = numberOfWords,
-            onSaveButtonClick = viewModel::saveCountOfWordsForLoad,
+            isLoadPhrases = isLoadPhrases,
+            onSaveButtonClick = viewModel::onSaveButtonClick,
             onSaveSettings = onSaveSettings,
-            changeNumberOfWordsValue = viewModel::changeNumberOfWordsValue
+            changeNumberOfWordsValue = viewModel::changeNumberOfWordsValue,
+            changeIsSetLoadPhrases = viewModel::changeIsSetLoadPhrases
         )
     }
 }

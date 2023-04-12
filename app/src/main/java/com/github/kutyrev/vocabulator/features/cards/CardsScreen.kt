@@ -14,6 +14,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.model.WordCard
@@ -80,6 +81,10 @@ fun CardsScreen(
                 Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)))
                 if ((isForeignLangFirst && showTranslation) || !isForeignLangFirst) {
                     card.translatedWord.let { translatedWord -> Text(translatedWord) }
+                }
+                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)))
+                if(showTranslation) {
+                    Text(card.phrase, textAlign = TextAlign.Center)
                 }
             }
         }

@@ -7,9 +7,10 @@ class EditableWordCard(
     subtitleId: Int,
     originalWord: String = "",
     translatedWord: String = "",
-    quantity: Int = 0
+    quantity: Int = 0,
+    phrase: String = ""
 ) :
-    WordCard(id, subtitleId, originalWord, translatedWord, quantity) {
+    WordCard(id, subtitleId, originalWord, translatedWord, quantity, phrase) {
     var checked = true
     var changed = false
 
@@ -19,11 +20,12 @@ class EditableWordCard(
         originalWord: String = this.originalWord,
         translatedWord: String = this.translatedWord,
         quantity: Int = this.quantity,
+        phrase: String = this.phrase,
         checked: Boolean = this.checked,
         changed: Boolean = this.changed
     ): EditableWordCard {
         val newCardInstance =
-            EditableWordCard(id, subtitleId, originalWord, translatedWord, quantity)
+            EditableWordCard(id, subtitleId, originalWord, translatedWord, quantity, phrase)
         newCardInstance.checked = checked
         newCardInstance.changed = changed
         return newCardInstance

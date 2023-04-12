@@ -21,7 +21,8 @@ open class WordCard(
     var subtitleId: Int,
     var originalWord: String = "",
     var translatedWord: String = "",
-    var quantity: Int = 0
+    var quantity: Int = 0,
+    var phrase: String = ""
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
@@ -31,8 +32,9 @@ open class WordCard(
         subtitleId: Int,
         originalWord: String = "",
         translatedWord: String = "",
-        quantity: Int = 0
-    ) : this(subtitleId, originalWord, translatedWord, quantity) {
+        quantity: Int = 0,
+        phrase: String = ""
+    ) : this(subtitleId, originalWord, translatedWord, quantity, phrase) {
         this.id = id
     }
 }

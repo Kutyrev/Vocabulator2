@@ -234,7 +234,8 @@ class EditSubViewModel @Inject constructor(
                         subtitleId = it.subtitleId,
                         originalWord = it.originalWord,
                         translatedWord = it.translatedWord,
-                        quantity = it.quantity
+                        quantity = it.quantity,
+                        phrase = it.phrase
                     )
                 })
             }
@@ -272,22 +273,24 @@ class EditSubViewModel @Inject constructor(
             if (it.changed && it.checked) {
                 changedWords.add(
                     WordCard(
-                        it.id,
-                        it.subtitleId,
-                        it.originalWord,
-                        it.translatedWord,
-                        it.quantity
+                        id = it.id,
+                        subtitleId = it.subtitleId,
+                        originalWord = it.originalWord,
+                        translatedWord = it.translatedWord,
+                        quantity = it.quantity,
+                        phrase = it.phrase
                     )
                 )
             }
             if (!it.checked) {
                 wordsToDelete.add(
                     WordCard(
-                        it.id,
-                        it.subtitleId,
-                        it.originalWord,
-                        it.translatedWord,
-                        it.quantity
+                        id = it.id,
+                        subtitleId = it.subtitleId,
+                        originalWord = it.originalWord,
+                        translatedWord = it.translatedWord,
+                        quantity = it.quantity,
+                        phrase = it.phrase
                     )
                 )
             }

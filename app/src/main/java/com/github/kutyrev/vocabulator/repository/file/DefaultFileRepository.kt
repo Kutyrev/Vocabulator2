@@ -1,6 +1,7 @@
 package com.github.kutyrev.vocabulator.repository.file
 
 import android.net.Uri
+import android.util.Log
 import com.github.kutyrev.vocabulator.app.di.IoDispatcher
 import com.github.kutyrev.vocabulator.datasource.database.VocabulatorDao
 import com.github.kutyrev.vocabulator.datasource.fileparsers.*
@@ -11,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.util.*
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 class DefaultFileRepository @Inject constructor(
@@ -22,6 +24,7 @@ class DefaultFileRepository @Inject constructor(
     FileRepository {
 
     override var sortedWords: Map<String, Int> = mapOf()
+    private val phrasesArray: MutableList<String> = mutableListOf()
 
     override suspend fun parseFile(uri: Uri, language: Language, fileName: String): FileLoadStatus =
         //Log.d("FileLoad", String.valueOf(System.currentTimeMillis()));
@@ -53,6 +56,16 @@ class DefaultFileRepository @Inject constructor(
             //Удаление имён собственных
             //<editor-fold desc="Proper name detection">
             val wordsArray = subtitlesText.split(" ").toTypedArray()
+
+            val isLoadPhrases = settingsRepository.getLoadPhrasesExamples().first()
+            if (isLoadPhrases) {
+                //val phrasesArray = subtitlesText.split(". ", "? ", "! ").toTypedArray()
+                val pattern = Pattern.compile("(?<=[.!?])\\s+")
+                phrasesArray.clear()
+                phrasesArray.addAll(subtitlesText.split(pattern))
+                phrasesArray.forEach { Log.d("DefaultFileRepository", it) }
+            }
+
             var wasPreviousDeleted = false
 
             for (ind in wordsArray.indices) {
@@ -109,7 +122,7 @@ class DefaultFileRepository @Inject constructor(
                 freqMap.toList().sortedBy { (key, _) -> key }.sortedBy { (_, value) -> value }
                     .reversed().toMap()
 
-            var limit = settingsRepository.getWordsForLoadCount().first() //TODO check
+            var limit = settingsRepository.getWordsForLoadCount().first()
 
             for (wordEntry in sortedWords) {
                 if (limit-- == 0) break
@@ -122,14 +135,28 @@ class DefaultFileRepository @Inject constructor(
                     continue
                 }
 
-                newSubtitleEntry.wordCards.add(
-                    WordCard(
-                        EMPTY_SUBS_ID,
-                        wordEntry.key,
-                        "",
-                        wordEntry.value
+                if (isLoadPhrases) {
+                    val foundedWord = phrasesArray.find { it.contains(wordEntry.key, true) }
+
+                    newSubtitleEntry.wordCards.add(
+                        WordCard(
+                            EMPTY_SUBS_ID,
+                            wordEntry.key,
+                            "",
+                            wordEntry.value,
+                            foundedWord ?: ""
+                        )
                     )
-                )
+                } else {
+                    newSubtitleEntry.wordCards.add(
+                        WordCard(
+                            EMPTY_SUBS_ID,
+                            wordEntry.key,
+                            "",
+                            wordEntry.value
+                        )
+                    )
+                }
             }
 
             return@withContext FileLoadStatus.FileLoaded(newSubtitleEntry)
@@ -146,6 +173,7 @@ class DefaultFileRepository @Inject constructor(
 
             commonWordsArray.forEach { commonWords.add(it.word) }
             var limit = settingsRepository.getWordsForLoadCount().first()
+            val isLoadPhrases = settingsRepository.getLoadPhrasesExamples().first()
 
             for (wordEntry in sortedWords) {
                 if (limit-- == 0) break
@@ -158,16 +186,28 @@ class DefaultFileRepository @Inject constructor(
                     continue
                 }
 
-                wordCards.add(
-                    WordCard(
-                        subtitlesUnit.id,
-                        wordEntry.key,
-                        "",
-                        wordEntry.value
+                if (isLoadPhrases) {
+                    val foundedWord = phrasesArray.find { it.contains(wordEntry.key, true) }
+                    wordCards.add(
+                        WordCard(
+                            subtitlesUnit.id,
+                            wordEntry.key,
+                            "",
+                            wordEntry.value,
+                            foundedWord ?: ""
+                        )
                     )
-                )
+                } else {
+                    wordCards.add(
+                        WordCard(
+                            subtitlesUnit.id,
+                            wordEntry.key,
+                            "",
+                            wordEntry.value
+                        )
+                    )
+                }
             }
-
             return@withContext wordCards
         }
 
