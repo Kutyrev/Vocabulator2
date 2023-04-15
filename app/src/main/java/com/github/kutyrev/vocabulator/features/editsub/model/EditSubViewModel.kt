@@ -104,7 +104,7 @@ class EditSubViewModel @Inject constructor(
 
     fun translateWords() {
         viewModelScope.launch {
-            translationRepository.getForebaseTranslation(
+            translationRepository.getFirebaseTranslation(
                 words,
                 subsLanguage.value,
                 langOfTranslation.value,

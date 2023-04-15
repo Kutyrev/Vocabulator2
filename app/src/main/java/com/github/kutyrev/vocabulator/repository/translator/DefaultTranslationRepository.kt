@@ -17,7 +17,7 @@ class DefaultTranslationRepository @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : TranslationRepository {
 
-    override suspend fun getForebaseTranslation(
+    override suspend fun getFirebaseTranslation(
         words: List<WordCard>,
         origLanguage: Language,
         translationLanguage: Language,
