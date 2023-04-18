@@ -52,4 +52,6 @@
     <string name="add_word_dialog_orig">Original word</string>
     <string name="add_word_dialog_trans">Translated word</string>
     <string name="settings_load_phrases">Load sample phrases</string>
+    <string name="edit_scr_close_topbar_desc">Close top bar</string>
+    <string name="edit_scr_open_topbar_desc">Open top bar</string>
 </resources>

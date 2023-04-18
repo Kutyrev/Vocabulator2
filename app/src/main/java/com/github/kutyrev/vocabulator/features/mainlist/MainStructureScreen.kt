@@ -37,6 +37,7 @@ import com.github.kutyrev.vocabulator.utils.getFileName
 import kotlinx.coroutines.launch
 
 private const val DEF_WEIGHT = 1.0f
+private const val HALF_WEIGHT = 0.5f
 
 @Composable
 fun MainStructureScreen(
@@ -178,10 +179,10 @@ private fun MainListTopAppBar(
                 DropdownMenuItem(onClick = { /*TODO*/ }) {
                     Text(stringResource(R.string.menuitem_tutorial))
                 }
-                DropdownMenuItem(onClick =  onSettingsMenuItemClick) {
+                DropdownMenuItem(onClick = onSettingsMenuItemClick) {
                     Text(stringResource(R.string.menuitem_settings))
                 }
-                DropdownMenuItem(onClick =  onAboutButtonClick ) {
+                DropdownMenuItem(onClick = onAboutButtonClick) {
                     Text(stringResource(R.string.menuitem_about))
                 }
             }
@@ -206,10 +207,13 @@ private fun MainListScreen(
     ) {
         LazyColumn(modifier = Modifier) {
             item {
-                Card(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(dimensionResource(id = R.dimen.padding_std))
-                    .clickable { onListItemClick(EMPTY_LIST_ID) }) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(dimensionResource(id = R.dimen.padding_std))
+                        .clickable { onListItemClick(EMPTY_LIST_ID) },
+                    shape = MaterialTheme.shapes.small
+                ) {
                     Text(
                         text = stringResource(R.string.main_scr_all_cards_item),
                         textAlign = TextAlign.Center
@@ -279,9 +283,9 @@ private fun MainListScreen(
                                         text = subtitlesUnit.name,
                                         style = MaterialTheme.typography.body2
                                     )
-                                    Button(modifier = Modifier
+                                    OutlinedButton(modifier = Modifier
                                         .padding(dimensionResource(id = R.dimen.padding_std))
-                                        .weight(DEF_WEIGHT),
+                                        .weight(HALF_WEIGHT),
                                         onClick = { onEditButtonClick(subtitlesUnit.id) }) {
                                         Image(
                                             painter = painterResource(id = R.drawable.ic_baseline_edit_24),

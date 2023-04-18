@@ -1,5 +1,8 @@
 package com.github.kutyrev.vocabulator.features.editsub
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,10 +10,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.ArrowDropDown
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -18,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
 import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.features.editsub.model.EditableWordCard
 import com.github.kutyrev.vocabulator.model.Language
@@ -96,14 +100,14 @@ fun EditSubScreen(
                     Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_short)))
                     TextField(
                         modifier = Modifier.weight(WEIGHT_STD),
-                        textStyle = MaterialTheme.typography.caption,
+                        textStyle = MaterialTheme.typography.subtitle2,
                         value = word.originalWord,
                         onValueChange = { newValue -> onOrigWordChange(newValue, word) })
                     Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_short)))
                     TextField(
                         modifier = Modifier
                             .weight(WEIGHT_STD),
-                        textStyle = MaterialTheme.typography.caption,
+                        textStyle = MaterialTheme.typography.subtitle2,
                         value = word.translatedWord,
                         trailingIcon = {
                             Icon(
@@ -168,97 +172,138 @@ private fun TopBar(
         mutableStateOf(false)
     }
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_short))
+    val fullTopBar = rememberSaveable { (mutableStateOf(true)) }
+
+    Card(
+        elevation = dimensionResource(id = R.dimen.elevation_std),
+        shape = MaterialTheme.shapes.small
     ) {
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = dimensionResource(id = R.dimen.padding_std)),
-            textStyle = MaterialTheme.typography.body2,
-            value = subtitlesName ?: "",
-            onValueChange = { newName -> onSubtitleNameChange(newName) },
-            label = { Text(stringResource(id = R.string.subtitles_name_label)) }
-        )
-
-        Row {
-            OutlinedButton(modifier = Modifier
-                .padding(dimensionResource(id = R.dimen.padding_std))
-                .weight(WEIGHT_STD),
-                onClick = { origLanguageMenuExpanded = true }) {
-                Text(origLanguage.name)
-                Icon(
-                    Icons.Default.ArrowDropDown,
-                    contentDescription = stringResource(R.string.edit_scr_orig_lang_menu_desc)
-                )
-                DropdownMenu(
-                    expanded = origLanguageMenuExpanded,
-                    onDismissRequest = { origLanguageMenuExpanded = false }) {
-                    for (language in languages) {
-                        ClickableText(
-                            modifier = Modifier
-                                .padding(dimensionResource(id = R.dimen.padding_std)),
-                            text = AnnotatedString(language.name),
-                            onClick = {
-                                origLanguageMenuExpanded = false
-                                onSubtitlesLanguageChange(language)
-                            }
+        Column(
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_short))
+        ) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                IconButton(onClick = { fullTopBar.value = !fullTopBar.value }) {
+                    if (fullTopBar.value) {
+                        Icon(
+                            Icons.Outlined.Close,
+                            stringResource(R.string.edit_scr_close_topbar_desc)
+                        )
+                    } else {
+                        Icon(
+                            Icons.Outlined.ArrowDropDown,
+                            stringResource(R.string.edit_scr_open_topbar_desc)
                         )
                     }
                 }
             }
-
-            OutlinedButton(modifier = Modifier
-                .padding(dimensionResource(id = R.dimen.padding_std))
-                .weight(WEIGHT_STD),
-                onClick = { targetLanguageMenuExpanded = true }) {
-                Text(targetLanguage.name)
-                Icon(
-                    Icons.Default.ArrowDropDown,
-                    contentDescription = stringResource(R.string.edit_scr_trans_lang_menu_desc)
-                )
-                DropdownMenu(
-                    expanded = targetLanguageMenuExpanded,
-                    onDismissRequest = { targetLanguageMenuExpanded = false }) {
-                    for (language in languages) {
-                        ClickableText(
+            AnimatedVisibility(
+                visible = fullTopBar.value,
+                enter = slideInVertically(initialOffsetY = { -it }),
+                exit = slideOutVertically(targetOffsetY = { -it }),
+                content = {
+                    Column {
+                        TextField(
                             modifier = Modifier
-                                .padding(dimensionResource(id = R.dimen.padding_std)),
-                            text = AnnotatedString(language.name),
-                            onClick = {
-                                targetLanguageMenuExpanded = false
-                                onTargetLanguageChange(language)
-                            }
+                                .fillMaxWidth(),
+                            textStyle = MaterialTheme.typography.body2,
+                            value = subtitlesName ?: "",
+                            onValueChange = { newName -> onSubtitleNameChange(newName) },
+                            label = { Text(stringResource(id = R.string.subtitles_name_label)) }
                         )
+                        Row {
+                            OutlinedButton(modifier = Modifier
+                                .padding(dimensionResource(id = R.dimen.padding_std))
+                                .weight(WEIGHT_STD),
+                                onClick = { origLanguageMenuExpanded = true }) {
+                                Text(origLanguage.name)
+                                Icon(
+                                    Icons.Default.ArrowDropDown,
+                                    contentDescription = stringResource(R.string.edit_scr_orig_lang_menu_desc)
+                                )
+                                DropdownMenu(
+                                    expanded = origLanguageMenuExpanded,
+                                    onDismissRequest = { origLanguageMenuExpanded = false },
+                                    offset = DpOffset(
+                                        x = dimensionResource(id = R.dimen.std_x_offset),
+                                        y = 0.dp
+                                    )
+                                ) {
+                                    for (language in languages) {
+                                        ClickableText(
+                                            modifier = Modifier
+                                                .padding(dimensionResource(id = R.dimen.padding_std)),
+                                            text = AnnotatedString(
+                                                language.name
+                                                        + " " + stringResource(id = language.fullNameResource)
+                                            ),
+                                            onClick = {
+                                                origLanguageMenuExpanded = false
+                                                onSubtitlesLanguageChange(language)
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+                            OutlinedButton(modifier = Modifier
+                                .padding(dimensionResource(id = R.dimen.padding_std))
+                                .weight(WEIGHT_STD),
+                                onClick = { targetLanguageMenuExpanded = true }) {
+                                Text(targetLanguage.name)
+                                Icon(
+                                    Icons.Default.ArrowDropDown,
+                                    contentDescription = stringResource(R.string.edit_scr_trans_lang_menu_desc)
+                                )
+                                DropdownMenu(
+                                    expanded = targetLanguageMenuExpanded,
+                                    onDismissRequest = { targetLanguageMenuExpanded = false }) {
+                                    for (language in languages) {
+                                        ClickableText(
+                                            modifier = Modifier
+                                                .padding(dimensionResource(id = R.dimen.padding_std)),
+                                            text = AnnotatedString(
+                                                language.name
+                                                        + " " + stringResource(id = language.fullNameResource)
+                                            ),
+                                            onClick = {
+                                                targetLanguageMenuExpanded = false
+                                                onTargetLanguageChange(language)
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        OutlinedButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = onTranslateButtonClicked
+                        ) {
+                            Text(stringResource(R.string.button_translate))
+                        }
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Checkbox(
+                                checked = uncheckedToDict,
+                                onCheckedChange = { onChangeUncheckedToDict(it) })
+                            Text(
+                                text = stringResource(R.string.add_unchecked_text),
+                                style = MaterialTheme.typography.caption
+                            )
+                            if (isFirstLoad) {
+                                OutlinedButton(
+                                    modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std_doubled)),
+                                    onClick = updateCommonsAndReloadFile
+                                ) {
+                                    Icon(
+                                        Icons.Default.Refresh,
+                                        contentDescription = stringResource(R.string.reload_file_desc)
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
-            }
-
-        }
-
-        OutlinedButton(modifier = Modifier.fillMaxWidth(), onClick = onTranslateButtonClicked) {
-            Text(stringResource(R.string.button_translate))
-        }
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(
-                checked = uncheckedToDict,
-                onCheckedChange = { onChangeUncheckedToDict(it) })
-            Text(
-                text = stringResource(R.string.add_unchecked_text),
-                style = MaterialTheme.typography.caption
             )
-            if (isFirstLoad) {
-                OutlinedButton(
-                    modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std_doubled)),
-                    onClick = updateCommonsAndReloadFile
-                ) {
-                    Icon(
-                        Icons.Default.Refresh,
-                        contentDescription = stringResource(R.string.reload_file_desc)
-                    )
-                }
-            }
         }
     }
 }

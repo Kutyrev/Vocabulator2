@@ -60,7 +60,7 @@ fun CommonsScreen(
             onCancelButtonPressed = onCancelButtonPressed
         )
     }) { paddingValues ->
-        LazyColumn(modifier = Modifier.padding(paddingValues), state = listState) {
+        LazyColumn(modifier = Modifier.padding(paddingValues).fillMaxWidth(), state = listState) {
             items(words) { commonWord ->
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(checked = commonWord.checked, onCheckedChange = { checked ->
@@ -68,10 +68,9 @@ fun CommonsScreen(
                             commonWord, checked
                         )
                     })
-
                     Text(
                         text = commonWord.word,
-                        style = MaterialTheme.typography.caption,
+                        style = MaterialTheme.typography.subtitle2,
                         textDecoration = if (commonWord.checked) TextDecoration.None
                         else TextDecoration.LineThrough
                     )
@@ -131,7 +130,8 @@ private fun TopBar(
                 onDismissRequest = { languageMenuExpanded = false }) {
                 for (curLanguage in languages) {
                     ClickableText(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)),
-                        text = AnnotatedString(curLanguage.name),
+                        text = AnnotatedString(curLanguage.name
+                                + " " + stringResource(id = language.fullNameResource)),
                         onClick = {
                             languageMenuExpanded = false
                             onLanguageChange(curLanguage)
@@ -143,7 +143,7 @@ private fun TopBar(
         TextField(
             value = searchText,
             singleLine = true,
-            textStyle = MaterialTheme.typography.caption,
+            textStyle = MaterialTheme.typography.subtitle2,
             leadingIcon = {
                 Icon(
                     Icons.Default.Search,

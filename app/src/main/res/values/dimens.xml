@@ -13,4 +13,5 @@
     <dimen name="progress_ind_stroke">1dp</dimen>
     <dimen name="edit_dialog_border_stroke">4dp</dimen>
     <dimen name="fab_small_size">40dp</dimen>
+    <dimen name="std_x_offset">8dp</dimen>
 </resources>
