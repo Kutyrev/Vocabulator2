@@ -44,7 +44,7 @@ fun DialogChangeTranslation(
                                 })
                             TextField(
                                 value = curWord.word,
-                                textStyle = MaterialTheme.typography.caption,
+                                textStyle = MaterialTheme.typography.subtitle2,
                                 onValueChange = { newValue ->
                                     checkableWords[checkableWords.indexOf(curWord)] =
                                         checkableWords[checkableWords.indexOf(curWord)].copy(

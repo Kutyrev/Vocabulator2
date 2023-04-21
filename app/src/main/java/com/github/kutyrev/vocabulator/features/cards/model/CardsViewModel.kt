@@ -1,5 +1,6 @@
 package com.github.kutyrev.vocabulator.features.cards.model
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
+import com.github.kutyrev.vocabulator.ui.components.CheckableWord
+import com.github.kutyrev.vocabulator.ui.components.TRANSLATION_DELIMITER
 
 const val EMPTY_LIST_ID = -1
 private const val ZERO_CARD_POSITION_OFFSET = 0f
@@ -34,6 +37,8 @@ class CardsViewModel @Inject constructor(
     private var _card = MutableStateFlow(EMPTY_CARD)
     val card: StateFlow<WordCard>
         get() = _card
+    val checkableWords = mutableStateListOf<CheckableWord>()
+
     var isForeignLangFirst = mutableStateOf(true)
         private set
     var isRandomCards = mutableStateOf(false)
@@ -87,9 +92,11 @@ class CardsViewModel @Inject constructor(
         if (cardIndex < cards.value.size) {
             _card.value = cards.value[cardIndex]
             isForeignLangFirst.value = true
+            updateCheckableWords()
         } else {
             _card.value = cards.value[cardIndex - cards.value.size]
             isForeignLangFirst.value = false
+            updateCheckableWords()
         }
     }
 
@@ -138,6 +145,13 @@ class CardsViewModel @Inject constructor(
 
     fun onCardClick(){
         showTranslation.value = !showTranslation.value
+    }
+
+    private fun updateCheckableWords() {
+        checkableWords.clear()
+        card.value.translatedWord.split(TRANSLATION_DELIMITER).forEach {
+            checkableWords.add(CheckableWord(checked = true, word = it))
+        }
     }
 }
 
