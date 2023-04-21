@@ -14,4 +14,5 @@
     <dimen name="edit_dialog_border_stroke">4dp</dimen>
     <dimen name="fab_small_size">40dp</dimen>
     <dimen name="std_x_offset">8dp</dimen>
+    <dimen name="change_dialog_list_max_height">400dp</dimen>
 </resources>
