@@ -40,9 +40,12 @@ class DefaultFileRepository @Inject constructor(
                 SubtitlesUnit(0, fileName, language.ordinal, Language.EN.ordinal)
             var subtitlesText = ""
 
-            val fileLoadParser =
+            val fileLoadParser = try {
                 fileParserFactory.getParser(SupportedFileExtension.valueOf(extension))
                     ?: return@withContext FileLoadStatus.LoadingError(FileLoadError.UnsupportedFileExtension)
+            } catch (_: java.lang.IllegalArgumentException) {
+                return@withContext FileLoadStatus.LoadingError(FileLoadError.UnsupportedFileExtension)
+            }
 
             when (val parsingResult = fileLoadParser.parseFile(uri)) {
                 is ParsingResult.SuccessfullParsing -> subtitlesText =
@@ -50,7 +53,9 @@ class DefaultFileRepository @Inject constructor(
                 is ParsingResult.InvalidTimestampFormatException -> return@withContext FileLoadStatus.LoadingError(
                     FileLoadError.FileFormatCorrupted, parsingResult.lineNumber, parsingResult.line
                 )
-                ParsingResult.IOException -> FileLoadStatus.LoadingError(FileLoadError.IOException)
+                ParsingResult.IOException -> return@withContext FileLoadStatus.LoadingError(
+                    FileLoadError.IOException
+                )
             }
 
             //Удаление имён собственных
