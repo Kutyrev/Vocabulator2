@@ -1,12 +1,9 @@
 package com.github.kutyrev.vocabulator.features.mainlist
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.kutyrev.vocabulator.features.mainlist.model.MainListViewModel
 import com.github.kutyrev.vocabulator.model.EMPTY_SUBS_ID
@@ -14,7 +11,6 @@ import com.github.kutyrev.vocabulator.repository.file.FileLoadStatus
 import com.github.kutyrev.vocabulator.ui.components.DialogBoxLoading
 import com.github.kutyrev.vocabulator.ui.theme.VocabulatorTheme
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun MainListRoute(
     viewModel: MainListViewModel = hiltViewModel(),

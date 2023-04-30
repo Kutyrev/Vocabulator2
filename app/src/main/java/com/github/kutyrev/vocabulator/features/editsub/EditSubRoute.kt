@@ -6,14 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.kutyrev.vocabulator.features.editsub.model.EditSubViewModel
 import com.github.kutyrev.vocabulator.ui.components.DialogBoxLoading
 import com.github.kutyrev.vocabulator.ui.components.DialogChangeTranslation
 import com.github.kutyrev.vocabulator.ui.components.DialogNewWordCard
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun EditSubRoute(
     viewModel: EditSubViewModel = hiltViewModel(),
