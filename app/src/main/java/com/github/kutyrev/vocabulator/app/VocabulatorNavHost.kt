@@ -12,6 +12,7 @@ import com.github.kutyrev.vocabulator.features.commons.CommonsRoute
 import com.github.kutyrev.vocabulator.features.editsub.EditSubRoute
 import com.github.kutyrev.vocabulator.features.mainlist.MainListRoute
 import com.github.kutyrev.vocabulator.features.settings.SettingsRoute
+import com.github.kutyrev.vocabulator.features.tutorial.TutorialRoute
 
 const val LIST_ID_PARAM_NAME = "listId"
 private const val LIST_ID_PARAM_TEMPLATE = "{listId}"
@@ -47,7 +48,8 @@ fun VocabulatorNavHost(
                     navController.navigate(VocabulatorDestinations.SettingsDestination.route)
                 },
                 onCommonsButtonClick = { navController.navigate(VocabulatorDestinations.CommonsDestination.route) },
-                onAboutButtonClick = { navController.navigate(VocabulatorDestinations.AboutDestination.route) }
+                onAboutButtonClick = { navController.navigate(VocabulatorDestinations.AboutDestination.route) },
+                onTutorialButtonClick = { navController.navigate(VocabulatorDestinations.TutorialDestination.route) }
             )
         }
         composable(route = VocabulatorDestinations.CardsDestinations.route) {
@@ -68,6 +70,12 @@ fun VocabulatorNavHost(
         }
         composable(route = VocabulatorDestinations.AboutDestination.route) {
             AboutRoute()
+        }
+        composable(route = VocabulatorDestinations.TutorialDestination.route) {
+            TutorialRoute(onSettingsMenuItemClick = {
+                navController.popBackStack()
+                navController.navigate(VocabulatorDestinations.SettingsDestination.route)
+            })
         }
     }
 }

@@ -11,6 +11,7 @@ import javax.inject.Inject
 
 private const val PROP_WORDS_FOR_LOAD_COUNT = "words_for_load_count"
 private const val PROP_LOAD_PHRASES_EXAMPLES = "load_phrases_examples"
+private const val PROP_IS_FIRST_RUN = "is_first_run"
 
 class DataStoreRepository @Inject constructor(private val dataStore: DataStore<Preferences>) :
     SettingsRepository {
@@ -38,6 +39,18 @@ class DataStoreRepository @Inject constructor(private val dataStore: DataStore<P
     override suspend fun setLoadPhrasesExamples(isSetLoadPhrases: Boolean) {
         dataStore.edit {  settings ->
             settings[booleanPreferencesKey(PROP_LOAD_PHRASES_EXAMPLES)] = isSetLoadPhrases
+        }
+    }
+
+    override fun getIsFirstRun(): Flow<Boolean> {
+        return dataStore.data.map {
+                preferences -> preferences[booleanPreferencesKey(PROP_IS_FIRST_RUN)] ?: true
+        }
+    }
+
+    override suspend fun setIsFirstRun(isFirstRun: Boolean) {
+        dataStore.edit {  settings ->
+            settings[booleanPreferencesKey(PROP_IS_FIRST_RUN)] = isFirstRun
         }
     }
 }

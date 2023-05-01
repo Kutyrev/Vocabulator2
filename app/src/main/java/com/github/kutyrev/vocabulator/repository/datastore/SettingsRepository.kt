@@ -7,4 +7,6 @@ interface SettingsRepository {
     suspend fun setWordsForLoadCount(newWordsCount: Int)
     fun getLoadPhrasesExamples(): Flow<Boolean>
     suspend fun setLoadPhrasesExamples(isSetLoadPhrases: Boolean)
+    fun getIsFirstRun(): Flow<Boolean>
+    suspend fun setIsFirstRun(isFirstRun: Boolean)
 }

@@ -6,5 +6,6 @@ enum class VocabulatorDestinations(val route: String) {
     EditSubtitlesDestination("edit/{listId}"),
     SettingsDestination("settings"),
     CommonsDestination("commons"),
-    AboutDestination("about")
+    AboutDestination("about"),
+    TutorialDestination("tutorial")
 }

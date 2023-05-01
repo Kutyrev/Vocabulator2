@@ -8,19 +8,23 @@ import androidx.lifecycle.viewModelScope
 import com.github.kutyrev.vocabulator.model.EMPTY_SUBS_ID
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
+import com.github.kutyrev.vocabulator.repository.datastore.SettingsRepository
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
 import com.github.kutyrev.vocabulator.repository.file.FileLoadStatus
 import com.github.kutyrev.vocabulator.repository.file.FileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainListViewModel @Inject constructor(
-    private val storageRepository: StorageRepository, private val fileRepository: FileRepository
+    private val storageRepository: StorageRepository,
+    private val fileRepository: FileRepository,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val fileExtensionRegExPattern =
@@ -46,6 +50,9 @@ class MainListViewModel @Inject constructor(
         get() = _newSubsId
 
     var unswipedSubtitlesUnit: MutableState<SubtitlesUnit?> = mutableStateOf(null)
+        private set
+
+    var showTutorial : MutableState<Boolean> = mutableStateOf(false)
         private set
 
     fun checkFileExtension(uriString: String): Boolean {
@@ -88,5 +95,18 @@ class MainListViewModel @Inject constructor(
     fun resetLoadingStatus() {
         _fileLoadingStatus.value = FileLoadStatus.None
         _newSubsId.value = EMPTY_SUBS_ID
+    }
+
+ fun checkIsFirstRun() {
+        viewModelScope.launch {
+            if(settingsRepository.getIsFirstRun().first()) {
+                settingsRepository.setIsFirstRun(false)
+                showTutorial.value = true
+            }
+        }
+    }
+
+    fun resetShowTutorialStatus() {
+        showTutorial.value = false
     }
 }

@@ -18,7 +18,8 @@ fun MainListRoute(
     onEditButtonClick: (Int) -> Unit,
     onSettingsMenuItemClick: () -> Unit,
     onCommonsButtonClick: () -> Unit,
-    onAboutButtonClick: () -> Unit
+    onAboutButtonClick: () -> Unit,
+    onTutorialButtonClick: () -> Unit
 ) {
     val listState = viewModel.subtitlesList.collectAsStateWithLifecycle(initialValue = listOf())
 
@@ -42,6 +43,14 @@ fun MainListRoute(
         }
     }
 
+    viewModel.checkIsFirstRun()
+    LaunchedEffect(key1 = viewModel.showTutorial.value) {
+        if(viewModel.showTutorial.value) {
+            viewModel.resetShowTutorialStatus()
+            onTutorialButtonClick()
+        }
+    }
+
     if (viewModel.showLoadingDialog.value) {
         DialogBoxLoading()
     }
@@ -55,6 +64,7 @@ fun MainListRoute(
             onSettingsMenuItemClick = onSettingsMenuItemClick,
             onCommonsButtonClick = onCommonsButtonClick,
             onAboutButtonClick = onAboutButtonClick,
+            onTutorialButtonClick = onTutorialButtonClick,
             checkFileExtension = viewModel::checkFileExtension,
             setLanguage = viewModel::setSubsLanguage,
             loadFile = viewModel::parseFile,

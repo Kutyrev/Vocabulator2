@@ -54,4 +54,12 @@
     <string name="settings_load_phrases">Load sample phrases</string>
     <string name="edit_scr_close_topbar_desc">Close top bar</string>
     <string name="edit_scr_open_topbar_desc">Open top bar</string>
+    <string name="help_label_1"><font size="16"><b>Card set list</b></font></string>
+    <string name="help_label_2"><font size="16"><b>Word card</b></font></string>
+    <string name="help_label_3"><font size="16"><b>Set editing</b></font></string>
+    <string name="help_text_1"><font size="14">1. The list of sets;\n2. Editing a set. Swipe — deleting a set;\n3. Adding new subtitles/book;\n4. Editing dictionaries of basic vocabulary.</font></string>
+    <string name="help_text_2"><font size="14">1. The second word of the card. Appears on click;\n2. Add a word to the base vocabulary;\n3. Edit translation;\n4. Delete card;\n5. Phrase example from the book/subtitles.</font></string>
+    <string name="help_text_3"><font size="14">1. Request for translation;\n2. Add unchecked words to base vocabulary and reload file;\n3. Translation can be changed;\n4. You can remove unnecessary words;\n5. You can add a new word card manually;\n6. You can minimize the header.</font></string>
+    <string name="app_functions_description_desc">App functions description</string>
+    <string name="tutorial_settings_button">Go to settings</string>
 </resources>

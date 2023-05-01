@@ -15,4 +15,7 @@
     <dimen name="fab_small_size">40dp</dimen>
     <dimen name="std_x_offset">8dp</dimen>
     <dimen name="change_dialog_list_max_height">400dp</dimen>
+    <dimen name="pager_indicator_box_size">50dp</dimen>
+    <dimen name="pager_indicator_item_padding">2dp</dimen>
+    <dimen name="pager_indicator_item_size">20dp</dimen>
 </resources>

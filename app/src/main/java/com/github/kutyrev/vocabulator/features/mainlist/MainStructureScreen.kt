@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
@@ -48,6 +49,7 @@ fun MainStructureScreen(
     onSettingsMenuItemClick: () -> Unit,
     onCommonsButtonClick: () -> Unit,
     onAboutButtonClick: () -> Unit,
+    onTutorialButtonClick: () -> Unit,
     checkFileExtension: (String) -> Boolean,
     setLanguage: (Language?) -> Unit,
     loadFile: (Uri, String?) -> Unit,
@@ -93,7 +95,12 @@ fun MainStructureScreen(
     }
 
     Scaffold(scaffoldState = scaffoldState, topBar = {
-        MainListTopAppBar(onCommonsButtonClick, onSettingsMenuItemClick, onAboutButtonClick)
+        MainListTopAppBar(
+            onCommonsButtonClick,
+            onSettingsMenuItemClick,
+            onAboutButtonClick,
+            onTutorialButtonClick
+        )
     }, floatingActionButton = {
         FloatingActionButton(onClick = { showLanguageDialog = true }) {
             Icon(Icons.Filled.Add, stringResource(R.string.sub_fab_content_desc))
@@ -152,7 +159,8 @@ fun MainStructureScreen(
 private fun MainListTopAppBar(
     onCommonsButtonClick: () -> Unit,
     onSettingsMenuItemClick: () -> Unit,
-    onAboutButtonClick: () -> Unit
+    onAboutButtonClick: () -> Unit,
+    onTutorialButtonClick: () -> Unit
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
@@ -176,7 +184,7 @@ private fun MainListTopAppBar(
             }
 
             DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
-                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                DropdownMenuItem(onClick = onTutorialButtonClick) {
                     Text(stringResource(R.string.menuitem_tutorial))
                 }
                 DropdownMenuItem(onClick = onSettingsMenuItemClick) {
@@ -212,7 +220,6 @@ private fun MainListScreen(
                         .fillMaxWidth()
                         .padding(dimensionResource(id = R.dimen.padding_std))
                         .clickable { onListItemClick(EMPTY_LIST_ID) },
-                    shape = MaterialTheme.shapes.small
                 ) {
                     Text(
                         text = stringResource(R.string.main_scr_all_cards_item),
@@ -273,7 +280,8 @@ private fun MainListScreen(
                                     .padding(dimensionResource(id = R.dimen.padding_std))
                                     .fillMaxWidth()
                                     .clickable(onClick = { onListItemClick(subtitlesUnit.id) }),
-                                elevation = dimensionResource(id = R.dimen.elevation_std)
+                                elevation = dimensionResource(id = R.dimen.elevation_std),
+                                shape = CutCornerShape(topStart = dimensionResource(id = R.dimen.corner_radius_std))
                             ) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(
