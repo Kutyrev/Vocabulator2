@@ -95,6 +95,11 @@ class FireBaseSourceCloudBase : CloudBase {
                     )
                 }
             }
+        } else {
+            translationCallback.receiveTranslation(
+                wordsToTranslate,
+                TranslationResultStatus.FirebaseSuccess
+            )
         }
     }
 
