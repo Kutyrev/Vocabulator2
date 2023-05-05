@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,7 +28,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -94,7 +93,8 @@ fun TutorialScreen(onSettingsMenuItemClick: () -> Unit) {
         Column(
             modifier = Modifier
                 .padding(dimensionResource(id = R.dimen.padding_std))
-                .fillMaxHeight()
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center
         ) {
             HorizontalPager(
                 pageCount = PAGE_COUNT,
@@ -125,8 +125,7 @@ fun TutorialScreen(onSettingsMenuItemClick: () -> Unit) {
                                     R.string.app_functions_description_desc
                                 ),
                                 modifier = Modifier
-                                    .border(BorderStroke(1.dp, Color.LightGray)),
-                                alignment = Center
+                                    .border(BorderStroke(1.dp, Color.LightGray))
                             )
                             Text(
                                 text = stringResource(titleTextRes.value),
@@ -149,7 +148,7 @@ fun TutorialScreen(onSettingsMenuItemClick: () -> Unit) {
                     }
                 }
             }
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)))
+            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std_doubled)))
             Row(
                 Modifier
                     .height(dimensionResource(id = R.dimen.pager_indicator_box_size))
