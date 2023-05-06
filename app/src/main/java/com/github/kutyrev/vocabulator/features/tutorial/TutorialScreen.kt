@@ -42,7 +42,7 @@ import androidx.compose.ui.util.lerp
 import com.github.kutyrev.vocabulator.R
 import kotlin.math.absoluteValue
 
-private const val PAGE_COUNT = 3
+private const val PAGE_COUNT = 4
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -66,20 +66,24 @@ fun TutorialScreen(onSettingsMenuItemClick: () -> Unit) {
         snapshotFlow { pagerState.currentPage }.collect { page ->
             when (page) {
                 0 -> {
+                    titleTextRes.value = R.string.app_name
+                    mainTextRes.value = R.string.main_desc_text
+                    imageRes.value = R.drawable.icon
+                    isShowToSettingsButton.value = false
+                }
+                1 -> {
                     titleTextRes.value = R.string.help_label_1
                     mainTextRes.value = R.string.help_text_1
                     imageRes.value = R.drawable.tutorial_1
                     isShowToSettingsButton.value = false
                 }
-
-                1 -> {
+                2 -> {
                     titleTextRes.value = R.string.help_label_2
                     mainTextRes.value = R.string.help_text_2
                     imageRes.value = R.drawable.tutorial_2
                     isShowToSettingsButton.value = false
                 }
-
-                2 -> {
+                3 -> {
                     titleTextRes.value = R.string.help_label_3
                     mainTextRes.value = R.string.help_text_3
                     imageRes.value = R.drawable.tutorial_3

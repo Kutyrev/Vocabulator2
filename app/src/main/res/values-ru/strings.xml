@@ -1,0 +1,71 @@
+<resources>
+    <string name="app_name">Vocabulator</string>
+    <string name="edit_button_desc">Редактировать набор карточек</string>
+    <string name="subtitles_name_label">Имя набора карточек</string>
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Отмена</string>
+    <string name="button_translate">Перевести</string>
+    <string name="button_commons">Commons list</string>
+    <string name="menuitem_settings">Натройки</string>
+    <string name="menuitem_about">О программе</string>
+    <string name="menuitem_tutorial">Обзор функций</string>
+    <string name="topappbar_options_button_desc">Открыть опции</string>
+    <string name="button_save">Сохранить</string>
+    <string name="settings_number_of_words_label">Количество слов для загрузки</string>
+    <string name="sub_fab_content_desc">Add new subtitle</string>
+    <string name="toast_unsupported_file">Неподдерживаемый файл. Приложение поддерживает srt, ssa, ass, txt, fb2 файлы</string>
+    <string name="toast_file_format_corrupted">Повреждённый файл</string>
+    <string name="toast_io_exception">Ошибка при чтении файла</string>
+    <string name="loading_message">Пожалуйста подождите…</string>
+    <string name="choose_lang_dialog_caption">Выберите язык файла</string>
+    <string name="en_lang_fullname"> — Английский</string>
+    <string name="fr_lang_fullname"> — Французский</string>
+    <string name="ru_lang_fullname"> — Русский</string>
+    <string name="it_lang_fullname"> — Итальянский</string>
+    <string name="edit_scr_orig_lang_menu_desc">Выберите язык книги/субтитров</string>
+    <string name="edit_scr_trans_lang_menu_desc">Выберите язык перевода</string>
+    <string name="add_unchecked_text">Добавить неотмеченный в словарь базовой лексики</string>
+    <string name="commons_scr_search">Найди слово в словаре</string>
+    <string name="main_list_delete_subs">Удалить набор слов</string>
+    <string name="cards_scr_random_cards_text">Случайные карточки</string>
+    <string name="cards_scr_prev_card_button"><![CDATA[<<]]></string>
+    <string name="cards_scr_next_card_button"><![CDATA[>>]]></string>
+    <string name="cards_scr_delete_word_button">Удалить карточку</string>
+    <string name="cards_scr_message_delete">Карточка удалена</string>
+    <string name="cards_scr_message_added_in_commons">Добавлено в базовую лексику</string>
+    <string name="cards_scr_message_trans_edited">Перевод изменён</string>
+    <string name="cards_scr_add_in_commons_button">Добавить в базовую лексику</string>
+    <string name="main_scr_all_cards_item">Все карточки</string>
+    <string name="cards_scr_edit_button">Редактировать перевод</string>
+    <string name="edit_scr_edit_icon_desc">Диалог редактирования</string>
+    <string name="edit_message_success">Перевод получен</string>
+    <string name="edit_message_network_error">Ошибка соеднинения. Пожалуйста проверьте ваше соединение.</string>
+    <string name="edit_message_yandex_generic_error">Произошла ошибка при соединении с Yandex. Попробуйте позже.</string>
+    <string name="edit_message_firebase_error">Произошла ошбика при соединении с БД. Попробуйте позже.</string>
+    <string name="edit_message_word_added">Новая карточка добавлена</string>
+    <string name="snackbar_undo_button">Отменить</string>
+    <string name="snackbar_delete_sub_unit_text">%1$s удалён</string>
+    <string name="logo_desc">Логотип</string>
+    <string name="version_description">Версия %1$s.\n\nКутырев Дмитрий — архитектура, разработка.
+    \nДрагни Наталья — идея, выверка словарей.\nДрагни Анастасия — Выверка итальянского словаря.</string>
+    <string name="reload_file_desc">Обновить базовую лексику и перечитать файл</string>
+    <string name="add_word_dialog_orig">Оригинальное слово</string>
+    <string name="add_word_dialog_trans">Переведённое слово</string>
+    <string name="settings_load_phrases">Загружать примеры фраз</string>
+    <string name="edit_scr_close_topbar_desc">Закрыть верхнюю панель</string>
+    <string name="edit_scr_open_topbar_desc">Открыть верхнюю панель</string>
+    <string name="help_label_1"><font size="16"><b>Список наборов карточек</b></font></string>
+    <string name="help_label_2"><font size="16"><b>Карточка слов</b></font></string>
+    <string name="help_label_3"><font size="16"><b>Редактирование набора</b></font></string>
+    <string name="help_text_1"><font size="14">1. Список наборов карточек;\n2. Редактирование набора. Свайп — удаление набора;\n3. Добавление новой книги/субтитров;\n4. Редактирование словарей базовой лексики.</font></string>
+    <string name="help_text_2"><font size="14">1. Второе слово на карточке. Появляется по клику;\n2. Добавить слово в словарь базовой лексики;\n3. Редактировать перевод;\n4. Удалить карточку;\n5. Пример фразы из книги/субтитров.</font></string>
+    <string name="help_text_3"><font size="14">1. Запрос перевода;\n2. Добавить неотмеченные в словарь базовой лексики и перечитать файл;\n3. Перевод может быть изменён;\n4. Вы можете удалить ненужные слова;\n5. Вы можете добавить новую карточку вручную;\n6. Вы можете свернуть верхнюю панель.</font></string>
+    <string name="app_functions_description_desc">Описание функций приложения</string>
+    <string name="tutorial_settings_button">Перейти в настройки</string>
+    <string name="main_desc_text">Приложение Vocabulator формирует двуязычные карточки на основании самых частых слов в книге
+        или субтитрах, предварительно удаляя базовую лексику языка.\n
+        Приложение умеет работать с форматами <b>srt, ssa, fb2, txt</b>.
+        \nПеревод слов осуществляется с помощью словарей программы и API сервиса <a href="https://cloud.yandex.ru/services/translate">Yandex.Translate</a>.\nДля формирования карточек
+        отбирается топ упоминаемых слов в файле субтитров, не являющихся именами собственными. Количество слов
+        можно изменить в настройках приложения.</string>
+</resources>
