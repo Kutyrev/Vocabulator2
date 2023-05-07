@@ -5,8 +5,7 @@ import android.net.Uri
 import java.io.InputStream
 import java.util.*
 
-class TxtFileParser(private val context: Context) :
-    FileParser {
+class TxtFileParser(private val context: Context) : FileParser {
 
     override fun parseFile(uri: Uri): ParsingResult {
         val fileText = StringBuilder()
@@ -23,6 +22,6 @@ class TxtFileParser(private val context: Context) :
 
         fileInputStream?.close()
 
-        return ParsingResult.SuccessfullParsing(fileText.toString())
+        return ParsingResult.SuccessfullParsing(fileText.toString().trim())
     }
 }

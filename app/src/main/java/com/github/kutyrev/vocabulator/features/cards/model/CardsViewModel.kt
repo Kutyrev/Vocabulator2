@@ -21,8 +21,8 @@ import com.github.kutyrev.vocabulator.ui.components.TRANSLATION_DELIMITER
 
 const val EMPTY_LIST_ID = -1
 private const val ZERO_CARD_POSITION_OFFSET = 0f
-private const val NEXT_CARD_OFFSET = 1f
-private const val PREVIOUS_CARD_OFFSET = -1f
+private const val NEXT_CARD_OFFSET = -1f
+private const val PREVIOUS_CARD_OFFSET = 1f
 
 @HiltViewModel
 class CardsViewModel @Inject constructor(
@@ -76,7 +76,7 @@ class CardsViewModel @Inject constructor(
 
         showTranslation.value = false
 
-        val maxInd = cards.value.size * 2 - 2
+        val maxInd = cards.value.size * 2 - 1
 
         if (!isRandomCards.value) {
 

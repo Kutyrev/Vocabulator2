@@ -64,8 +64,9 @@ fun MainStructureScreen(
         ActivityResultContracts.OpenDocument()
     ) { docUri ->
         if (docUri != null) {
-            if (checkFileExtension(docUri.toString())) {
-                loadFile(docUri, getFileName(context, docUri))
+            val fileName: String = getFileName(context, docUri) ?: ""
+            if (checkFileExtension(fileName)) {
+                loadFile(docUri, fileName)
             } else {
                 setLanguage(null)
                 Toast.makeText(

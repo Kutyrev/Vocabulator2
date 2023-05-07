@@ -98,10 +98,10 @@ class DefaultFileRepository @Inject constructor(
             val subtitlesTextBuilder: StringBuilder = StringBuilder()
 
             for (ind in wordsArray.indices) {
-                if (ind > 0) {
+                ///if (ind > 0) {
                     //subtitlesText = subtitlesText.concat(wordsArray[ind]);
                     subtitlesTextBuilder.append(wordsArray[ind])
-                }
+                //}
             }
 
             subtitlesText = subtitlesTextBuilder.toString()

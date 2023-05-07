@@ -204,6 +204,7 @@ class EditSubViewModel @Inject constructor(
     fun addNewWordCard(origWord: String, translatedWord: String) {
         subtitlesUnit.value?.let {
             viewModelScope.launch {
+                _words.clear()
                 storageRepository.insertWordCards(
                     mutableListOf(
                         WordCard(
