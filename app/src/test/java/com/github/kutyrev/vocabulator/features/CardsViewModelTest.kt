@@ -2,13 +2,17 @@ package com.github.kutyrev.vocabulator.features
 
 import androidx.lifecycle.SavedStateHandle
 import com.github.kutyrev.vocabulator.MainDispatcherRule
+import com.github.kutyrev.vocabulator.features.cards.model.CardsMessages
 import com.github.kutyrev.vocabulator.features.cards.model.CardsViewModel
+import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.model.WordCard
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
+import io.mockk.just
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -26,6 +30,8 @@ internal class CardsViewModelTest {
     private val mockWordCardOne = WordCard(1, 1, "mock", "mock")
     private val mockWordCardTwo = WordCard(2, 1, "mock2", "mock2")
     private val mockWordCards = listOf(mockWordCardOne, mockWordCardTwo)
+    private val subUnitMock = SubtitlesUnit(1, "Mock", 1, 2)
+    private val newTranslation = "changed mock"
 
     @get:Rule
     val mockkRule = MockKRule(this)
@@ -111,5 +117,73 @@ internal class CardsViewModelTest {
         assertEquals(mockWordCardTwo, cardsViewModel.card.value)
         cardsViewModel.onPreviousCardButtonPressed()
         assertEquals(mockWordCardOne, cardsViewModel.card.value)
+    }
+
+    @Test
+    fun deleteWordCardTest() {
+        coEvery {
+            storageRepository.deleteWordCards(any())
+        } just Runs
+
+        cardsViewModel.deleteWordCard()
+
+        assertEquals(CardsMessages.DELETED.ordinal, cardsViewModel.messages.value?.ordinal)
+        assertEquals(mockWordCardTwo, cardsViewModel.card.value)
+
+        coVerify {
+            storageRepository.deleteWordCards(listOf(mockWordCardOne))
+        }
+    }
+
+    @Test
+    fun addWordInCommonsTest() {
+        coEvery {
+            storageRepository.getSubtitlesUnit(any())
+        } returns subUnitMock
+        coEvery {
+            storageRepository.insertCommonWords(any())
+        } just Runs
+        coEvery {
+            storageRepository.deleteWordCards(any())
+        } just Runs
+
+        cardsViewModel.addWordInCommons()
+        assertEquals(CardsMessages.ADDEDINCOMMONS.ordinal, cardsViewModel.messages.value?.ordinal)
+        assertEquals(mockWordCardTwo, cardsViewModel.card.value)
+
+        coVerify {
+            storageRepository.getSubtitlesUnit(mockWordCardOne.subtitleId)
+            storageRepository.insertCommonWords(any())
+            storageRepository.deleteWordCards(listOf(mockWordCardOne))
+        }
+    }
+
+    @Test
+    fun onIsEditStateChangeTest() {
+        assertEquals(false, cardsViewModel.isEdit.value)
+        cardsViewModel.onIsEditStateChange(true)
+        assertEquals(true, cardsViewModel.isEdit.value)
+    }
+
+    @Test
+    fun onChangeTranslationTest() {
+        coEvery {
+            storageRepository.updateWordCards(listOf(mockWordCardOne))
+        } just Runs
+
+        cardsViewModel.onChangeTranslation(newTranslation)
+        assertEquals(CardsMessages.TRANSLATIONEDITED.ordinal, cardsViewModel.messages.value?.ordinal)
+        assertEquals(newTranslation, cardsViewModel.card.value.translatedWord)
+
+        coVerify {
+            storageRepository.updateWordCards(listOf(mockWordCardOne))
+        }
+    }
+
+    @Test
+    fun onCardClickTest() {
+        assertEquals(false, cardsViewModel.showTranslation.value)
+        cardsViewModel.onCardClick()
+        assertEquals(true, cardsViewModel.showTranslation.value)
     }
 }
