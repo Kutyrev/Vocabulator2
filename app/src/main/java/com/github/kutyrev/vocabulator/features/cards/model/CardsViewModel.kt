@@ -57,7 +57,7 @@ class CardsViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            if(listId.value == EMPTY_LIST_ID) {
+            if (listId.value == EMPTY_LIST_ID) {
                 storageRepository.getAllCards().collect {
                     _cards.value = it
                     emitNewCard(ZERO_CARD_POSITION_OFFSET)
@@ -123,7 +123,14 @@ class CardsViewModel @Inject constructor(
     fun addWordInCommons() {
         viewModelScope.launch {
             val subtitlesUnit = storageRepository.getSubtitlesUnit(card.value.subtitleId)
-            storageRepository.insertCommonWords(listOf(CommonWord(languageId = subtitlesUnit.origLangId, word = card.value.originalWord)))
+            storageRepository.insertCommonWords(
+                listOf(
+                    CommonWord(
+                        languageId = subtitlesUnit.origLangId,
+                        word = card.value.originalWord
+                    )
+                )
+            )
             _messages.emit(CardsMessages.ADDEDINCOMMONS)
             storageRepository.deleteWordCards(listOf(card.value))
             emitNewCard(NEXT_CARD_OFFSET)
@@ -143,7 +150,7 @@ class CardsViewModel @Inject constructor(
         }
     }
 
-    fun onCardClick(){
+    fun onCardClick() {
         showTranslation.value = !showTranslation.value
     }
 
