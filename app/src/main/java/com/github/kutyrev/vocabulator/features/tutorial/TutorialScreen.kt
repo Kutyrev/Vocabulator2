@@ -19,10 +19,14 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +50,7 @@ private const val PAGE_COUNT = 4
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TutorialScreen(onSettingsMenuItemClick: () -> Unit) {
+fun TutorialScreen(onSettingsMenuItemClick: () -> Unit, onCloseButtonClick: () -> Unit) {
     val pagerState = rememberPagerState()
     val titleTextRes = rememberSaveable {
         mutableStateOf(R.string.help_label_1)
@@ -58,7 +62,7 @@ fun TutorialScreen(onSettingsMenuItemClick: () -> Unit) {
         mutableStateOf(R.drawable.tutorial_1)
     }
 
-    val isShowToSettingsButton = rememberSaveable {
+    val isLastPage = rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -69,25 +73,28 @@ fun TutorialScreen(onSettingsMenuItemClick: () -> Unit) {
                     titleTextRes.value = R.string.app_name
                     mainTextRes.value = R.string.main_desc_text
                     imageRes.value = R.drawable.icon
-                    isShowToSettingsButton.value = false
+                    isLastPage.value = false
                 }
+
                 1 -> {
                     titleTextRes.value = R.string.help_label_1
                     mainTextRes.value = R.string.help_text_1
                     imageRes.value = R.drawable.tutorial_1
-                    isShowToSettingsButton.value = false
+                    isLastPage.value = false
                 }
+
                 2 -> {
                     titleTextRes.value = R.string.help_label_2
                     mainTextRes.value = R.string.help_text_2
                     imageRes.value = R.drawable.tutorial_2
-                    isShowToSettingsButton.value = false
+                    isLastPage.value = false
                 }
+
                 3 -> {
                     titleTextRes.value = R.string.help_label_3
                     mainTextRes.value = R.string.help_text_3
                     imageRes.value = R.drawable.tutorial_3
-                    isShowToSettingsButton.value = true
+                    isLastPage.value = true
                 }
             }
         }
@@ -122,6 +129,20 @@ fun TutorialScreen(onSettingsMenuItemClick: () -> Unit) {
                     elevation = 0.dp
                 ) {
                     Column {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            if (isLastPage.value) {
+                                IconButton(onClick = onCloseButtonClick) {
+                                    Icon(
+                                        Icons.Outlined.Close,
+                                        stringResource(R.string.tutorial_close_button_desc)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)))
+                            }
+                        }
                         Column(horizontalAlignment = CenterHorizontally) {
                             Image(
                                 painter = painterResource(id = imageRes.value),
@@ -144,7 +165,7 @@ fun TutorialScreen(onSettingsMenuItemClick: () -> Unit) {
                             modifier = Modifier.fillMaxWidth()
                         )
                         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)))
-                        if (isShowToSettingsButton.value) {
+                        if (isLastPage.value) {
                             OutlinedButton(onClick = onSettingsMenuItemClick) {
                                 Text(stringResource(R.string.tutorial_settings_button))
                             }

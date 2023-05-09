@@ -68,4 +68,5 @@
         \nWords are translated using the app dictionaries and the service API <a href="https://cloud.yandex.ru/services/translate">Yandex.Translate</a>.\nTop words are selected for cards
         in a subtitle/book file without proper names. Word amount can be changed in the application settings.
     </string>
+    <string name="tutorial_close_button_desc">Close tutorial</string>
 </resources>

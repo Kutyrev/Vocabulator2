@@ -75,7 +75,7 @@ fun VocabulatorNavHost(
             TutorialRoute(onSettingsMenuItemClick = {
                 navController.popBackStack()
                 navController.navigate(VocabulatorDestinations.SettingsDestination.route)
-            })
+            }, onCloseButtonClick = { navController.popBackStack() })
         }
     }
 }
