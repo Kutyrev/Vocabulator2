@@ -52,7 +52,7 @@ class MainListViewModel @Inject constructor(
     var unswipedSubtitlesUnit: MutableState<SubtitlesUnit?> = mutableStateOf(null)
         private set
 
-    var showTutorial : MutableState<Boolean> = mutableStateOf(false)
+    var showTutorial: MutableState<Boolean> = mutableStateOf(false)
         private set
 
     fun checkFileExtension(uriString: String): Boolean {
@@ -97,9 +97,9 @@ class MainListViewModel @Inject constructor(
         _newSubsId.value = EMPTY_SUBS_ID
     }
 
- fun checkIsFirstRun() {
+    fun checkIsFirstRun() {
         viewModelScope.launch {
-            if(settingsRepository.getIsFirstRun().first()) {
+            if (settingsRepository.getIsFirstRun().first()) {
                 settingsRepository.setIsFirstRun(false)
                 showTutorial.value = true
             }
