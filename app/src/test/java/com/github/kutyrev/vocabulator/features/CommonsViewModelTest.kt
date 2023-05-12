@@ -36,7 +36,7 @@ internal class CommonsViewModelTest {
     @MockK
     lateinit var storageRepository: StorageRepository
 
-    lateinit var commonsViewModel: CommonsViewModel
+    private lateinit var commonsViewModel: CommonsViewModel
 
     @Before
     fun setUp() {

@@ -52,7 +52,7 @@ internal class MainListViewModelTest {
     @MockK
     lateinit var settingsRepository: SettingsRepository
 
-    lateinit var mainListViewModel: MainListViewModel
+    private lateinit var mainListViewModel: MainListViewModel
 
     @Before
     fun setUp() {

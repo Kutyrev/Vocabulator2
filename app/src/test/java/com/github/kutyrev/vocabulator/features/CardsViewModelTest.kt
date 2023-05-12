@@ -20,10 +20,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-const val LIST_ID = "1"
-const val EMPTY_LIST_ID = "-1"
-const val POSITIVE_OFFSET: Float = 1f
-const val NEGATIVE_OFFSET: Float = -1f
+private const val LIST_ID = "1"
+private const val EMPTY_LIST_ID = "-1"
+private const val POSITIVE_OFFSET: Float = 1f
+private const val NEGATIVE_OFFSET: Float = -1f
 
 internal class CardsViewModelTest {
 
@@ -46,7 +46,7 @@ internal class CardsViewModelTest {
     @MockK
     lateinit var savedStateHandle: SavedStateHandle
 
-    lateinit var cardsViewModel: CardsViewModel
+    private lateinit var cardsViewModel: CardsViewModel
 
     @Before
     fun setUp() {

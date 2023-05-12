@@ -31,7 +31,7 @@ internal class SettingsViewModelTest {
     @MockK
     lateinit var settingsRepository: SettingsRepository
 
-    lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var settingsViewModel: SettingsViewModel
 
     @Before
     fun setUp() {
