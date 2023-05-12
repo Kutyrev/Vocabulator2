@@ -80,13 +80,12 @@ class EditSubViewModel @Inject constructor(
         }
 
         if (listId != EMPTY_SUBS_ID) {
-            loadWords()
-
             viewModelScope.launch {
                 _subtitlesUnit.value = storageRepository.getSubtitlesUnit(listId)
                 if (_subtitlesUnit.value != null) {
                     _subsLanguage.value = Language.values()[_subtitlesUnit.value!!.origLangId]
                     _subtitlesName.value = _subtitlesUnit.value!!.name
+                    loadWords()
                 }
             }
         }
