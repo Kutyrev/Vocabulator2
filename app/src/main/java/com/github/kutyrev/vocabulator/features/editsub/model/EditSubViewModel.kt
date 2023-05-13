@@ -91,12 +91,12 @@ class EditSubViewModel @Inject constructor(
         }
     }
 
-    fun onOrigWordChange(newValue: String, word: WordCard) {
+    fun onOrigWordChange(newValue: String, word: EditableWordCard) {
         val wordIndex = _words.indexOf(word)
         _words[wordIndex] = _words[wordIndex].copy(originalWord = newValue, changed = true)
     }
 
-    fun onTranslationChange(newValue: String, word: WordCard) {
+    fun onTranslationChange(newValue: String, word: EditableWordCard) {
         val wordIndex = _words.indexOf(word)
         _words[wordIndex] = _words[wordIndex].copy(translatedWord = newValue, changed = true)
     }
