@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.features.editsub.model.EditableWordCard
 import com.github.kutyrev.vocabulator.model.Language
-import com.github.kutyrev.vocabulator.model.WordCard
 
 private const val WEIGHT_STD = 1f
 
@@ -48,7 +47,7 @@ fun EditSubScreen(
     onOkButtonPressedRoute: () -> Unit,
     onCancelButtonPressed: () -> Unit,
     onChangeUncheckedToDict: (Boolean) -> Unit,
-    onTranslationClick: (WordCard) -> Unit,
+    onTranslationClick: (EditableWordCard) -> Unit,
     updateCommonsAndReloadFile: () -> Unit,
     setAddNewWordCardDialogVisibility: (Boolean) -> Unit
 ) {

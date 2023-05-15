@@ -163,7 +163,7 @@ class EditSubViewModel @Inject constructor(
         }
     }
 
-    fun onTranslationClick(word: WordCard) {
+    fun onTranslationClick(word: EditableWordCard) {
         checkableWords.clear()
         editableWord = word
         word.translatedWord.split(TRANSLATION_DELIMITER).forEach {
