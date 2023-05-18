@@ -24,6 +24,7 @@ internal class TxtFileParserTest {
         mockkConstructor(ContentResolver::class)
         every { anyConstructed<ContentResolver>().openInputStream(any()) } returns InputStream.nullInputStream()
         mockkConstructor(Scanner::class)
+        //This mock realization related to the number of hasNextLine calls in the algorithm
         every { anyConstructed<Scanner>().hasNextLine() } returns true andThen true andThen false
         every { anyConstructed<Scanner>().nextLine() } returns mockLineOne andThen mockLineTwo
         val mContextMock = mockk<Context>(relaxed = true)
