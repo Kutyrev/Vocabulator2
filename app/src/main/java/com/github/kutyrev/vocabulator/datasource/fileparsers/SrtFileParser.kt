@@ -95,6 +95,6 @@ class SrtFileParser(private val context: Context) : FileParser {
 
         fileInputStream?.close()
 
-        return ParsingResult.SuccessfullParsing(subtitlesText.toString())
+        return ParsingResult.SuccessfullParsing(subtitlesText.toString().trim())
     }
 }
