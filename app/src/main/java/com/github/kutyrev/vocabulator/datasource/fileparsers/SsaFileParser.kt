@@ -13,8 +13,7 @@ private const val SECTION_DELIMITER = "["
 private const val TEXT_SECTION = "Text"
 private const val slashChar = 65533.toChar().toString()
 
-class SsaFileParser(private val context: Context) :
-    FileParser {
+class SsaFileParser(private val context: Context) : FileParser {
 
     override fun parseFile(uri: Uri): ParsingResult {
         val subtitlesText = StringBuilder()
@@ -77,7 +76,7 @@ class SsaFileParser(private val context: Context) :
 
         fileInputStream?.close()
 
-        return ParsingResult.SuccessfullParsing(subtitlesText.toString())
+        return ParsingResult.SuccessfullParsing(subtitlesText.toString().trim())
     }
 
     /**
