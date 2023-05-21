@@ -8,12 +8,12 @@ import javax.inject.Inject
 class FileParserFactory @Inject constructor(@ApplicationContext private val context: Context) :
     ParserFactory {
 
-    override fun getParser(fileExtension: SupportedFileExtension): FileParser? =
+    override fun getParser(fileExtension: SupportedFileExtension): FileParser =
         when (fileExtension) {
             SupportedFileExtension.SRT -> SrtFileParser(context)
             SupportedFileExtension.SSA -> SsaFileParser(context)
             SupportedFileExtension.TXT -> TxtFileParser(context)
             SupportedFileExtension.FB2 -> Fb2FileParser(context)
-            else -> null
+            SupportedFileExtension.ASS -> SsaFileParser(context)
         }
 }
