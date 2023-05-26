@@ -47,6 +47,10 @@ import com.github.kutyrev.vocabulator.R
 import kotlin.math.absoluteValue
 
 private const val PAGE_COUNT = 4
+private const val PAGE_ONE_INDEX = 0
+private const val PAGE_TWO_INDEX = 1
+private const val PAGE_THREE_INDEX = 2
+private const val PAGE_FOUR_INDEX = 3
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -69,28 +73,28 @@ fun TutorialScreen(onSettingsMenuItemClick: () -> Unit, onCloseButtonClick: () -
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.collect { page ->
             when (page) {
-                0 -> {
+                PAGE_ONE_INDEX -> {
                     titleTextRes.value = R.string.app_name
                     mainTextRes.value = R.string.main_desc_text
                     imageRes.value = R.drawable.icon
                     isLastPage.value = false
                 }
 
-                1 -> {
+                PAGE_TWO_INDEX -> {
                     titleTextRes.value = R.string.help_label_1
                     mainTextRes.value = R.string.help_text_1
                     imageRes.value = R.drawable.tutorial_1
                     isLastPage.value = false
                 }
 
-                2 -> {
+                PAGE_THREE_INDEX -> {
                     titleTextRes.value = R.string.help_label_2
                     mainTextRes.value = R.string.help_text_2
                     imageRes.value = R.drawable.tutorial_2
                     isLastPage.value = false
                 }
 
-                3 -> {
+                PAGE_FOUR_INDEX -> {
                     titleTextRes.value = R.string.help_label_3
                     mainTextRes.value = R.string.help_text_3
                     imageRes.value = R.drawable.tutorial_3

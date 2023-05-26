@@ -20,7 +20,8 @@ class SrtFileParser(private val context: Context) : FileParser {
         val subtitlesText = StringBuilder()
 
         val fileInputStream: InputStream? = context.contentResolver.openInputStream(uri)
-        //FileInputStream in = new FileInputStream(context.getContentResolver().openFileDescriptor(uri, "r").getFileDescriptor());
+        //FileInputStream in = new FileInputStream(context.getContentResolver()
+        // .openFileDescriptor(uri, "r").getFileDescriptor());
         //Через FileInputStream загрузка обрывалась после небольшого куска файла
 
         val scanner = Scanner(fileInputStream)

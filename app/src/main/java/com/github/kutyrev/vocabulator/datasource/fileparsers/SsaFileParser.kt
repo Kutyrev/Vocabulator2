@@ -11,7 +11,7 @@ private const val DIALOG_SECTION = "Dialogue:"
 private const val FORMAT_FIELD_DELIM = ":"
 private const val SECTION_DELIMITER = "["
 private const val TEXT_SECTION = "Text"
-private const val slashChar = 65533.toChar().toString()
+private const val SLASH_CHAR = 65533.toChar().toString()
 
 class SsaFileParser(private val context: Context) : FileParser {
 
@@ -95,7 +95,7 @@ class SsaFileParser(private val context: Context) : FileParser {
 
                 //text is cleaned before being inserted into the caption
                 return captionText.replace("\\{.*?\\}".toRegex(), "").replace("\n", " ")
-                    .replace("\\N", " ").replace(slashChar, "'")
+                    .replace("\\N", " ").replace(SLASH_CHAR, "'")
             }
         }
         return ""

@@ -13,9 +13,9 @@ import org.junit.Test
 import java.io.InputStream
 import java.util.Scanner
 
-private const val mockLineOne = "Test data."
-private const val mockLineTwo = "Test data!"
-private const val resultString = "Test data. Test data!"
+private const val MOCK_LINE_ONE = "Test data."
+private const val MOCK_LINE_TWO = "Test data!"
+private const val RESULT_STRING = "Test data. Test data!"
 
 internal class TxtFileParserTest {
 
@@ -26,7 +26,7 @@ internal class TxtFileParserTest {
         mockkConstructor(Scanner::class)
         //This mock realization related to the number of hasNextLine calls in the algorithm
         every { anyConstructed<Scanner>().hasNextLine() } returns true andThen true andThen false
-        every { anyConstructed<Scanner>().nextLine() } returns mockLineOne andThen mockLineTwo
+        every { anyConstructed<Scanner>().nextLine() } returns MOCK_LINE_ONE andThen MOCK_LINE_TWO
         val mContextMock = mockk<Context>(relaxed = true)
 
         mockkStatic(Uri::class)
@@ -36,6 +36,6 @@ internal class TxtFileParserTest {
         val result = txtFileParser.parseFile(uriMock)
 
         assertTrue(result is ParsingResult.SuccessfullParsing)
-        assertEquals(resultString, (result as ParsingResult.SuccessfullParsing).parsedText)
+        assertEquals(RESULT_STRING, (result as ParsingResult.SuccessfullParsing).parsedText)
     }
 }

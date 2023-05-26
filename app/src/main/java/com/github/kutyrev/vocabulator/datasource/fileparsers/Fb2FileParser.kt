@@ -2,7 +2,9 @@ package com.github.kutyrev.vocabulator.datasource.fileparsers
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.util.Xml
+import com.github.kutyrev.vocabulator.BuildConfig
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
@@ -11,6 +13,7 @@ import java.io.InputStream
 
 private const val FB_TAG = "FictionBook"
 private const val PARAGRAPH_TAG = "p"
+private const val TAG = "Fb2FileParser"
 
 class Fb2FileParser(private val context: Context) :
     FileParser {
@@ -25,7 +28,9 @@ class Fb2FileParser(private val context: Context) :
         try {
             resultArray = fileInputStream?.let { parse(it) }
         } catch (e: IOException) {
-            e.printStackTrace()
+            if(BuildConfig.DEBUG) {
+                Log.d(TAG, e.toString())
+            }
             return ParsingResult.IOException
         }
 
@@ -47,7 +52,9 @@ class Fb2FileParser(private val context: Context) :
             parser.nextTag()
             readFeed(parser)
         } catch (e: XmlPullParserException) {
-            e.printStackTrace()
+            if(BuildConfig.DEBUG) {
+                Log.d(TAG, e.toString())
+            }
             ArrayList()
         } finally {
             fileInputStream.close()

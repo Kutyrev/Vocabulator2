@@ -13,16 +13,16 @@ import java.io.InputStream
 import java.util.Scanner
 
 
-private const val mockLineOne = "1"
-private const val mockLineTwo = "00:00:04,170 --> 00:00:05,838"
-private const val mockLineThree = "Man:"
-private const val mockLineFour = "Kids, I'm gonna tell you"
-private const val mockLineFive = ""
-private const val mockLineSix = "2"
-private const val mockLineSeven = "00:00:05,840 --> 00:00:06,772"
-private const val mockLineEight = "An incredible story;"
-private const val mockLineNine = ""
-private const val expectedResult = "Man: Kids, I'm gonna tell you An incredible story;"
+private const val MOCK_LINE_ONE = "1"
+private const val MOCK_LINE_TWO = "00:00:04,170 --> 00:00:05,838"
+private const val MOCK_LINE_THREE = "Man:"
+private const val MOCK_LINE_FOUR = "Kids, I'm gonna tell you"
+private const val MOCK_LINE_FIVE = ""
+private const val MOCK_LINE_SIX = "2"
+private const val MOCK_LINE_SEVEN = "00:00:05,840 --> 00:00:06,772"
+private const val MOCK_LINE_EIGHT = "An incredible story;"
+private const val MOCK_LINE_NINE = ""
+private const val EXPECTED_RESULT = "Man: Kids, I'm gonna tell you An incredible story;"
 
 internal class SrtFileParserTest {
 
@@ -44,15 +44,15 @@ internal class SrtFileParserTest {
                 false
         every {
             anyConstructed<Scanner>().nextLine()
-        } returns mockLineOne andThen
-                mockLineTwo andThen
-                mockLineThree andThen
-                mockLineFour andThen
-                mockLineFive andThen
-                mockLineSix andThen
-                mockLineSeven andThen
-                mockLineEight andThen
-                mockLineNine
+        } returns MOCK_LINE_ONE andThen
+                MOCK_LINE_TWO andThen
+                MOCK_LINE_THREE andThen
+                MOCK_LINE_FOUR andThen
+                MOCK_LINE_FIVE andThen
+                MOCK_LINE_SIX andThen
+                MOCK_LINE_SEVEN andThen
+                MOCK_LINE_EIGHT andThen
+                MOCK_LINE_NINE
 
         val mContextMock = mockk<Context>(relaxed = true)
 
@@ -63,6 +63,6 @@ internal class SrtFileParserTest {
         val result = srtFileParser.parseFile(uriMock)
 
         TestCase.assertTrue(result is ParsingResult.SuccessfullParsing)
-        TestCase.assertEquals(expectedResult, (result as ParsingResult.SuccessfullParsing).parsedText)
+        TestCase.assertEquals(EXPECTED_RESULT, (result as ParsingResult.SuccessfullParsing).parsedText)
     }
 }

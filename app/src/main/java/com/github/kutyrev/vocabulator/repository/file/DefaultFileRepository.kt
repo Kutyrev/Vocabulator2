@@ -15,6 +15,8 @@ import java.util.*
 import java.util.regex.Pattern
 import javax.inject.Inject
 
+private const val EXTENSION_SIZE = 3
+
 class DefaultFileRepository @Inject constructor(
     private val fileParserFactory: ParserFactory,
     private val settingsRepository: SettingsRepository,
@@ -35,7 +37,7 @@ class DefaultFileRepository @Inject constructor(
             val commonWords: HashSet<String> = HashSet()
             commonWordsArray.forEach { commonWords.add(it.word) }
 
-            val extension = fileName.substring(fileName.length - 3).uppercase()
+            val extension = fileName.substring(fileName.length - EXTENSION_SIZE).uppercase()
             val newSubtitleEntry =
                 SubtitlesUnit(0, fileName, language.ordinal, Language.EN.ordinal)
             var subtitlesText = ""

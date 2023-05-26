@@ -12,6 +12,7 @@ import javax.inject.Inject
 private const val PROP_WORDS_FOR_LOAD_COUNT = "words_for_load_count"
 private const val PROP_LOAD_PHRASES_EXAMPLES = "load_phrases_examples"
 private const val PROP_IS_FIRST_RUN = "is_first_run"
+private const val DEFAULT_LOAD_WORDS_NUMBER = 100
 
 class DataStoreRepository @Inject constructor(private val dataStore: DataStore<Preferences>) :
     SettingsRepository {
@@ -20,7 +21,7 @@ class DataStoreRepository @Inject constructor(private val dataStore: DataStore<P
         return dataStore.data
             .map { preferences ->
                 // No type safety.
-                preferences[intPreferencesKey(PROP_WORDS_FOR_LOAD_COUNT)] ?: 100
+                preferences[intPreferencesKey(PROP_WORDS_FOR_LOAD_COUNT)] ?: DEFAULT_LOAD_WORDS_NUMBER
             }
     }
 

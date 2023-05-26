@@ -40,7 +40,10 @@ class RepositoryModule {
     }
 
     @Provides
-    fun providesTranslationRepository(translationBackSource: CloudBase, yandexSource: YandexSource): TranslationRepository {
+    fun providesTranslationRepository(
+        translationBackSource: CloudBase,
+        yandexSource: YandexSource
+    ): TranslationRepository {
         return DefaultTranslationRepository(translationBackSource, yandexSource)
     }
 

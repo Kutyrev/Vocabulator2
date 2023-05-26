@@ -25,7 +25,6 @@ private const val INIT_OFFSET = 0f
 
 @Composable
 fun CardsScreen(
-    modifier: Modifier = Modifier,
     card: WordCard,
     isRandomCards: Boolean,
     isForeignLangFirst: Boolean,
