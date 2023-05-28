@@ -22,7 +22,7 @@ class SrtFileParser(private val context: Context) : FileParser {
         val fileInputStream: InputStream? = context.contentResolver.openInputStream(uri)
         //FileInputStream in = new FileInputStream(context.getContentResolver()
         // .openFileDescriptor(uri, "r").getFileDescriptor());
-        //Через FileInputStream загрузка обрывалась после небольшого куска файла
+        //Through FileInputStream, the load was interrupted after a small piece of the file
 
         val scanner = Scanner(fileInputStream)
 
@@ -31,9 +31,8 @@ class SrtFileParser(private val context: Context) : FileParser {
         var line: String
 
         while (scanner.hasNextLine()) {
-            /* We assign our own ID's, ignore the ID given in the file. */
             if (skipNext) {
-                //Может быть больше одной пустой строки после строки с текстом
+                //There can be more than one empty line after the line with text
                 line = scanner.nextLine()
                 lineNumber++
                 while (line.isEmpty()) {
@@ -67,7 +66,7 @@ class SrtFileParser(private val context: Context) : FileParser {
             lineNumber++
             if (!line.isEmpty()) {
                 while (!line.isEmpty()) {
-                    //Несколько строк с текстом
+                    //Multiple lines of text
                     subtitlesText.append(" ").append(line)
                     line = if (scanner.hasNextLine()) scanner.nextLine() else {
                         if (BuildConfig.DEBUG) {
@@ -78,7 +77,7 @@ class SrtFileParser(private val context: Context) : FileParser {
                     lineNumber++
                 }
             } else {
-                //Могут быть просто пустые строки вместо текста
+                //Can be just blank lines instead of text
                 while (line.isEmpty()) {
                     if (scanner.hasNextLine()) {
                         line = scanner.nextLine()
@@ -89,7 +88,7 @@ class SrtFileParser(private val context: Context) : FileParser {
                         }
                         break
                     }
-                    skipNext = false //Текущая строка идентификатор
+                    skipNext = false //Current row is id
                 }
             }
         }
