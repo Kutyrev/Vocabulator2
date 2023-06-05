@@ -36,10 +36,12 @@ class FireBaseSourceCloudBase : CloudBase {
             val subLists: MutableList<List<WordCard>> = mutableListOf()
 
             for (i in wordsToTranslate.indices step FIREBASE_QUERY_LIMIT) {
+                //We use wordsToTranslate.size without -1,
+                //because second param in subList is exclusive
                 subLists.add(
                     wordsToTranslate.subList(
                         i,
-                        if (i + FIREBASE_QUERY_LIMIT > wordsToTranslate.size - 1) wordsToTranslate.size - 1 else i + FIREBASE_QUERY_LIMIT
+                        if (i + FIREBASE_QUERY_LIMIT > wordsToTranslate.size) wordsToTranslate.size else i + FIREBASE_QUERY_LIMIT
                     )
                 )
             }
