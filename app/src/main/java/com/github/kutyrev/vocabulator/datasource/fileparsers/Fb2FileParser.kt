@@ -40,7 +40,7 @@ class Fb2FileParser(private val context: Context) :
 
         fileInputStream?.close()
 
-        return ParsingResult.SuccessfullParsing(fileText.toString())
+        return ParsingResult.SuccessfullParsing(fileText.toString().trim())
     }
 
     @Throws(IOException::class)
