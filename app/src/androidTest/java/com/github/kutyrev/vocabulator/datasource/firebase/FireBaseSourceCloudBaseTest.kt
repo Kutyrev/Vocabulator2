@@ -14,6 +14,8 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 private const val expectedString = "наказуемость; сознание вины; вина; проступок; преступление"
+private const val LATCH_TIMEOUT = 2000L
+private const val TAG = "FireBaseSourceCloudBaseTest"
 
 internal class FireBaseSourceCloudBaseTest : TranslationCallback {
 
@@ -34,7 +36,7 @@ internal class FireBaseSourceCloudBaseTest : TranslationCallback {
             transLang,
             this@FireBaseSourceCloudBaseTest
         )
-        latch.await(2000, TimeUnit.MILLISECONDS)
+        latch.await(LATCH_TIMEOUT, TimeUnit.MILLISECONDS)
         assertTrue(translationResultStatus is TranslationResultStatus.FirebaseSuccess)
         assertEquals(expectedString, resultTranslation)
 
@@ -46,7 +48,7 @@ internal class FireBaseSourceCloudBaseTest : TranslationCallback {
     ) {
         translationResultStatus = translationResult
         resultTranslation = translatedWords[0].translatedWord
-        Log.d("FireBaseSourceCloudBaseTest", translatedWords[0].translatedWord)
+        Log.d(TAG, translatedWords[0].translatedWord)
         latch.countDown()
     }
 }
