@@ -16,6 +16,8 @@ import java.util.regex.Pattern
 import javax.inject.Inject
 
 private const val EXTENSION_SIZE = 3
+private const val DASH_SIGN = '-'
+private const val UPPER_COMMA = '\''
 
 class DefaultFileRepository @Inject constructor(
     private val fileParserFactory: ParserFactory,
@@ -93,9 +95,10 @@ class DefaultFileRepository @Inject constructor(
                     wordsArray[ind] = wordsArray[ind] + " "
                     wasPreviousDeleted = false
                 }
-
             }
             //</editor-fold>
+
+            wordsCleaning(wordsArray)
 
             val subtitlesTextBuilder: StringBuilder = StringBuilder()
 
@@ -169,6 +172,23 @@ class DefaultFileRepository @Inject constructor(
             return@withContext FileLoadStatus.FileLoaded(newSubtitleEntry)
         }
 
+    private fun wordsCleaning(wordsArray: Array<String>) {
+        for (ind in wordsArray.indices) {
+            if (wordsArray[ind].isNotEmpty()) {
+                if (wordsArray[ind].startsWith(DASH_SIGN) ||
+                    wordsArray[ind].startsWith(UPPER_COMMA)
+                ) {
+                    wordsArray[ind] = wordsArray[ind].drop(1)
+                }
+                if (wordsArray[ind].endsWith(DASH_SIGN) ||
+                    wordsArray[ind].endsWith(UPPER_COMMA)
+                ) {
+                    wordsArray[ind] = wordsArray[ind].dropLast(1)
+                }
+            }
+        }
+    }
+
     override suspend fun reparseSubtitles(subtitlesUnit: SubtitlesUnit): List<WordCard> =
         withContext(dispatcher) {
             val commonWordsArray: List<CommonWord> =
@@ -229,7 +249,7 @@ class DefaultFileRepository @Inject constructor(
         }
 
         //Dialog
-        return curChar == '.' || curChar == '?' || curChar == '!' || curChar == '-'
+        return curChar == '.' || curChar == '?' || curChar == '!' || curChar == DASH_SIGN
     }
 
     private fun isCaseException(word: String): Boolean {
