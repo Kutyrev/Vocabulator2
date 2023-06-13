@@ -47,7 +47,7 @@
     <string name="snackbar_delete_sub_unit_text">%1$s удалён</string>
     <string name="logo_desc">Логотип</string>
     <string name="version_description">Версия %1$s.\n\nКутырев Дмитрий — архитектура, разработка.
-    \nДрагни Наталья — идея, выверка словарей.\nДрагни Анастасия — Выверка итальянского словаря.</string>
+    \nДрагни Наталья — идея, выверка словарей.\nДрагни Анастасия — выверка итальянского словаря.</string>
     <string name="reload_file_desc">Обновить базовую лексику и перечитать файл</string>
     <string name="add_word_dialog_orig">Оригинальное слово</string>
     <string name="add_word_dialog_trans">Переведённое слово</string>
@@ -69,4 +69,5 @@
         отбирается топ упоминаемых слов в файле субтитров, не являющихся именами собственными. Количество слов
         можно изменить в настройках приложения.</string>
     <string name="tutorial_close_button_desc">Закрыть обзор функций</string>
+    <string name="commons_scr_orig_lang_menu_desc">Выберите язык базовой лексики</string>
 </resources>

@@ -124,14 +124,14 @@ private fun TopBar(
             Text(language.name)
             Icon(
                 Icons.Default.ArrowDropDown,
-                contentDescription = stringResource(R.string.edit_scr_orig_lang_menu_desc)
+                contentDescription = stringResource(R.string.commons_scr_orig_lang_menu_desc)
             )
             DropdownMenu(expanded = languageMenuExpanded,
                 onDismissRequest = { languageMenuExpanded = false }) {
                 for (curLanguage in languages) {
                     ClickableText(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std)),
                         text = AnnotatedString(curLanguage.name
-                                + " " + stringResource(id = language.fullNameResource)),
+                                + " " + stringResource(id = curLanguage.fullNameResource)),
                         onClick = {
                             languageMenuExpanded = false
                             onLanguageChange(curLanguage)
