@@ -2,6 +2,7 @@ package com.github.kutyrev.vocabulator.repository.file
 
 import android.net.Uri
 import android.util.Log
+import com.github.kutyrev.vocabulator.BuildConfig
 import com.github.kutyrev.vocabulator.app.di.IoDispatcher
 import com.github.kutyrev.vocabulator.datasource.database.VocabulatorDao
 import com.github.kutyrev.vocabulator.datasource.fileparsers.*
@@ -54,9 +55,11 @@ class DefaultFileRepository @Inject constructor(
             when (val parsingResult = fileLoadParser.parseFile(uri)) {
                 is ParsingResult.SuccessfullParsing -> subtitlesText =
                     parsingResult.parsedText
+
                 is ParsingResult.InvalidTimestampFormatException -> return@withContext FileLoadStatus.LoadingError(
                     FileLoadError.FileFormatCorrupted, parsingResult.lineNumber, parsingResult.line
                 )
+
                 ParsingResult.IOException -> return@withContext FileLoadStatus.LoadingError(
                     FileLoadError.IOException
                 )
@@ -72,7 +75,9 @@ class DefaultFileRepository @Inject constructor(
                 val pattern = Pattern.compile("(?<=[.!?])\\s+")
                 phrasesArray.clear()
                 phrasesArray.addAll(subtitlesText.split(pattern))
-                phrasesArray.forEach { Log.d("DefaultFileRepository", it) }
+                if (BuildConfig.DEBUG) {
+                    phrasesArray.forEach { Log.d("DefaultFileRepository", it) }
+                }
             }
 
             var wasPreviousDeleted = false
@@ -88,11 +93,9 @@ class DefaultFileRepository @Inject constructor(
                             !isEndOfPhrase(wordsArray[ind]) //Само имя собственное может быть концом фразы
                         wordsArray[ind] = ""
                     } else {
-                        wordsArray[ind] = wordsArray[ind] + " "
                         wasPreviousDeleted = false
                     }
                 } else {
-                    wordsArray[ind] = wordsArray[ind] + " "
                     wasPreviousDeleted = false
                 }
             }
@@ -104,8 +107,10 @@ class DefaultFileRepository @Inject constructor(
 
             for (ind in wordsArray.indices) {
                 ///if (ind > 0) {
-                    //subtitlesText = subtitlesText.concat(wordsArray[ind]);
-                    subtitlesTextBuilder.append(wordsArray[ind])
+                //subtitlesText = subtitlesText.concat(wordsArray[ind]);
+                if (wordsArray[ind].isNotEmpty()) {
+                    subtitlesTextBuilder.append(wordsArray[ind]).append(" ")
+                }
                 //}
             }
 
@@ -146,7 +151,12 @@ class DefaultFileRepository @Inject constructor(
                 }
 
                 if (isLoadPhrases) {
-                    val foundedWord = phrasesArray.find { it.contains(wordEntry.key, true) }
+                    val foundedWord = phrasesArray.find {
+                        it.contains(
+                            StringBuilder(" ").append(wordEntry.key).append(" "),
+                            true
+                        )
+                    }
 
                     newSubtitleEntry.wordCards.add(
                         WordCard(
@@ -173,7 +183,11 @@ class DefaultFileRepository @Inject constructor(
         }
 
     private fun wordsCleaning(wordsArray: Array<String>) {
+        //Sometimes in texts we have words with commas like "couldn’t" instead of "couldn't"
+        //these commas "’" can't be in a key of a hashmap, so in a key we have something
+        //like "couldn"
         for (ind in wordsArray.indices) {
+            wordsArray[ind] = wordsArray[ind].replace("’", "'")
             if (wordsArray[ind].isNotEmpty()) {
                 if (wordsArray[ind].startsWith(DASH_SIGN) ||
                     wordsArray[ind].startsWith(UPPER_COMMA)
@@ -214,7 +228,11 @@ class DefaultFileRepository @Inject constructor(
                 }
 
                 if (isLoadPhrases) {
-                    val foundedWord = phrasesArray.find { it.contains(wordEntry.key, true) }
+                    val foundedWord = phrasesArray.find {
+                        it.contains(
+                            StringBuilder(" ").append(wordEntry.key).append(" "), true
+                        )
+                    }
                     wordCards.add(
                         WordCard(
                             subtitlesUnit.id,
