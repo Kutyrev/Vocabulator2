@@ -24,7 +24,7 @@
     <string name="it_lang_fullname"> — Итальянский</string>
     <string name="edit_scr_orig_lang_menu_desc">Выберите язык книги/субтитров</string>
     <string name="edit_scr_trans_lang_menu_desc">Выберите язык перевода</string>
-    <string name="add_unchecked_text">Добавить неотмеченный в словарь базовой лексики</string>
+    <string name="add_unchecked_text">Добавить неотмеченные в словарь базовой лексики</string>
     <string name="commons_scr_search">Найди слово в словаре</string>
     <string name="main_list_delete_subs">Удалить набор слов</string>
     <string name="cards_scr_random_cards_text">Случайные карточки</string>

@@ -27,6 +27,7 @@ import com.github.kutyrev.vocabulator.features.editsub.model.EditableWordCard
 import com.github.kutyrev.vocabulator.model.Language
 
 private const val WEIGHT_STD = 1f
+private const val HALF_WEIGHT = 0.5f
 
 @Composable
 fun EditSubScreen(
@@ -285,17 +286,20 @@ private fun TopBar(
                                 checked = uncheckedToDict,
                                 onCheckedChange = { onChangeUncheckedToDict(it) })
                             Text(
+                                modifier = Modifier.weight(WEIGHT_STD),
                                 text = stringResource(R.string.add_unchecked_text),
                                 style = MaterialTheme.typography.caption
                             )
                             if (isFirstLoad) {
                                 OutlinedButton(
-                                    modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_std_doubled)),
+                                    modifier = Modifier
+                                        .padding(dimensionResource(id = R.dimen.padding_std_doubled))
+                                        .weight(HALF_WEIGHT),
                                     onClick = updateCommonsAndReloadFile
                                 ) {
                                     Icon(
                                         Icons.Default.Refresh,
-                                        contentDescription = stringResource(R.string.reload_file_desc)
+                                        contentDescription = stringResource(R.string.reload_file_desc),
                                     )
                                 }
                             }
