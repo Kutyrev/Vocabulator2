@@ -14,9 +14,7 @@ import com.github.kutyrev.vocabulator.repository.file.FileLoadStatus
 import com.github.kutyrev.vocabulator.repository.file.FileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,10 +29,7 @@ class MainListViewModel @Inject constructor(
         "^.*\\.(srt|SRT|ssa|SSA|ass|ASS|txt|TXT|fb2|FB2)\$".toRegex()
     private var subsLanguage: Language? = null
 
-    val subtitlesList: Flow<List<SubtitlesUnit>> = flow {
-        val source = storageRepository.getSubtitlesList()
-        emitAll(source)
-    }
+    val subtitlesList: Flow<List<SubtitlesUnit>> = storageRepository.getSubtitlesList()
 
     private var _fileLoadingStatus: MutableState<FileLoadStatus> =
         mutableStateOf(FileLoadStatus.None)

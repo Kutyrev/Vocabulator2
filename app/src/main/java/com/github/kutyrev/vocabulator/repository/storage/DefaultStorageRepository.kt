@@ -9,6 +9,7 @@ import com.github.kutyrev.vocabulator.model.WordCard
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -16,9 +17,8 @@ class DefaultStorageRepository @Inject constructor(
     private val vocabulatorDao: VocabulatorDao,
     @IoDispatcher private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : StorageRepository {
-    override suspend fun getSubtitlesList(): Flow<List<SubtitlesUnit>> = withContext(dispatcher) {
-        vocabulatorDao.getSubtitlesList()
-    }
+    override fun getSubtitlesList(): Flow<List<SubtitlesUnit>> =
+        vocabulatorDao.getSubtitlesList().flowOn(dispatcher)
 
     override suspend fun getCards(subtitleId: Int): Flow<List<WordCard>> = withContext(dispatcher) {
         vocabulatorDao.getSubtitlesWordsCards(subtitleId)

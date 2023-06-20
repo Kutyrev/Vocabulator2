@@ -40,6 +40,7 @@ fun MainListRoute(
                 context.getText((fileLoadStatus as FileLoadStatus.LoadingError).error.messageRes),
                 Toast.LENGTH_LONG
             ).show()
+            viewModel.resetLoadingStatus()
         }
     }
 

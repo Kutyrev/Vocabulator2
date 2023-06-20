@@ -7,7 +7,7 @@ import com.github.kutyrev.vocabulator.model.WordCard
 import kotlinx.coroutines.flow.Flow
 
 interface StorageRepository {
-    suspend fun getSubtitlesList(): Flow<List<SubtitlesUnit>>
+    fun getSubtitlesList(): Flow<List<SubtitlesUnit>>
     suspend fun getSubtitlesUnit(id: Int): SubtitlesUnit
     suspend fun insertNewSubtitles(subtitlesUnit: SubtitlesUnit): Int
     suspend fun updateSubtitles(subtitlesUnit: SubtitlesUnit)
