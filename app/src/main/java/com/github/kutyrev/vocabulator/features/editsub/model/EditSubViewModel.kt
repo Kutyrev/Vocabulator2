@@ -183,11 +183,28 @@ class EditSubViewModel @Inject constructor(
     }
 
     fun updateCommonsAndReloadFile() {
-        updateCommonWords()
-
         _showLoadingDialog.value = true
 
+        val newCommonWords: MutableList<CommonWord> = mutableListOf()
+
+        if (uncheckedToDict.value) {
+            words.forEach {
+                if (!it.checked) {
+                    newCommonWords.add(
+                        CommonWord(
+                            languageId = subsLanguage.value.ordinal,
+                            word = it.originalWord
+                        )
+                    )
+                }
+            }
+        }
+
         viewModelScope.launch {
+            if (newCommonWords.isNotEmpty()) {
+                storageRepository.insertCommonWords(newCommonWords)
+            }
+
             subtitlesUnit.value?.let {
                 val newWords =
                     fileRepository.reparseSubtitles(it)
