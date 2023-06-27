@@ -234,8 +234,9 @@ private fun TopBar(
                                                 .padding(dimensionResource(id = R.dimen.padding_std)),
                                             text = AnnotatedString(
                                                 language.name
-                                                        + " " + stringResource(id = language.fullNameResource)
+                                                        + " " + stringResource(id = language.fullNameResource),
                                             ),
+                                            style = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.onBackground),
                                             onClick = {
                                                 origLanguageMenuExpanded = false
                                                 onSubtitlesLanguageChange(language)
@@ -264,6 +265,7 @@ private fun TopBar(
                                                 language.name
                                                         + " " + stringResource(id = language.fullNameResource)
                                             ),
+                                            style = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.onBackground),
                                             onClick = {
                                                 targetLanguageMenuExpanded = false
                                                 onTargetLanguageChange(language)

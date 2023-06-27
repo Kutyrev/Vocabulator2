@@ -137,7 +137,7 @@ fun MainStructureScreen(
                         Row {
                             ClickableText(
                                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_std)),
-                                style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onBackground),
+                                style = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.onBackground),
                                 onClick = {
                                     showLanguageDialog = false
                                     setLanguage(language)
