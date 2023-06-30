@@ -20,6 +20,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -84,6 +85,17 @@ class EditSubViewModel @Inject constructor(
                 _subtitlesUnit.value = storageRepository.getSubtitlesUnit(listId)
                 if (_subtitlesUnit.value != null) {
                     _subsLanguage.value = Language.values()[_subtitlesUnit.value!!.origLangId]
+                    if(isFirstLoad) {
+                        when(Locale.getDefault().language.uppercase()) {
+                            Language.EN.name -> _langOfTranslation.value = Language.EN
+                            Language.RU.name -> _langOfTranslation.value = Language.RU
+                            Language.FR.name -> _langOfTranslation.value = Language.FR
+                            Language.IT.name -> _langOfTranslation.value = Language.IT
+                        }
+                    } else {
+                        _langOfTranslation.value =
+                            Language.values()[_subtitlesUnit.value!!.transLangId]
+                    }
                     _subtitlesName.value = _subtitlesUnit.value!!.name
                     loadWords()
                 }
@@ -337,6 +349,10 @@ class EditSubViewModel @Inject constructor(
             if (_subtitlesUnit.value!!.origLangId != _subsLanguage.value.ordinal) {
                 mainSubtitleInfoChanged = true
                 _subtitlesUnit.value!!.origLangId = _subsLanguage.value.ordinal
+            }
+            if (_subtitlesUnit.value!!.transLangId != _langOfTranslation.value.ordinal) {
+                mainSubtitleInfoChanged = true
+                _subtitlesUnit.value!!.transLangId = _langOfTranslation.value.ordinal
             }
             if (mainSubtitleInfoChanged) {
                 viewModelScope.launch {
