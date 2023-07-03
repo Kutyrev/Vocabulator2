@@ -97,13 +97,13 @@ private fun CardsBottomBar(
 ) {
     Row(modifier = Modifier.fillMaxWidth()) {
         OutlinedButton(
-            modifier = Modifier.weight(WEIGHT_STD), onClick = onNextCardButtonPressed
+            modifier = Modifier.weight(WEIGHT_STD), onClick = onPreviousCardButtonPressed
         ) {
             Text(stringResource(R.string.cards_scr_prev_card_button))
         }
 
         OutlinedButton(
-            modifier = Modifier.weight(WEIGHT_STD), onClick = onPreviousCardButtonPressed
+            modifier = Modifier.weight(WEIGHT_STD), onClick = onNextCardButtonPressed
         ) {
             Text(stringResource(R.string.cards_scr_next_card_button))
         }
