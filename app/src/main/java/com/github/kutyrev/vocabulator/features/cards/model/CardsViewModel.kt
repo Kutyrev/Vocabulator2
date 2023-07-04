@@ -79,11 +79,15 @@ class CardsViewModel @Inject constructor(
         val maxInd = cards.value.size * 2 - 1
 
         if (!isRandomCards.value) {
-
-            if (offsetX > 0 && cardIndex > 0)
+            if (offsetX > 0 && cardIndex > 0) {
                 cardIndex -= 1
+            }
             else if (offsetX < 0 && cardIndex < maxInd) {
                 cardIndex += 1
+            } else if (offsetX > 0 && cardIndex == 0) {
+                cardIndex = maxInd
+            } else if (offsetX < 0 && cardIndex == maxInd) {
+                cardIndex = 0
             }
         } else {
             cardIndex = Random.nextInt(0, maxInd)
