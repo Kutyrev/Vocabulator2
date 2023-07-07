@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.kutyrev.vocabulator.model.EMPTY_SUBS_ID
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
+import com.github.kutyrev.vocabulator.model.WordsCount
 import com.github.kutyrev.vocabulator.repository.datastore.SettingsRepository
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
 import com.github.kutyrev.vocabulator.repository.file.FileLoadStatus
@@ -30,6 +31,7 @@ class MainListViewModel @Inject constructor(
     private var subsLanguage: Language? = null
 
     val subtitlesList: Flow<List<SubtitlesUnit>> = storageRepository.getSubtitlesList()
+    val wordsCount: Flow<List<WordsCount>> = storageRepository.getWordsCount()
 
     private var _fileLoadingStatus: MutableState<FileLoadStatus> =
         mutableStateOf(FileLoadStatus.None)

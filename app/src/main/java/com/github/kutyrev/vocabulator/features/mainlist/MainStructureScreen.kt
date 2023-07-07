@@ -34,6 +34,7 @@ import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.features.cards.model.EMPTY_LIST_ID
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
+import com.github.kutyrev.vocabulator.model.WordsCount
 import com.github.kutyrev.vocabulator.utils.getFileName
 import kotlinx.coroutines.launch
 
@@ -43,6 +44,7 @@ private const val HALF_WEIGHT = 0.5f
 @Composable
 fun MainStructureScreen(
     listState: State<List<SubtitlesUnit>>,
+    wordsCountState: State<List<WordsCount>>,
     unswipedSubtitleUnit: SubtitlesUnit?,
     onListItemClick: (Int) -> Unit,
     onEditButtonClick: (Int) -> Unit,
@@ -109,6 +111,7 @@ fun MainStructureScreen(
     }) { paddingValues ->
         MainListScreen(
             listState = listState,
+            wordsCountState = wordsCountState,
             unswipeSubtitleUnit = unswipedSubtitleUnit,
             onListItemClick = onListItemClick,
             onEditButtonClick = onEditButtonClick,
@@ -203,6 +206,7 @@ private fun MainListTopAppBar(
 @Composable
 private fun MainListScreen(
     listState: State<List<SubtitlesUnit>>,
+    wordsCountState: State<List<WordsCount>>,
     unswipeSubtitleUnit: SubtitlesUnit?,
     onListItemClick: (Int) -> Unit,
     onEditButtonClick: (Int) -> Unit,
@@ -235,6 +239,9 @@ private fun MainListScreen(
                     if (it == DismissValue.DismissedToStart) onSubtitleSwiping(subtitlesUnit)
                     true
                 })
+
+                val cardsCount =
+                    wordsCountState.value.find { it.subId == subtitlesUnit.id }?.wordsCount ?: 0
 
                 if (unswipeSubtitleUnit == subtitlesUnit) {
                     LaunchedEffect(Unit) {
@@ -290,7 +297,11 @@ private fun MainListScreen(
                                         modifier = Modifier
                                             .padding(dimensionResource(id = R.dimen.padding_std))
                                             .weight(DEF_WEIGHT),
-                                        text = subtitlesUnit.name,
+                                        text = subtitlesUnit.name +
+                                                if (cardsCount > 0) stringResource(
+                                                    id = R.string.cards_count,
+                                                    cardsCount
+                                                ) else "",
                                         style = MaterialTheme.typography.body2
                                     )
                                     OutlinedButton(modifier = Modifier

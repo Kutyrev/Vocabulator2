@@ -6,6 +6,7 @@ import com.github.kutyrev.vocabulator.model.CommonWord
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.model.WordCard
+import com.github.kutyrev.vocabulator.model.WordsCount
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +20,9 @@ class DefaultStorageRepository @Inject constructor(
 ) : StorageRepository {
     override fun getSubtitlesList(): Flow<List<SubtitlesUnit>> =
         vocabulatorDao.getSubtitlesList().flowOn(dispatcher)
+
+    override fun getWordsCount(): Flow<List<WordsCount>> =
+        vocabulatorDao.getWordsCount().flowOn(dispatcher)
 
     override suspend fun getCards(subtitleId: Int): Flow<List<WordCard>> = withContext(dispatcher) {
         vocabulatorDao.getSubtitlesWordsCards(subtitleId)

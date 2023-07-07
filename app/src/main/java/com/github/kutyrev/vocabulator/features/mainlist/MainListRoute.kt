@@ -22,6 +22,7 @@ fun MainListRoute(
     onTutorialButtonClick: () -> Unit
 ) {
     val listState = viewModel.subtitlesList.collectAsStateWithLifecycle(initialValue = listOf())
+    val wordsCountState = viewModel.wordsCount.collectAsStateWithLifecycle(initialValue = listOf())
 
     val fileLoadStatus by viewModel.fileLoadingStatus
 
@@ -59,6 +60,7 @@ fun MainListRoute(
     VocabulatorTheme {
         MainStructureScreen(
             listState = listState,
+            wordsCountState = wordsCountState,
             unswipedSubtitleUnit = viewModel.unswipedSubtitlesUnit.value,
             onListItemClick = onListItemClick,
             onEditButtonClick = onEditButtonClick,

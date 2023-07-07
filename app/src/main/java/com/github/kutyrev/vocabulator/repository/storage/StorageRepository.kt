@@ -4,10 +4,12 @@ import com.github.kutyrev.vocabulator.model.CommonWord
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.model.WordCard
+import com.github.kutyrev.vocabulator.model.WordsCount
 import kotlinx.coroutines.flow.Flow
 
 interface StorageRepository {
     fun getSubtitlesList(): Flow<List<SubtitlesUnit>>
+    fun getWordsCount() : Flow<List<WordsCount>>
     suspend fun getSubtitlesUnit(id: Int): SubtitlesUnit
     suspend fun insertNewSubtitles(subtitlesUnit: SubtitlesUnit): Int
     suspend fun updateSubtitles(subtitlesUnit: SubtitlesUnit)

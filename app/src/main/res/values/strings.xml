@@ -70,4 +70,5 @@
     </string>
     <string name="tutorial_close_button_desc">Close tutorial</string>
     <string name="commons_scr_orig_lang_menu_desc">Select common words language</string>
+    <string name="cards_count"> (%1$d cards)</string>
 </resources>

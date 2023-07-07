@@ -8,6 +8,7 @@ import androidx.room.Update
 import com.github.kutyrev.vocabulator.model.CommonWord
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.model.WordCard
+import com.github.kutyrev.vocabulator.model.WordsCount
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -28,6 +29,9 @@ interface VocabulatorDao {
 
     @Query("SELECT * FROM words_cards")
     fun getAllWordsCards() : Flow<List<WordCard>>
+
+    @Query("SELECT subtitleId AS subId, COUNT(id) AS wordsCount FROM words_cards GROUP BY subtitleId")
+    fun getWordsCount() : Flow<List<WordsCount>>
 
     //Modifying subtitles
 
