@@ -149,6 +149,7 @@ class EditSubViewModel @Inject constructor(
         updateMainInfo()
         updateWords()
         updateCommonWords()
+        fileRepository.sortedWords = mapOf()
     }
 
     override fun receiveTranslation(
