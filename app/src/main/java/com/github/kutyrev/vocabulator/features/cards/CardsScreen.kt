@@ -18,10 +18,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.model.WordCard
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 private const val WEIGHT_STD = 1f
 private const val INIT_OFFSET = 0f
+private const val MIN_EMIT_OFFSET = 300
 
 @Composable
 fun CardsScreen(
@@ -61,7 +63,9 @@ fun CardsScreen(
             .pointerInput(Unit) {
                 detectHorizontalDragGestures(
                     onDragEnd = {
-                        emitNewValue(offsetX)
+                        if(abs(offsetX) > MIN_EMIT_OFFSET) {
+                            emitNewValue(offsetX)
+                        }
                         offsetX = INIT_OFFSET
                     },
                     onDragCancel = { offsetX = INIT_OFFSET },
