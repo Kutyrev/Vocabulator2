@@ -56,7 +56,7 @@ fun CardsScreen(
         Card(modifier = Modifier
             .padding(it)
             .fillMaxSize()
-            .clickable {
+            .clickable(onClickLabel = stringResource(R.string.card_click_desc)) {
                 onCardClick()
             }
             .offset { IntOffset((offsetX).roundToInt(), 0) }

@@ -18,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import com.github.kutyrev.vocabulator.R
@@ -60,10 +62,15 @@ fun CommonsScreen(
             onCancelButtonPressed = onCancelButtonPressed
         )
     }) { paddingValues ->
+        val columnDesc = stringResource(R.string.commons_scr_col_desc)
+
         LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxWidth(), state = listState
+                .fillMaxWidth()
+                .semantics(mergeDescendants = true) {
+                    contentDescription = columnDesc
+                }, state = listState
         ) {
             items(words) { commonWord ->
                 Row(verticalAlignment = Alignment.CenterVertically) {
