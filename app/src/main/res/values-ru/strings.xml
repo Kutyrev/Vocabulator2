@@ -70,7 +70,7 @@
         можно изменить в настройках приложения.</string>
     <string name="tutorial_close_button_desc">Закрыть обзор функций</string>
     <string name="commons_scr_orig_lang_menu_desc">Выберите язык базовой лексики</string>
-    <string name="cards_count"> (%1$d шт)</string>
+    <string name="cards_count">\u0020(%1$d шт)</string>
     <string name="card_click_desc">Нажмите на карточку, чтобы показать второе слово.</string>
     <string name="commons_scr_col_desc">Вы можете удалить слова из общего словаря, сняв галочки c флажков</string>
 </resources>

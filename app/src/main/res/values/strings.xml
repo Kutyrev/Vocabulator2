@@ -70,7 +70,7 @@
     </string>
     <string name="tutorial_close_button_desc">Close tutorial</string>
     <string name="commons_scr_orig_lang_menu_desc">Select common words language</string>
-    <string name="cards_count"> (%1$d cards)</string>
+    <string name="cards_count">\u0020(%1$d cards)</string>
     <string name="card_click_desc">Click on the card to show second word</string>
     <string name="commons_scr_col_desc">You can remove words from the common dictionary by clearing the checkboxes</string>
 </resources>
