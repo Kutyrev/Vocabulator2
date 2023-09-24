@@ -39,7 +39,7 @@ class DefaultFileRepository @Inject constructor(
 
             val commonWords: HashSet<String> = HashSet()
             commonWordsArray.forEach { commonWords.add(it.word) }
-
+            //TODO Avoid const
             val extension = fileName.substring(fileName.length - EXTENSION_SIZE).uppercase()
             val newSubtitleEntry =
                 SubtitlesUnit(0, fileName, language.ordinal, Language.EN.ordinal)
