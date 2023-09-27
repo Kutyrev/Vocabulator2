@@ -116,7 +116,7 @@ class EditSubViewModel @Inject constructor(
     fun translateWords() {
         viewModelScope.launch {
             translationRepository.getFirebaseTranslation(
-                words,
+                words.filter { it.checked },
                 subsLanguage.value,
                 langOfTranslation.value,
                 this@EditSubViewModel
@@ -167,7 +167,7 @@ class EditSubViewModel @Inject constructor(
                 TranslationResultStatus.YandexNetworkError -> _messages.emit(EditCardsMessages.NETWORK_ERROR)
                 TranslationResultStatus.FirebaseError -> _messages.emit(EditCardsMessages.FIREBASE_ERROR)
                 TranslationResultStatus.FirebaseSuccess -> translationRepository.getYandexTranslation(
-                    words,
+                    words.filter { it.checked && it.translatedWord.isEmpty() },
                     subsLanguage.value,
                     langOfTranslation.value,
                     this@EditSubViewModel
