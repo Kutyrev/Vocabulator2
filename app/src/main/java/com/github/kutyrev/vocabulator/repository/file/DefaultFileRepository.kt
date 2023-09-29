@@ -16,7 +16,7 @@ import java.util.*
 import java.util.regex.Pattern
 import javax.inject.Inject
 
-private const val EXTENSION_SIZE = 3
+private const val POINT = '.'
 private const val DASH_SIGN = '-'
 private const val UPPER_COMMA = '\''
 
@@ -39,8 +39,8 @@ class DefaultFileRepository @Inject constructor(
 
             val commonWords: HashSet<String> = HashSet()
             commonWordsArray.forEach { commonWords.add(it.word) }
-            //TODO Avoid const
-            val extension = fileName.substring(fileName.length - EXTENSION_SIZE).uppercase()
+
+            val extension = fileName.substringAfterLast(POINT).uppercase()
             val newSubtitleEntry =
                 SubtitlesUnit(0, fileName, language.ordinal, Language.EN.ordinal)
             var subtitlesText = ""

@@ -15,6 +15,6 @@ class FileParserFactory @Inject constructor(@ApplicationContext private val cont
             SupportedFileExtension.TXT -> TxtFileParser(context)
             SupportedFileExtension.FB2 -> Fb2FileParser(context)
             SupportedFileExtension.ASS -> SsaFileParser(context)
-            SupportedFileExtension.PUB -> EpubFileParser(context)
+            SupportedFileExtension.EPUB -> EpubFileParser(context)
         }
 }
