@@ -13,6 +13,7 @@ import com.github.kutyrev.vocabulator.repository.translator.TranslationResultSta
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.just
@@ -71,9 +72,10 @@ internal class EditSubViewModelTest {
         coEvery {
             storageRepository.getCards(any())
         } returns flowOf(mockWordCards)
-        coEvery {
+        every {
             fileRepository.sortedWords
         } returns mapOf()
+
 
         editSubViewModel = EditSubViewModel(
             savedStateHandle = savedStateHandle,
@@ -162,6 +164,7 @@ internal class EditSubViewModelTest {
             storageRepository.deleteWordCards(any())
             storageRepository.updateWordCards(any())
             storageRepository.insertCommonWords(any())
+            fileRepository.sortedWords = any()
         } just Runs
         editSubViewModel.onSubtitleNameChange(CHANGED_WORD)
         editSubViewModel.onTargetLanguageChange(newSubsLanguage)
@@ -213,7 +216,7 @@ internal class EditSubViewModelTest {
 
         coVerify {
             translationRepository.getYandexTranslation(
-                editSubViewModel.words,
+                any(),
                 editSubViewModel.subsLanguage.value,
                 editSubViewModel.langOfTranslation.value,
                 any()
