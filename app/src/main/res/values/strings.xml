@@ -13,7 +13,7 @@
     <string name="button_save">Save</string>
     <string name="settings_number_of_words_label">Number of words to load</string>
     <string name="sub_fab_content_desc">Add new subtitle</string>
-    <string name="toast_unsupported_file">Unsupported file. The app supports srt, ssa, ass, txt, fb2 files</string>
+    <string name="toast_unsupported_file">Unsupported file. The app supports srt, ssa, ass, txt, fb2, epub files</string>
     <string name="toast_file_format_corrupted">Corrupted file</string>
     <string name="toast_io_exception">Error reading file</string>
     <string name="loading_message">Please wait…</string>
@@ -64,13 +64,13 @@
     <string name="tutorial_settings_button">Go to settings</string>
     <string name="main_desc_text">Vocabulator application forms bilingual cards on the basis of the most common words
         in the book or subtitles, previously removing the basic vocabulary of the language. \nThe application
-        can work with the formats <b>srt, ssa (ass), fb2, txt</b>.
+        can work with the formats <b>srt, ssa (ass), fb2, txt, epub</b>.
         \nWords are translated using the app dictionaries and the service API <a href="https://cloud.yandex.ru/services/translate">Yandex.Translate</a>.\nTop words are selected for cards
         in a subtitle/book file without proper names. Word amount can be changed in the application settings.
     </string>
     <string name="tutorial_close_button_desc">Close tutorial</string>
     <string name="commons_scr_orig_lang_menu_desc">Select common words language</string>
-    <string name="cards_count"> (%1$d cards)</string>
+    <string name="cards_count">\u0020(%1$d cards)</string>
     <string name="card_click_desc">Click on the card to show second word</string>
     <string name="commons_scr_col_desc">You can remove words from the common dictionary by clearing the checkboxes</string>
 </resources>

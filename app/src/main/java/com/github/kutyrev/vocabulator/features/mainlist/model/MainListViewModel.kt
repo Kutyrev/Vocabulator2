@@ -27,7 +27,7 @@ class MainListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val fileExtensionRegExPattern =
-        "^.*\\.(srt|SRT|ssa|SSA|ass|ASS|txt|TXT|fb2|FB2)\$".toRegex()
+        "^.*\\.(srt|SRT|ssa|SSA|ass|ASS|txt|TXT|fb2|FB2|epub|EPUB)\$".toRegex()
     private var subsLanguage: Language? = null
 
     val subtitlesList: Flow<List<SubtitlesUnit>> = storageRepository.getSubtitlesList()

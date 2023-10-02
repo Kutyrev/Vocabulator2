@@ -13,7 +13,7 @@
     <string name="button_save">Сохранить</string>
     <string name="settings_number_of_words_label">Количество слов для загрузки</string>
     <string name="sub_fab_content_desc">Add new subtitle</string>
-    <string name="toast_unsupported_file">Неподдерживаемый файл. Приложение поддерживает srt, ssa, ass, txt, fb2 файлы</string>
+    <string name="toast_unsupported_file">Неподдерживаемый файл. Приложение поддерживает srt, ssa, ass, txt, fb2, epub файлы</string>
     <string name="toast_file_format_corrupted">Повреждённый файл</string>
     <string name="toast_io_exception">Ошибка при чтении файла</string>
     <string name="loading_message">Пожалуйста подождите…</string>
@@ -64,13 +64,13 @@
     <string name="tutorial_settings_button">Перейти в настройки</string>
     <string name="main_desc_text">Приложение Vocabulator формирует двуязычные карточки на основании самых частых слов в книге
         или субтитрах, предварительно удаляя базовую лексику языка.\n
-        Приложение умеет работать с форматами <b>srt, ssa (ass), fb2, txt</b>.
+        Приложение умеет работать с форматами <b>srt, ssa (ass), fb2, txt, epub</b>.
         \nПеревод слов осуществляется с помощью словарей программы и API сервиса <a href="https://cloud.yandex.ru/services/translate">Yandex.Translate</a>.\nДля формирования карточек
         отбирается топ упоминаемых слов в файле субтитров, не являющихся именами собственными. Количество слов
         можно изменить в настройках приложения.</string>
     <string name="tutorial_close_button_desc">Закрыть обзор функций</string>
     <string name="commons_scr_orig_lang_menu_desc">Выберите язык базовой лексики</string>
-    <string name="cards_count"> (%1$d шт)</string>
+    <string name="cards_count">\u0020(%1$d шт)</string>
     <string name="card_click_desc">Нажмите на карточку, чтобы показать второе слово.</string>
     <string name="commons_scr_col_desc">Вы можете удалить слова из общего словаря, сняв галочки c флажков</string>
 </resources>

@@ -6,6 +6,7 @@ import com.github.kutyrev.vocabulator.features.mainlist.model.MainListViewModel
 import com.github.kutyrev.vocabulator.model.EMPTY_SUBS_ID
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
+import com.github.kutyrev.vocabulator.model.WordsCount
 import com.github.kutyrev.vocabulator.repository.datastore.SettingsRepository
 import com.github.kutyrev.vocabulator.repository.file.FileLoadStatus
 import com.github.kutyrev.vocabulator.repository.file.FileRepository
@@ -44,6 +45,8 @@ internal class MainListViewModelTest {
     private val subUnitMock = SubtitlesUnit(1, "Mock", 1, 2)
     private val subtitlesList = listOf(subUnitMock)
     private val subsLanguage = Language.FR
+    private val subWordsCount = WordsCount(1, 99)
+    private val wordsCountList = listOf(subWordsCount)
 
     @MockK
     lateinit var storageRepository: StorageRepository
@@ -59,6 +62,10 @@ internal class MainListViewModelTest {
         coEvery {
             storageRepository.getSubtitlesList()
         } returns flowOf(subtitlesList)
+
+        coEvery {
+            storageRepository.getWordsCount()
+        } returns flowOf(wordsCountList)
 
         mainListViewModel = MainListViewModel(
             storageRepository = storageRepository,

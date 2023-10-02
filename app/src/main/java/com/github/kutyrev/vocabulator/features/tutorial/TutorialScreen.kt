@@ -55,7 +55,7 @@ private const val PAGE_FOUR_INDEX = 3
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TutorialScreen(onSettingsMenuItemClick: () -> Unit, onCloseButtonClick: () -> Unit) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState { PAGE_COUNT }
     val titleTextRes = rememberSaveable {
         mutableStateOf(R.string.help_label_1)
     }
@@ -112,7 +112,6 @@ fun TutorialScreen(onSettingsMenuItemClick: () -> Unit, onCloseButtonClick: () -
             verticalArrangement = Arrangement.Center
         ) {
             HorizontalPager(
-                pageCount = PAGE_COUNT,
                 state = pagerState
             ) { page ->
                 Card(
