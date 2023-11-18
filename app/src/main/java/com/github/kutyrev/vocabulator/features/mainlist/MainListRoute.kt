@@ -72,7 +72,8 @@ fun MainListRoute(
             setLanguage = viewModel::setSubsLanguage,
             loadFile = viewModel::parseFile,
             onSubtitleSwiped = viewModel::onSubtitleSwiped,
-            setUnswipedSubtitleUnit = viewModel::setUnswipedSubtitleUnit
+            setUnswipedSubtitleUnit = viewModel::setUnswipedSubtitleUnit,
+            onCreateEmptySetClick = viewModel::createEmptySet
         )
     }
 }

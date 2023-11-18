@@ -73,4 +73,5 @@
     <string name="cards_count">\u0020(%1$d cards)</string>
     <string name="card_click_desc">Click on the card to show second word</string>
     <string name="commons_scr_col_desc">You can remove words from the common dictionary by clearing the checkboxes</string>
+    <string name="empty_set">An empty set</string>
 </resources>

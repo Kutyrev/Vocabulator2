@@ -79,6 +79,20 @@ class MainListViewModel @Inject constructor(
         }
     }
 
+    fun createEmptySet() {
+        viewModelScope.launch {
+            val newSubUnit = SubtitlesUnit(
+                0,
+                "",
+                Language.EN.ordinal,
+                Language.EN.ordinal
+            )
+            _newSubsId.value =
+                storageRepository.insertNewSubtitles(newSubUnit)
+            _fileLoadingStatus.value = FileLoadStatus.FileLoaded(newSubUnit)
+        }
+    }
+
     fun onSubtitleSwiped(subtitlesUnit: SubtitlesUnit) {
         viewModelScope.launch {
             storageRepository.deleteSubtitles(subtitlesUnit)

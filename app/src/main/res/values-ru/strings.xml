@@ -73,4 +73,5 @@
     <string name="cards_count">\u0020(%1$d шт)</string>
     <string name="card_click_desc">Нажмите на карточку, чтобы показать второе слово.</string>
     <string name="commons_scr_col_desc">Вы можете удалить слова из общего словаря, сняв галочки c флажков</string>
+    <string name="empty_set">Пустой набор</string>
 </resources>

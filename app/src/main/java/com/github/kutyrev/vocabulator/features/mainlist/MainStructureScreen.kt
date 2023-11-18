@@ -56,7 +56,8 @@ fun MainStructureScreen(
     setLanguage: (Language?) -> Unit,
     loadFile: (Uri, String?) -> Unit,
     onSubtitleSwiped: (subtitleUnit: SubtitlesUnit) -> Unit,
-    setUnswipedSubtitleUnit: (subtitleUnit: SubtitlesUnit?) -> Unit
+    setUnswipedSubtitleUnit: (subtitleUnit: SubtitlesUnit?) -> Unit,
+    onCreateEmptySetClick: () -> Unit
 ) {
     var showLanguageDialog by remember { mutableStateOf(false) }
 
@@ -153,6 +154,24 @@ fun MainStructureScreen(
                                 )
                             )
                         }
+                    }
+                    Divider(
+                        modifier = Modifier.padding(dimensionResource(R.dimen.padding_std)),
+                        color = Color.Gray,
+                        thickness = dimensionResource(id = R.dimen.divider_thickness)
+                    )
+                    Row {
+                        ClickableText(
+                            modifier = Modifier.padding(dimensionResource(R.dimen.padding_std)),
+                            style = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.onBackground),
+                            onClick = {
+                                showLanguageDialog = false
+                                onCreateEmptySetClick()
+                            },
+                            text = AnnotatedString(
+                                stringResource(R.string.empty_set)
+                            )
+                        )
                     }
                 }
             }
