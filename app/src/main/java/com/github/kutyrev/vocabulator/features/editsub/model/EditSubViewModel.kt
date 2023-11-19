@@ -249,6 +249,12 @@ class EditSubViewModel @Inject constructor(
         }
     }
 
+    fun resetMessagesStatus() {
+        viewModelScope.launch {
+            _messages.emit(null)
+        }
+    }
+
     fun setAddNewWordCardDialogVisibility(isVisible: Boolean) {
         _showAddNewWordCardDialog.value = isVisible
     }

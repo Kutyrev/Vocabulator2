@@ -37,6 +37,7 @@ fun EditSubRoute(
         if (messages.value != null) {
             Toast.makeText(context, context.getText(messages.value!!.messageId), Toast.LENGTH_LONG)
                 .show()
+            viewModel.resetMessagesStatus()
         }
     }
 
