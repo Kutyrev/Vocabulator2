@@ -112,6 +112,22 @@ internal class MainListViewModelTest {
     }
 
     @Test
+    fun createEmptySetTest() {
+        coEvery {
+            storageRepository.insertNewSubtitles(any())
+        } returns NEW_SUBS_ID
+
+        mainListViewModel.createEmptySet()
+
+        assertEquals(NEW_SUBS_ID, mainListViewModel.newSubsId.value)
+        assertTrue(mainListViewModel.fileLoadingStatus.value is FileLoadStatus.FileLoaded)
+
+        coVerify {
+            storageRepository.insertNewSubtitles(any())
+        }
+    }
+
+    @Test
     fun onSubtitleSwipedTest() {
         coEvery {
             storageRepository.deleteSubtitles(any())
