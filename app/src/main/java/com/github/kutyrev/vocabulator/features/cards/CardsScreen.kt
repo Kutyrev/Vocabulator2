@@ -23,7 +23,7 @@ import kotlin.math.roundToInt
 
 private const val WEIGHT_STD = 1f
 private const val INIT_OFFSET = 0f
-private const val MIN_EMIT_OFFSET = 300
+private const val MIN_EMIT_OFFSET = 200
 
 @Composable
 fun CardsScreen(
