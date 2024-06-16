@@ -1,5 +1,8 @@
 package com.github.kutyrev.vocabulator.features.editsub
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -13,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Save
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -28,6 +32,7 @@ import com.github.kutyrev.vocabulator.model.Language
 
 private const val WEIGHT_STD = 1f
 private const val HALF_WEIGHT = 0.5f
+private const val CSV_FILE_MIME_TYPE = "text/csv"
 
 @Composable
 fun EditSubScreen(
@@ -50,9 +55,10 @@ fun EditSubScreen(
     onChangeUncheckedToDict: (Boolean) -> Unit,
     onTranslationClick: (EditableWordCard) -> Unit,
     updateCommonsAndReloadFile: () -> Unit,
-    setAddNewWordCardDialogVisibility: (Boolean) -> Unit
+    setAddNewWordCardDialogVisibility: (Boolean) -> Unit,
+    saveListToCsvFile: (Uri) -> Unit
 ) {
-    val languages = remember { Language.values() }
+    val languages = remember { Language.entries.toTypedArray() }
 
     Scaffold(
         topBar = {
@@ -68,7 +74,8 @@ fun EditSubScreen(
                 uncheckedToDict = uncheckedToDict,
                 onChangeUncheckedToDict = onChangeUncheckedToDict,
                 onTranslateButtonClicked = onTranslateButtonClicked,
-                updateCommonsAndReloadFile = updateCommonsAndReloadFile
+                updateCommonsAndReloadFile = updateCommonsAndReloadFile,
+                saveListToCsvFile = saveListToCsvFile
             )
         },
         bottomBar = {
@@ -149,6 +156,7 @@ private fun BottomBar(
     }
 }
 
+
 @Composable
 private fun TopBar(
     subtitlesName: String?,
@@ -162,8 +170,10 @@ private fun TopBar(
     uncheckedToDict: Boolean,
     onChangeUncheckedToDict: (Boolean) -> Unit,
     onTranslateButtonClicked: () -> Unit,
-    updateCommonsAndReloadFile: () -> Unit
+    updateCommonsAndReloadFile: () -> Unit,
+    saveListToCsvFile: (Uri) -> Unit
 ) {
+
     var origLanguageMenuExpanded by rememberSaveable {
         mutableStateOf(false)
     }
@@ -174,6 +184,14 @@ private fun TopBar(
 
     val fullTopBar = rememberSaveable { (mutableStateOf(true)) }
 
+    val exportSubsInCSVLauncher = rememberLauncherForActivityResult(
+        CreateDocument(CSV_FILE_MIME_TYPE)
+    ) { docUri: Uri? ->
+        docUri?.let {
+            saveListToCsvFile(docUri)
+        }
+    }
+
     Card(
         elevation = dimensionResource(id = R.dimen.elevation_std),
         shape = MaterialTheme.shapes.small
@@ -182,6 +200,10 @@ private fun TopBar(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_short))
         ) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                IconButton(onClick = { exportSubsInCSVLauncher.launch(subtitlesName ?: "") }) {
+                    Icon(Icons.Outlined.Save,
+                        stringResource(R.string.edit_scr_export_into_csv))
+                }
                 IconButton(onClick = { fullTopBar.value = !fullTopBar.value }) {
                     if (fullTopBar.value) {
                         Icon(

@@ -54,6 +54,7 @@
     <string name="settings_load_phrases">Load sample phrases</string>
     <string name="edit_scr_close_topbar_desc">Close top bar</string>
     <string name="edit_scr_open_topbar_desc">Open top bar</string>
+    <string name="edit_scr_export_into_csv">Export into CSV file</string>
     <string name="help_label_1"><font size="16"><b>Card set list</b></font></string>
     <string name="help_label_2"><font size="16"><b>Word card</b></font></string>
     <string name="help_label_3"><font size="16"><b>Set editing</b></font></string>
@@ -74,4 +75,6 @@
     <string name="card_click_desc">Click on the card to show second word</string>
     <string name="commons_scr_col_desc">You can remove words from the common dictionary by clearing the checkboxes</string>
     <string name="empty_set">An empty set</string>
+    <string name="export_success">Export completed</string>
+    <string name="export_error">An error occurred during the export process</string>
 </resources>

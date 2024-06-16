@@ -70,7 +70,8 @@ fun EditSubRoute(
             onChangeUncheckedToDict = viewModel::onChangeUncheckedToDict,
             onTranslationClick = viewModel::onTranslationClick,
             updateCommonsAndReloadFile = viewModel::updateCommonsAndReloadFile,
-            setAddNewWordCardDialogVisibility = viewModel::setAddNewWordCardDialogVisibility
+            setAddNewWordCardDialogVisibility = viewModel::setAddNewWordCardDialogVisibility,
+            saveListToCsvFile = viewModel::saveListToCsvFile
         )
     }
 }

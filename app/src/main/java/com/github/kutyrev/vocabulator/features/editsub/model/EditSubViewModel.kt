@@ -1,5 +1,7 @@
 package com.github.kutyrev.vocabulator.features.editsub.model
 
+import android.net.Uri
+import androidx.annotation.StringRes
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.kutyrev.vocabulator.R
 import com.github.kutyrev.vocabulator.app.LIST_ID_PARAM_NAME
 import com.github.kutyrev.vocabulator.model.*
+import com.github.kutyrev.vocabulator.repository.file.FileExportStatus
 import com.github.kutyrev.vocabulator.repository.file.FileRepository
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
 import com.github.kutyrev.vocabulator.repository.translator.TranslationCallback
@@ -84,9 +87,10 @@ class EditSubViewModel @Inject constructor(
             viewModelScope.launch {
                 _subtitlesUnit.value = storageRepository.getSubtitlesUnit(listId)
                 if (_subtitlesUnit.value != null) {
-                    _subsLanguage.value = Language.values()[_subtitlesUnit.value!!.origLangId]
-                    if(isFirstLoad) {
-                        when(Locale.getDefault().language.uppercase()) {
+                    _subsLanguage.value =
+                        Language.entries.toTypedArray()[_subtitlesUnit.value!!.origLangId]
+                    if (isFirstLoad) {
+                        when (Locale.getDefault().language.uppercase()) {
                             Language.EN.name -> _langOfTranslation.value = Language.EN
                             Language.RU.name -> _langOfTranslation.value = Language.RU
                             Language.FR.name -> _langOfTranslation.value = Language.FR
@@ -94,7 +98,7 @@ class EditSubViewModel @Inject constructor(
                         }
                     } else {
                         _langOfTranslation.value =
-                            Language.values()[_subtitlesUnit.value!!.transLangId]
+                            Language.entries.toTypedArray()[_subtitlesUnit.value!!.transLangId]
                     }
                     _subtitlesName.value = _subtitlesUnit.value!!.name
                     loadWords()
@@ -345,6 +349,15 @@ class EditSubViewModel @Inject constructor(
         }
     }
 
+    fun saveListToCsvFile(uri: Uri) {
+        viewModelScope.launch {
+            when (fileRepository.exportSubtitles(uri, words)) {
+                FileExportStatus.Success -> _messages.emit(EditCardsMessages.EXPORT_SUCCESS)
+                FileExportStatus.Error -> _messages.emit(EditCardsMessages.EXPORT_ERROR)
+            }
+        }
+    }
+
     private fun updateMainInfo() {
         var mainSubtitleInfoChanged = false
 
@@ -369,11 +382,13 @@ class EditSubViewModel @Inject constructor(
         }
     }
 
-    enum class EditCardsMessages(val messageId: Int) {
+    enum class EditCardsMessages(@StringRes val messageId: Int) {
         SUCCESS(R.string.edit_message_success),
         NETWORK_ERROR(R.string.edit_message_network_error),
         YANDEX_GENERIC_ERROR(R.string.edit_message_yandex_generic_error),
         FIREBASE_ERROR(R.string.edit_message_firebase_error),
-        NEW_WORD_ADDED(R.string.edit_message_word_added)
+        NEW_WORD_ADDED(R.string.edit_message_word_added),
+        EXPORT_SUCCESS(R.string.export_success),
+        EXPORT_ERROR(R.string.export_error)
     }
 }

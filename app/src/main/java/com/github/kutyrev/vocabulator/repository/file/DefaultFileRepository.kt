@@ -1,17 +1,23 @@
 package com.github.kutyrev.vocabulator.repository.file
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.github.kutyrev.vocabulator.BuildConfig
 import com.github.kutyrev.vocabulator.app.di.IoDispatcher
 import com.github.kutyrev.vocabulator.datasource.database.VocabulatorDao
 import com.github.kutyrev.vocabulator.datasource.fileparsers.*
+import com.github.kutyrev.vocabulator.features.editsub.model.EditableWordCard
 import com.github.kutyrev.vocabulator.model.*
 import com.github.kutyrev.vocabulator.repository.datastore.SettingsRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import java.io.IOException
+import java.io.OutputStreamWriter
+import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -19,11 +25,16 @@ import javax.inject.Inject
 private const val POINT = '.'
 private const val DASH_SIGN = '-'
 private const val UPPER_COMMA = '\''
+private const val CSV_FILE_HEADER = "Word;Translated word;Example"
+private const val ROW_SEPARATOR = "\n"
+private const val CSV_WORDS_SEPARATOR = ";"
+private const val POINT_COMMA = ".,"
 
 class DefaultFileRepository @Inject constructor(
     private val fileParserFactory: ParserFactory,
     private val settingsRepository: SettingsRepository,
     private val vocabulatorDao: VocabulatorDao,
+    @ApplicationContext private val context: Context,
     @IoDispatcher private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) :
     FileRepository {
@@ -206,7 +217,7 @@ class DefaultFileRepository @Inject constructor(
     override suspend fun reparseSubtitles(subtitlesUnit: SubtitlesUnit): List<WordCard> =
         withContext(dispatcher) {
             val commonWordsArray: List<CommonWord> =
-                getCommonWords(Language.values()[subtitlesUnit.origLangId])
+                getCommonWords(Language.entries[subtitlesUnit.origLangId])
 
             val wordCards: MutableList<WordCard> = mutableListOf()
 
@@ -255,6 +266,41 @@ class DefaultFileRepository @Inject constructor(
             }
             return@withContext wordCards
         }
+
+    override suspend fun exportSubtitles(
+        uri: Uri,
+        words: List<EditableWordCard>
+    ): FileExportStatus {
+        context.contentResolver.openOutputStream(uri)?.let { outputStream ->
+            try {
+                val writer = OutputStreamWriter(outputStream, StandardCharsets.UTF_8)
+                writer.append(CSV_FILE_HEADER).append(ROW_SEPARATOR)
+                words.forEach { row ->
+                    writer.append(
+                        listOf(
+                            row.originalWord,
+                            row.translatedWord.replace(
+                                CSV_WORDS_SEPARATOR,
+                                POINT_COMMA
+                            ),
+                            row.phrase.replace(
+                                CSV_WORDS_SEPARATOR,
+                                POINT_COMMA
+                            )
+                        ).joinToString(
+                            CSV_WORDS_SEPARATOR
+                        )
+                    ).append(ROW_SEPARATOR)
+                }
+                writer.flush()
+                writer.close()
+                return FileExportStatus.Success
+            } catch (e: IOException) {
+                return FileExportStatus.Error
+            }
+        }
+        return FileExportStatus.Error
+    }
 
     private fun isEndOfPhrase(word: String): Boolean {
         val wordLength = word.length

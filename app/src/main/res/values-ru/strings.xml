@@ -54,6 +54,7 @@
     <string name="settings_load_phrases">Загружать примеры фраз</string>
     <string name="edit_scr_close_topbar_desc">Закрыть верхнюю панель</string>
     <string name="edit_scr_open_topbar_desc">Открыть верхнюю панель</string>
+    <string name="edit_scr_export_into_csv">Сохранить в CSV файл</string>
     <string name="help_label_1"><font size="16"><b>Список наборов карточек</b></font></string>
     <string name="help_label_2"><font size="16"><b>Карточка слов</b></font></string>
     <string name="help_label_3"><font size="16"><b>Редактирование набора</b></font></string>
@@ -74,4 +75,6 @@
     <string name="card_click_desc">Нажмите на карточку, чтобы показать второе слово.</string>
     <string name="commons_scr_col_desc">Вы можете удалить слова из общего словаря, сняв галочки c флажков</string>
     <string name="empty_set">Пустой набор</string>
+    <string name="export_success">Экспорт завершён</string>
+    <string name="export_error">В процессе экспорта произошла ошибка</string>
 </resources>
