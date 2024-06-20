@@ -320,9 +320,9 @@ class DefaultFileRepository @Inject constructor(
         return word[0] == 'I'
 
         /*
-       Артефакты:
-        Слово начинается с "
-        Слово начитается с -
+       Artefacts:
+        Word starts with "
+        Word starts with -
         */
     }
 
