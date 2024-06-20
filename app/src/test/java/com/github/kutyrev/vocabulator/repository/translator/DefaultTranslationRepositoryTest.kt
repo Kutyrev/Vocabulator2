@@ -11,7 +11,6 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.just
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -33,7 +32,6 @@ internal class DefaultTranslationRepositoryTest : TranslationCallback {
     @MockK
     lateinit var firebaseSource: CloudBase
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getFirebaseTranslationTest() = runTest {
         coEvery {
@@ -64,7 +62,6 @@ internal class DefaultTranslationRepositoryTest : TranslationCallback {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getYandexTranslationTestSuccess() = runTest {
         coEvery {
@@ -95,7 +92,6 @@ internal class DefaultTranslationRepositoryTest : TranslationCallback {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getYandexTranslationTestGenericError() = runTest {
         coEvery {
@@ -124,7 +120,6 @@ internal class DefaultTranslationRepositoryTest : TranslationCallback {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getYandexTranslationTestNetworkError() = runTest {
         coEvery {

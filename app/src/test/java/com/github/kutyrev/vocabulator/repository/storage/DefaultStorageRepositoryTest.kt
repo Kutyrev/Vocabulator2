@@ -11,7 +11,6 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.just
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -34,7 +33,6 @@ internal class DefaultStorageRepositoryTest {
     private val subtitlesId = 1
     private val language = Language.EN
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getSubtitlesListTest() = runTest {
         coEvery {
@@ -52,7 +50,6 @@ internal class DefaultStorageRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getCardsTest() = runTest {
         coEvery {
@@ -70,7 +67,6 @@ internal class DefaultStorageRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllCardsTest() = runTest {
         coEvery {
@@ -88,7 +84,6 @@ internal class DefaultStorageRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getCommonWordsTest() = runTest {
         coEvery {
@@ -106,7 +101,6 @@ internal class DefaultStorageRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getSubtitlesUnitTest() = runTest {
         coEvery {
@@ -124,7 +118,6 @@ internal class DefaultStorageRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertNewSubtitlesTest() = runTest {
         coEvery {
@@ -147,7 +140,6 @@ internal class DefaultStorageRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun updateSubtitles() = runTest {
         coEvery {
@@ -163,7 +155,6 @@ internal class DefaultStorageRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun deleteSubtitles() = runTest {
         coEvery {
@@ -179,7 +170,6 @@ internal class DefaultStorageRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertWordCards() = runTest {
         coEvery {
@@ -195,7 +185,6 @@ internal class DefaultStorageRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun updateWordCards() = runTest {
         coEvery {
@@ -211,7 +200,6 @@ internal class DefaultStorageRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun deleteWordCards() = runTest {
         coEvery {
@@ -227,7 +215,6 @@ internal class DefaultStorageRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertCommonWords() = runTest {
         coEvery {
@@ -243,7 +230,6 @@ internal class DefaultStorageRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun deleteCommonWords() = runTest {
         coEvery {

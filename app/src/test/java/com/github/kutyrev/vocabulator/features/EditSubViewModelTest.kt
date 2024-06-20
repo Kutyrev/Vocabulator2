@@ -1,11 +1,13 @@
 package com.github.kutyrev.vocabulator.features
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import com.github.kutyrev.vocabulator.MainDispatcherRule
 import com.github.kutyrev.vocabulator.features.editsub.model.EditSubViewModel
 import com.github.kutyrev.vocabulator.model.Language
 import com.github.kutyrev.vocabulator.model.SubtitlesUnit
 import com.github.kutyrev.vocabulator.model.WordCard
+import com.github.kutyrev.vocabulator.repository.file.FileExportStatus
 import com.github.kutyrev.vocabulator.repository.file.FileRepository
 import com.github.kutyrev.vocabulator.repository.storage.StorageRepository
 import com.github.kutyrev.vocabulator.repository.translator.TranslationRepository
@@ -17,8 +19,9 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.just
+import io.mockk.mockk
+import io.mockk.mockkStatic
 import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
@@ -33,7 +36,6 @@ internal class EditSubViewModelTest {
     @get:Rule
     val mockkRule = MockKRule(this)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -296,5 +298,42 @@ internal class EditSubViewModelTest {
         coVerify {
             storageRepository.insertWordCards(any())
         }
+    }
+
+    @Test
+    fun saveListToCsvFileTest() {
+        coEvery {
+            fileRepository.exportSubtitles(any(), any())
+        } returns FileExportStatus.Success
+
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+
+        editSubViewModel.saveListToCsvFile(uriMock)
+
+        assertEquals(
+            EditSubViewModel.EditCardsMessages.EXPORT_SUCCESS,
+            editSubViewModel.messages.value
+        )
+
+        coEvery {
+            fileRepository.exportSubtitles(any(), any())
+        } returns FileExportStatus.Error
+
+        editSubViewModel.saveListToCsvFile(uriMock)
+
+        assertEquals(
+            EditSubViewModel.EditCardsMessages.EXPORT_ERROR,
+            editSubViewModel.messages.value
+        )
+    }
+
+    @Test
+    fun resetMessagesStatusTest() {
+        editSubViewModel.resetMessagesStatus()
+        assertEquals(
+            null,
+            editSubViewModel.messages.value
+        )
     }
 }
