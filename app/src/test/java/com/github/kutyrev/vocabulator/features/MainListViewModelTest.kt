@@ -21,7 +21,6 @@ import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -38,7 +37,6 @@ internal class MainListViewModelTest {
     @get:Rule
     val mockkRule = MockKRule(this)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -74,7 +72,6 @@ internal class MainListViewModelTest {
         )
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun initTest() = runTest {
         assertEquals(subtitlesList, mainListViewModel.subtitlesList.first())

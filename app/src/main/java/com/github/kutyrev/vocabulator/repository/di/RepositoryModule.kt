@@ -52,9 +52,15 @@ class RepositoryModule {
     fun providesFileRepository(
         fileParserFactory: ParserFactory,
         settingsRepository: SettingsRepository,
-        vocabulatorDao: VocabulatorDao
+        vocabulatorDao: VocabulatorDao,
+        @ApplicationContext appContext: Context
     ): FileRepository {
-        return DefaultFileRepository(fileParserFactory, settingsRepository, vocabulatorDao)
+        return DefaultFileRepository(
+            fileParserFactory,
+            settingsRepository,
+            vocabulatorDao,
+            appContext
+        )
     }
 
     @Provides

@@ -7,7 +7,6 @@ import com.github.kutyrev.vocabulator.repository.translator.TranslationCallback
 import com.github.kutyrev.vocabulator.repository.translator.TranslationResultStatus
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
@@ -26,7 +25,6 @@ internal class FireBaseSourceCloudBaseTest : TranslationCallback {
     private var translationResultStatus: TranslationResultStatus? = null
     var latch = CountDownLatch(1)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getTranslationTest() = runTest {
         val firebaseSource = FireBaseSourceCloudBase()

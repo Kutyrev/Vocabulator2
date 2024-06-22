@@ -137,7 +137,7 @@ fun MainStructureScreen(
                         text = stringResource(R.string.choose_lang_dialog_caption),
                         style = MaterialTheme.typography.caption
                     )
-                    for (language in Language.values()) {
+                    for (language in Language.entries) {
                         Row {
                             ClickableText(
                                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_std)),

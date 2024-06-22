@@ -8,7 +8,7 @@ import org.junit.Test
 
 internal class FileParserFactoryTest {
 
-    val mContextMock = mockk<Context>(relaxed = true)
+    private val mContextMock = mockk<Context>(relaxed = true)
 
     @Test
     fun getParserTest() {
