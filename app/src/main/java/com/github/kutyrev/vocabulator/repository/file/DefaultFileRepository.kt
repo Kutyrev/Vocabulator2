@@ -28,7 +28,7 @@ private const val UPPER_COMMA = '\''
 private const val CSV_FILE_HEADER = "Word;Translated word;Example"
 private const val ROW_SEPARATOR = "\n"
 private const val CSV_WORDS_SEPARATOR = ";"
-private const val POINT_COMMA = ".,"
+private const val SEMICOLON_REPLACEMENT = "(semicolon)"
 
 class DefaultFileRepository @Inject constructor(
     private val fileParserFactory: ParserFactory,
@@ -281,11 +281,11 @@ class DefaultFileRepository @Inject constructor(
                             row.originalWord,
                             row.translatedWord.replace(
                                 CSV_WORDS_SEPARATOR,
-                                POINT_COMMA
+                                SEMICOLON_REPLACEMENT
                             ),
                             row.phrase.replace(
                                 CSV_WORDS_SEPARATOR,
-                                POINT_COMMA
+                                SEMICOLON_REPLACEMENT
                             )
                         ).joinToString(
                             CSV_WORDS_SEPARATOR
