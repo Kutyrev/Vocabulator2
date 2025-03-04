@@ -2,22 +2,22 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
-    id 'kotlin-kapt'
     id "io.gitlab.arturbosch.detekt" version "1.22.0"
-    id 'com.google.gms.google-services' //For Firebase
+    id 'com.google.gms.google-services' // For Firebase
     // Add the Crashlytics Gradle plugin
     id 'com.google.firebase.crashlytics'
     id "com.google.devtools.ksp"
+    id "org.jetbrains.kotlin.plugin.compose"
 }
 
 android {
     namespace 'com.github.kutyrev.vocabulator'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.github.kutyrev.vocabulator"
         minSdk 28
-        targetSdk 34
+        targetSdk 35
         versionCode 12
         versionName "2.3.0"
 
@@ -60,56 +60,56 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
-    implementation 'androidx.activity:activity-compose:1.9.0'
+    implementation 'androidx.core:core-ktx:1.15.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
+    implementation 'androidx.activity:activity-compose:1.10.1'
     implementation "androidx.compose.ui:ui:$compose_ui_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
     implementation "androidx.compose.material:material:$compose_ui_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
     implementation "androidx.compose.ui:ui-util:$compose_ui_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.7.0"
-    //Room
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.8.7"
+    implementation 'com.google.android.material:material:1.12.0'
+    // Room
     def room_version = '2.6.1'
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
     ksp "androidx.room:room-compiler:$room_version"
-    //DI
+    // DI
     def hilt_version = '2.51.1'
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    ksp "com.google.dagger:hilt-compiler:$hilt_version"
     implementation "androidx.hilt:hilt-navigation-compose:1.2.0"
-    //Navigation
-    def nav_version = "2.7.7"
+    // Navigation
+    def nav_version = "2.8.8"
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
-    implementation "androidx.datastore:datastore-preferences:1.1.1"
+    implementation "androidx.datastore:datastore-preferences:1.1.3"
 
-    //Firebase
-    implementation platform('com.google.firebase:firebase-bom:33.1.0')
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:33.10.0')
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
-    //Retrofit
+    // Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.11.0"
+
+    // Update check
+    implementation("com.google.android.play:app-update:2.1.0")
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation "io.mockk:mockk:1.13.3"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
 
-    androidTestImplementation 'androidx.test:core:1.5.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:core:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
     androidTestImplementation "androidx.arch.core:core-testing:2.2.0"
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
-}
-
-// Allow references to generated code
-kapt {
-    correctErrorTypes true
 }
